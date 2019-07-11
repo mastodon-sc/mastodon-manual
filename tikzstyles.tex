@@ -1,0 +1,47 @@
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{matrix}
+\usetikzlibrary{matrix.skeleton}
+
+% factor graphs
+\tikzstyle{var}=
+  [circle,fill=white!90!gray,draw=black,inner sep=3pt]
+\tikzstyle{factor}=
+  [rectangle,fill=gray!50!white,draw=black,inner sep=5pt]
+\tikzstyle{region}=
+  [rounded rectangle,opacity=0.5]
+
+\tikzstyle{process}=[
+  single arrow,
+  single arrow head extend=0.125cm,
+  inner sep=1pt,
+  minimum height=0.5cm,
+  fill=gray]
+
+\tikzstyle{coordinate-axis}=[color=gray,->]
+\tikzstyle{detection}=[]
+\tikzstyle{line-to-neighbor}=[thin]
+\tikzstyle{line-to-neighbor-other}=[thin,color=gray]
+\tikzstyle{marks}=[very thin]
+\tikzstyle{background rectangle}=[fill=white]
+
+\tikzstyle{motion-vector}=[thin,->]
+\tikzstyle{p-pt}=[detection,color=red!50!black]
+\tikzstyle{p-mv}=[motion-vector,color=red!50!black]
+\tikzstyle{p-est-mv}=[motion-vector,color=red!50!black,densely dashed]
+\tikzstyle{q-pt}=[detection,color=black]
+\tikzstyle{q-mv}=[motion-vector,color=black]
+\tikzstyle{u-pt}=[detection,color=white!40!black]
+
+\makeatletter
+\pgfdeclareradialshading{weights}{\pgfpoint{0bp}{0bp}}{%
+ color(0bp)=(orange!80);
+ color(10bp)=(orange!40);
+ color(26bp)=(white)}
+\makeatother
+

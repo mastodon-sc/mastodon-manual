@@ -1,0 +1,15 @@
+\ProvidesPackage{funkey}[2013/02/27 by Jan Funke]
+\typeout{funkey -- some helpful macros by Jan Funke}
+\NeedsTeXFormat{LaTeX2e}
+
+\newif\if@funkeytheorems\@funkeytheoremstrue
+\DeclareOption{notheorems}{
+  \@funkeytheoremsfalse
+}
+
+\ProcessOptions\relax
+
+%\input{math}
+\newcommand{\mat}[1]{#1}
+%\input{notation}
+%\input{funkey/tikztension}
