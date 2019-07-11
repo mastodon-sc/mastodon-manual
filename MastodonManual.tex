@@ -1,0 +1,190 @@
+\documentclass{scrartcl}
+
+\usepackage{libertine} 
+\usepackage[libertine]{newtxmath}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{courier}
+
+\usepackage[export]{adjustbox}
+\usepackage{wrapfig}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsrefs}
+\usepackage{calc}
+\usepackage{funkey}
+\usepackage{notation}
+\usepackage{array}
+\usepackage{menukeys}
+\input{tikzstyles}
+\usetikzlibrary{shapes.misc}
+\usepackage{subfig}
+\usepackage{longtable}
+\usepackage{caption}
+\usepackage{multirow}
+\usepackage{tabulary}
+\usepackage{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\usepackage[htt]{hyphenat}
+\usepackage[scaled=.75]{beramono}
+% Put a dot after section number.
+\usepackage{secdot}
+\usepackage[super]{nth}
+
+% I want a proper degree symbol in text.
+\usepackage{textcomp}       % additional symbols using companion encoding TS1
+\usepackage{gensymb}        % provides macro \degree which works in text and math
+\DeclareUnicodeCharacter{00B0}{\degree}
+
+\newcommand\button[1]{\textit{#1}}
+\newcommand\key[1]{\texttt{#1}}
+\newcommand\screenshotA[1]{\centerline{\includegraphics[scale=0.5]{figures/#1}}}
+\newcommand\screenshotB[1]{\centerline{\includegraphics[width=.8\textwidth]{figures/#1}}}
+\newcommand\screenshotC[1]{\centerline{\includegraphics[width=.5\textwidth]{figures/#1}}}
+\newcommand\screenshotLeft[1]{\begin{wrapfigure}{r}{7.5cm}{\centerline{\includegraphics[width=7.3cm]{figures/#1}}}\end{wrapfigure}}
+\newcommand\screenshotLeftB[1]{\begin{wrapfigure}{r}{6cm}{\centerline{\includegraphics[width=5.8cm]{figures/#1}}}\end{wrapfigure}}
+\newcommand\screenshotLeftC[1]{\begin{wrapfigure}{r}{4cm}{\centerline{\includegraphics[width=3.8cm]{figures/#1}}}\end{wrapfigure}}
+\newcommand\screenshotTikz[1]{\centerline{\includetikz{figures/#1}}}
+\newcommand\coloredlink[1]{\textcolor{blue!75!black}{\underline{\smash{#1}}}}
+\newcommand\wikilink[2]{\href{http://imagej.net/#1}{\coloredlink{#2}}}
+\newcommand\otherlink[2]{\href{#1}{\coloredlink{#2}}}
+\newcommand\TODO[1]{\textcolor{red}{#1}}
+
+% Small font in verbatime environment.
+\makeatletter
+\def\verbatim{\small\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
+\makeatother
+
+% Small images in text (for e.g. small icon).
+\newcommand*{\smallimg}[1]{%
+  \raisebox{-.1\baselineskip}{%
+    \includegraphics[
+      height=0.8\baselineskip,
+      width=\baselineskip,
+      keepaspectratio,
+    ]{figures/#1}%
+  }%
+}
+
+% Properly hyphen TrackMate & TrackScheme
+\newcommand\TrackScheme[0]{Track\-Scheme\xspace}
+\newcommand\TrackMate[0]{Track\-Mate\xspace}
+
+% Less space when we make bullet lists.
+\newenvironment{myitemize}
+{ \begin{itemize}
+    \setlength{\itemsep}{2pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}     }
+{ \end{itemize}                  } 
+
+
+% Syntax highlighting for code.
+\usepackage{color}
+\definecolor{sh_comment}{rgb}{0.12, 0.38, 0.18 }
+\definecolor{sh_keyword}{rgb}{0.37, 0.08, 0.25}  
+\definecolor{sh_string}{rgb}{0.06, 0.10, 0.98} 
+
+\usepackage{listings}
+\lstset{
+	rulesepcolor=\color{black},
+	showstringspaces=false,showtabs=false,tabsize=2,
+	basicstyle=\ttfamily\small,
+	stringstyle=\color{sh_string},
+	keywordstyle = \color{sh_keyword}\bfseries,
+	commentstyle=\color{sh_comment}\itshape,
+	% escapebegin={\lstsmallmath}, escapeend={\lstsmallmathend}
+	breaklines=true,
+	postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+
+% Tables in the Wiki and LaTeX
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
+\newcommand\tablecell[2][&]{#2 #1}
+
+% Highlight a sentence or word of wisdom like for amsbox
+\newcommand\amsbox[1]{\begin{center}
+	\begin{tikzpicture}[baseline=(char.base)]
+		\node(char)[draw,
+			fill=lightgray!20,
+			shape=rectangle,
+			drop shadow,
+			rounded corners,
+			minimum width=6cm,
+			text width=13cm]
+			{#1};
+	\end{tikzpicture}
+\end{center}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\title{
+	{\fontsize{60}{70}\selectfont Mastodon}
+	{\fontsize{40}{50}\selectfont documentation} \\ 
+	\protect{\includegraphics[width=10cm]{figures/Mastodon-logo_jy-01.png}}
+}
+
+\author{Tobias Pietzsch \& Jean-Yves Tinevez}
+
+\begin{document}
+\titlehead{%
+  \makebox[0pt][l]{\smash{%
+    \parbox[t][\dimexpr\textheight-\ht\strutbox\relax][b]{\textwidth}{%
+      \includegraphics[width=4cm]{figures/Pasteur-logo-medium.png}
+      \hfill
+      \includegraphics[width=4cm]{figures/MPICBG_logo_bw.png}%
+  }}}}
+\maketitle
+\thispagestyle{empty}
+
+
+\newpage
+
+This document constitutes the \wikilink{Mastodon}{Mastodon} documentation. 
+It is divided in four parts, that group sections by interest.
+\begin{myitemize}
+	
+	\item The first part contains three tutorials, aimed at end-users and focused on cell tracking.
+	They are meant to guide users with the Mastodon software and cover three applications of cell tracking Mastodon:
+	\begin{myitemize}
+		\item automated cell or particle tracking;
+		\item manual curation and correction of tracking results;
+		\item manual and semi-automatic tracking.
+	\end{myitemize}
+	
+	\item The second part contains technical information. ...
+	
+	\item The third part is aimed at advanced users, ...
+	
+	\item The last part is made of tutorials aimed at Java developers ...
+	
+\end{myitemize}
+
+
+
+\newpage
+\tableofcontents
+\newpage
+
+
+
+
+
+
+
+
+\end{document}
+% vim::set expandtab tabstop=4 softtabstop=2 shiftwidth=2 ft=tex:
