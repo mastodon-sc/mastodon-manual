@@ -7,3 +7,13 @@ We don't go into details, and will revisit the features we survey here later.
 Mastodon was created specially because we needed to harness very big, multi-view images. We wanted to generate  comprehensive lineages and follow a large number of cells over a very long time.
 This accumulation of inflated words is tied to the very large  - in objective disk space  occupation - images we deal with using modern microscopy tools. 
 Such datasets might not be optimal for a first tutorial with Mastodon.
+So just for this tutorial we will use a smaller dataset.
+It is a small region cut into a movie following the development of a drosophila, acquired in Pavel Tomancak lab (MPI-CBG).
+You can find it on Zenodo\footnote{\href{https://zenodo.org/record/3336346}{https://zenodo.org/record/3336346}} there: \href{https://doi.org/10.5281/zenodo.3336346}{\includegraphics[height=1.4\fontcharht\font`\B]{figures/zenodo3336346.png}}
+
+It is a zip file that contains 3 files:
+\begin{minted}[bgcolor=lightgray]{text}
+    14M  datasethdf5.h5
+   2.7K  datasethdf5.settings.xml
+   8.7K  datasethdf5.xml
+\end{minted}
