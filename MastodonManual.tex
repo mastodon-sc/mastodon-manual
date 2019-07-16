@@ -130,6 +130,12 @@
 \usepackage{minted}
 \setminted{fontsize=\small,baselinestretch=1}
 
+% More space between paragraphs and indent.
+\setlength{\parskip}{6pt}
+\setlength\parindent{24pt}
+
+% Figure caption with special fonts.
+\usepackage[font=small,labelfont=bf]{caption}
 
 
 
@@ -155,6 +161,10 @@
 \newpage
 \input{ src/Chapter3.tex }
 
+
+\newpage
+\bibliographystyle{plainnat}
+\bibliography{References}
 
 
 
