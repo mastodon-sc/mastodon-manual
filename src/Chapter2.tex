@@ -57,7 +57,7 @@ The BDV display component exploits this file format in a clever way, and ensures
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/BdvTikz-pyramidblocks.png}
+    \includegraphics[width=0.6\textwidth]{figures/BdvTikz-pyramidblocks.png}
     \caption{Illustration of the BDV file format storage strategy. The image is stored over several resolution levels (multi-scale pyramid) and in chunks.}
     \label{fig:BDVchunks}
 \end{figure}
@@ -77,23 +77,23 @@ This accumulation of inflated words is tied to the very large  - in objective di
 Such datasets might not be optimal for a first contact with Mastodon.
 So just for this tutorial we will use a smaller dataset.
 It is a small region cut into a movie following the development of a drosophila, acquired in Pavel Tomancak lab (MPI-CBG).
-You can find it on Zenodo\footnote{\href{https://zenodo.org/record/3336346}{https://zenodo.org/record/3336346}} there: \href{https://doi.org/10.5281/zenodo.3336346}{\includegraphics[height=1.4\fontcharht\font`\B]{figures/zenodo3336346.png}}
+You can find it on Zenodo\footnote{\href{https://zenodo.org/record/3336346}{\coloredlink{https://zenodo.org/record/3336346}}} there: \href{https://doi.org/10.5281/zenodo.3336346}{\includegraphics[height=1.5\fontcharht\font`\B]{figures/zenodo3336346.png}}
 
 It is a zip file that contains 3 files:
-\begin{minted}[bgcolor=lightgray]{text}
+\begin{minted}{text}
     14M  datasethdf5.h5
    2.7K  datasethdf5.settings.xml
    8.7K  datasethdf5.xml
 \end{minted}
 
 The \texttt{.h5} file is the HDF5 file mentioned above, that contains the image data itself.
-The \texttt{datasethdf5.xml} is a text file following the XML convention, specific to the BDV file format, that contains information about the the image data and metadata. 
+The \texttt{data\-sethdf5.xml} is a text file following the XML convention, specific to the BDV file format, that contains information about the the image data and metadata. 
 When we want to open a BDV file, we point the reader to this file.
 The \texttt{datasethdf5.settings.xml} is an optional file that stores user display parameters, such as channel colors, min and max display value, as well as bookmarks in the data. 
 We refer you to the \wikilink{BigDataViewer\#Loading_and_Saving_Settings}{BDV documentation} about this file.
 Mastodon uses this settings file to store that same information.
 
-If you open this data in the \Bdv (in Fiji in the \menu{Plugins > BigDataViewer >} \\ \menu{ > Open XML/HDF5} menu), you should see something like in figure~\ref{fig:OpeningImage}. 
+If you open this data in the \Bdv (in Fiji in the \menu{Plugins > BigDataViewer > Open XML/HDF5} menu), you should see something like in figure~\ref{fig:OpeningImage}. 
 There is about 70 cells in each of the 30 time-points, arranged in a layer at the top of the sample. 
 The deeper part of the sample (low Z coordinates) has some hazy, diffuse signal from which we cannot individualize cells.
 As time progresses, the cells move towards the middle part and bottom (high Y coordinates) part of the image, and some of them move deeper in Z, initiating gastrulation.
@@ -102,8 +102,8 @@ The goal of this short tutorial is to track all these cells in Mastodon.
 
 \begin{figure}
      \centering
-         \includegraphics[width=0.4\textwidth]{figures/BDV-imageXY.png}
-         \includegraphics[width=0.4\textwidth]{figures/BDV-imageXZ.png}
+         \includegraphics[width=0.3\textwidth]{figures/BDV-imageXY.png}
+         \includegraphics[width=0.3\textwidth]{figures/BDV-imageXZ.png}
          \caption{The tutorial dataset opened in \Bdv, seen along XY (left) and XZ (right)}
      \label{fig:OpeningImage}
 \end{figure}  
@@ -111,4 +111,39 @@ The goal of this short tutorial is to track all these cells in Mastodon.
 
 
 
+\subsection{Getting Mastodon.}
+
+As of today, Mastodon is available as a preview. We are still working on adding and validating features.
+Nonetheless the preview has everything we need to track these cells.
+Also, Mastodon is independent of ImageJ or Fiji, it can operate as a standalone software. 
+However we currently distribute it via Fiji, because the updater and the dependency management are so convenient. 
+So the first thing to do is to grab Fiji\footnote{\href{http://fiji.sc/}{\coloredlink{http://fiji.sc/}}}, if you do not have it already.
+
+Then launch the \wikilink{Updater}{Fiji updater} and once your Fiji is up to date, click on the \texttt{Manage update site} button.
+We will add the \wikilink{Following_an_update_site}{add the Mastodon update site}.
+You should find the Mastodon preview site in the list. 
+Select it, update Fiji and restart it. 
+After restarting, you should find the command \menu{Plugins > Mastodon (preview)} at the bottom of the menu.
+
+\begin{center}
+    \includegraphics[width=0.7\textwidth]{figures/Mastodon_UpdateSite.png}
+\end{center}
+
+
+
 \subsection{Creating a new Mastodon project.}
+
+After launching the command, this plain, sober window appears.
+\begin{center}
+         \includegraphics[width=0.3\textwidth]{figures/Mastodon_MainWindow.png}
+\end{center}
+
+Click on new \texttt{new project}, and browse to the \texttt{datasethdf5.xml} file of the XML/HDF5 file pair of the tutorial dataset.
+All the buttons that were grayed out should be enabled. 
+Click on the \texttt{bdv} button.
+A BDV window should appear and if it does everything is right.
+\begin{center}
+         \includegraphics[width=0.4\textwidth]{figures/Mastodon_BDV.png}
+\end{center}
+
+It is almost a regular BDV window and if you already know who to use it and the key bindings you should find your marks quickly.
