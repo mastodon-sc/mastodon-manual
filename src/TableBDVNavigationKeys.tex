@@ -1,0 +1,70 @@
+\begin{tabulary}{\textwidth}{L|J}
+    
+    \toprule
+    \textbf{Action}                 & \textbf{Key}              
+    \\ \midrule
+    
+    \multicolumn{2}{c}{\textit{View.}}
+    \\ \midrule
+    
+    Move in X \& Y.                 & \keys{Right-click} and \keys{Drag}.
+    \\ \midrule
+    
+    Move in Z.                      & \keys{Mouse-wheel}. Press and hold shift to move faster, control to move slower.
+    \\ \midrule
+    
+    Align view with X / Y / Z axes. &  
+    \begin{minipage}[t]{0.7\textwidth}
+    \begin{itemize}
+        \item  Align with XY plane: \keys{Shift+Z}. 
+        \item Align with YZ plane: \keys{Shift+X}. 
+        \item Align with XZ plane: \keys{Shift+C} or \keys{Shift+Y}. 
+    \end{itemize}
+    The view will rotate around the location you clicked.
+    \end{minipage}
+    
+    \\ \midrule
+    
+    Zoom / Unzoom.                  & \keys{Control+Shift+Mouse-wheel} or \keys{Command+Mouse-wheel}. The view will zoom and unzoom around the mouse location.
+    \\ \midrule
+
+    \multicolumn{2}{c}{\textit{Time-points.}}
+    \\ \midrule
+    
+    Next time-point.                & \keys{]} or \keys{M}
+    \\ \midrule
+    
+    Previous time-point.            & \keys{[} or \keys{N}                                                                                     
+    \\ \midrule
+
+    \multicolumn{2}{c}{\textit{Bookmarks.}}
+    \\ \midrule
+
+    Store a bookmark.               & \keys{Shift+B} then press any key to store a bookmark with this key as name. A bookmark stores the position, zoom and orientation in the view but not the time-point. Bookmarks are saved in display settings file.
+    \\ \midrule
+    
+    Recall a bookmark.              & Press \keys{B} then the key of the bookmark.
+    \\ \midrule  
+    
+    Recall a bookmark orientation.  & Press \keys{O} then the key of the bookmark. Only the orientation of the bookmark will be restored.
+    \\ \midrule
+    
+    \multicolumn{2}{c}{\textit{Image display.}}
+    \\ \midrule
+    
+    Select source 1, 2 \ldots         & Press \keys{1}, \keys{2} \ldots
+    \\ \midrule
+    
+    Brightness and color dialog.    & Press \keys{S}. In this dialog you can adjust the min \& max for each source, select to what sources these min \& max apply and pick a color for each source.
+    \\ \midrule
+    
+    Toggle fused mode.              & Press \keys{F}. In fused mode, several sources are overlaid. Press \keys{Shift+1}, \keys{Shift+2} \ldots to add / remove the source to the view. In single-source mode, only one source is shown.
+    \\ \midrule
+    
+    Visibility and grouping dialog.     & Press \keys{F6}. In this dialog you can define what sources are visible in fused mode, and define groups of sources for use in the grouping mode.
+    \\ \midrule
+    
+    Save / load display settings.       & \keys{F11} / \keys{F12}. This will create a \texttt{XYZ\_settings.xml} file in which the display settings will be saved.
+    \\ \bottomrule
+
+\end{tabulary}
