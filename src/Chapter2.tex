@@ -70,7 +70,7 @@ For instance our previous work on cell lineaging in large images, \wikilink{MaMu
 
 
 
-\subsubsection{The tuturial dataset.}
+\subsubsection{The tutorial dataset.}
 
 Mastodon was created specially because we needed to harness very big, multi-view images. We wanted to generate  comprehensive lineages and follow a large number of cells over a very long time.
 This accumulation of inflated words is tied to the very large  - in objective disk space  occupation - images we deal with using modern microscopy tools. 
@@ -164,3 +164,28 @@ In the table~\ref{tab:MastodonBDVNavigationKeys} you will find the key bindings 
     \vspace{-10pt}
 
 \end{table}
+
+Now you want to save the project. 
+Go back to the main window, and click on the \texttt{save project} button.
+This will create a single file, called for instance \texttt{drosophila\_crop.mastodon} file. 
+This file is actually a zip file that contains the tracks and \textit{links} to the image data.
+The image data is kept separate from the Mastodon file, which allows for using it with another software, independently. 
+So if you want to transfer or move a full Mastodon project, you need to take the \texttt{.mastodon} file and all the \texttt{.xml} and \texttt{.h5} files from the \Bdv dataset.
+
+Next time you want to open this project, just click on the \texttt{load project} button and point the file browser to the \texttt{.mastodon} file.
+The image data will be loaded along with the lineages.
+
+
+
+\subsection{Detecting cells.}
+
+We want to track automatically all the cells in this dataset, and the first step is therefore to detect them.
+Mastodon ships a wizard to perform cell detection. 
+It is very much inspired by the \wikilink{TrackMate}{TrackMate} GUI, and if you know this software you will find your marks here.
+Also, the algorithms are very close to what was in TrackMate, but they have been heavily optimized for Mastodon.
+
+The detection wizard can be launched from the \menu{Plugins > Tracking > Detection...} menu item. 
+You should have a window like this one appearing:
+\begin{center}
+         \includegraphics[width=0.4\textwidth]{figures/Mastodon_DetectionWizard_01.png}
+\end{center}
