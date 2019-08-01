@@ -36,6 +36,7 @@ Once you have prepared your images for opening in the \bdv, you should have a \t
 
 
 \subsubsection{Key advantages of the \Bdv file format.}
+\label{BDV_advantages}
 
 The BDV file format solves mainly two challenges in image visualization and analysis, that arise with modern microscopy, namely:
 \begin{itemize}
@@ -147,6 +148,7 @@ A BDV window should appear and if it does everything is right.
 \end{center}
 
 It is almost a regular BDV window and if you already know who to use it and the key bindings you should find your marks quickly.
+The BDV view displays a \textit{slice} of the image through arbitrary orientation. 
 Below we give the commands and key-bindings for navigation in a Mastodon-BDV window. 
 They are indeed close to what is found in the standard \Bdv but some changes. 
 \textbf{Please note:} You can reconfigure almost everything in Mastodon, as we will see later, including key-bindings.
@@ -166,13 +168,13 @@ In the table~\ref{tab:MastodonBDVNavigationKeys} you will find the key bindings 
 \end{table}
 
 Now you want to save the project. 
-Go back to the main window, and click on the \texttt{save project} button.
+Go back to the main window, and click on the \menu{save project} button.
 This will create a single file, called for instance \texttt{drosophila\_crop.mastodon} file. 
 This file is actually a zip file that contains the tracks and \textit{links} to the image data.
 The image data is kept separate from the Mastodon file, which allows for using it with another software, independently. 
 So if you want to transfer or move a full Mastodon project, you need to take the \texttt{.mastodon} file and all the \texttt{.xml} and \texttt{.h5} files from the \Bdv dataset.
 
-Next time you want to open this project, just click on the \texttt{load project} button and point the file browser to the \texttt{.mastodon} file.
+Next time you want to open this project, just click on the \menu{load project} button and point the file browser to the \texttt{.mastodon} file.
 The image data will be loaded along with the lineages.
 
 
@@ -189,3 +191,36 @@ You should have a window like this one appearing:
 \begin{center}
          \includegraphics[width=0.4\textwidth]{figures/Mastodon_DetectionWizard_01.png}
 \end{center}
+
+Like for TrackMate, the automated tracking user interface uses \textit{wizards} to enter parameters, select algorithms, \textit{etc.}
+You can navigate back and forth with the \menu{\smallimg{arrow_right.png} Next} and  \menu{\smallimg{arrow_left.png} Previous} buttons. 
+The \menu{\smallimg{book.png} Log} button will bring an independent panel where all the activity in the wizard are logged as text. 
+
+This first panel allows for selecting the target \textit{source} on which the detection will be run. 
+Since we use the \bdv for images, a channel or a view is stored and displayed as a source. 
+A source can have multiple resolutions stored, as explain in paragraph~\ref{BDV_advantages}, but for the data used in this tutorial this is not the case. The sources are nicknamed 'setups' in this panel.
+They are numbered from 0 and can be selected from the drop-down list. 
+Below the list we try to display the metadata we could retrieve from the \bdv file.
+Just pick the first and only channel, and click \menu{\smallimg{arrow_right.png} Next}.
+
+You can now choose to operate only on a rectangular ROI in the image. 
+If you check the \textbf{Process only a ROI} button, new controls appear in the panel, and a ROI is drawn into an open BDV view (a new one is created if one is not opened).
+The ROI is painted as a wire-frame box, green for vertices that point towards the camera from the displayed slice, and purple for vertices that points away from the camera, below the displayed slice.
+The intersection of the ROI box with the displayed slice is painted with a purple semi-transparent overlay, with a white dotted line as borders.
+You can control the ROI bounds wither with the controls in the panel, or by directly dragging the ROI corners in the BDV view.
+Time bounds can also be set this way. In our case we want to segment the full image over all time-points, so leave the \textbf{Process only a ROI} button unchecked.
+
+You cannot have non-rectangular ROI in Mastodon. Nonetheless they are super useful as is. 
+You can for instance combine several detection steps using different parameters in different region of your image. Or different time interval.
+
+
+The next panel lets you choose the detector you want to use.
+In vanilla Mastodon, 3 detectors are available.
+Right now, we will use the default one, the \textbf{DoG detector}, which should be good enough for most cases.
+DoG means 'difference-of-Gaussians'.
+It is an efficient approximation of the LoG ('Laplacian of Gaussian') filter, and there is also a detector in Mastodon based on it.
+
+These detectors excel at finding roundish structures in the image that are bright over a dark background.
+These structures must have a shape somewhat close to a sphere, but they can accommodate a lot of variability.
+As a rule of thumb, if you can define rough estimate of the radius of these structures, they are eligible to be picked up by our detectors. 
+This also implies that in Mastodon, we cannot 
