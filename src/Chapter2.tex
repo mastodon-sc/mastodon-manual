@@ -213,14 +213,71 @@ Time bounds can also be set this way. In our case we want to segment the full im
 You cannot have non-rectangular ROI in Mastodon. Nonetheless they are super useful as is. 
 You can for instance combine several detection steps using different parameters in different region of your image. Or different time interval.
 
+\begin{center}
+         \includegraphics[height=0.25\textheight]{figures/Mastodon_ROIpanel.png}
+         \includegraphics[height=0.25\textheight]{figures/Mastodon_ROIBDV.png}
+\end{center}
 
 The next panel lets you choose the detector you want to use.
-In vanilla Mastodon, 3 detectors are available.
+In vanilla Mastodon, three detectors are available.
 Right now, we will use the default one, the \textbf{DoG detector}, which should be good enough for most cases.
 DoG means 'difference-of-Gaussians'.
-It is an efficient approximation of the LoG ('Laplacian of Gaussian') filter, and there is also a detector in Mastodon based on it.
+It is an efficient approximation of the LoG ('Laplacian of Gaussian') filter, and there is also a detector in Mastodon based on the latter.
 
 These detectors excel at finding roundish structures in the image that are bright over a dark background.
-These structures must have a shape somewhat close to a sphere, but they can accommodate a lot of variability.
+The structures must have a shape somewhat close to a sphere, but they can accommodate a lot of variability.
 As a rule of thumb, if you can define rough estimate of the radius of these structures, they are eligible to be picked up by our detectors. 
-This also implies that in Mastodon, we cannot 
+This also implies that in Mastodon, we cannot segment complex shapes, or object labeled by their contour (\textit{e.g.} cell membranes), or even exploit these shapes to have an accurate measurements of the volume. 
+This is an important limitation of Mastodon.
+
+For now, select the \textbf{DoG detector} and click \menu{\smallimg{arrow_right.png} Next}.
+
+Here is briefly  how it works.
+The LoG detector, and its approximation the DoG detector, is the best detector for Gaussian-like particles in the presence of noise. 
+It is based on applying a Laplacian of Gaussian (LoG) filter on the image and looking for local maxima. The result is obtained by summing the second order spatial derivatives of the gaussian- filtered image, and normalizing for scale.
+Local maxima in the filtered image yields spot detections. 
+Each detected spot is assigned a \textbf{quality} value by taking the local maxima value in the filtered image.
+So by properties of the LoG filter, this quality value is larger for :
+\begin{myitemize}
+    \item bright spots;
+    \item spots which diameter is close to the specified diameter.
+\end{myitemize}
+
+So the DoG detector requires only two parameters: the estimated diameter of the object we want to detect, and a threshold on the quality value, that will help separating spurious detections from real ones. 
+The panel you are presented let you specify these parameters, and preview the resulting detection.
+Try with 10 pixels for \textbf{Estimated diameter} and 0 for the \textbf{Quality threshold}.
+The click on the \menu{\smallimg{led-icon-eye-green.png} Preview} button.
+A preview panel should open shortly, showing detection results on the current frame
+
+\begin{center}
+         \includegraphics[height=0.25\textheight]{figures/Mastodon_DoGconfig1.png}
+         \includegraphics[height=0.25\textheight]{figures/Mastodon_DoGconfig2.png}
+\end{center}
+
+These values are close but not quite.
+You can see that the diameter value is too small to properly grasps the elongated shape of the cells along Z (the BDV view on the left panel above is rotated to show a YZ plane). 
+Also the threshold value is too low, and some spurious detections are found below the epithelium.
+These spots have a low quality, that manifests as a peak at low value in the quality histogram displayed on the configuration panel.
+From the shape of the histogram, we can infer that a threshold value around 100 should work.
+However we also need to change the diameter parameter, which will change the range of quality values.
+After trial and errors, values around 15 pixels for the diameter and 400 for the threshold seem to work.
+
+Note that you can run the preview on any frame.
+You just have to move the time slider on the preview window.
+Once you are happy with the parameters, click on the \menu{\smallimg{arrow_right.png} Next} button.
+All the frames specified in the ROI (if any) will be processed. 
+In our case it should conclude quickly and the following panel should appear:
+
+\begin{center}
+         \includegraphics[height=0.25\textheight]{figures/Mastodon_DetectionResuts.png}
+\end{center}
+
+We now have more than 1000 cells detected and this concludes the detection step.
+Click on the \menu{\smallimg{accept-icon.png} Finish} button, and the wizard will disappear.
+
+If you have complex images mixing several size of objects, or detection parameters that work for one part of the movie but not for another one, you could restart a new detection now, selecting for instance other parts of the movie with the ROI.
+You can do this and more, but for this kind of approach, the \textbf{Advanced DoG detector} offers more configuration capabilities, that will review later.
+
+
+
+\subsection{Linking cells.}
