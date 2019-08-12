@@ -184,7 +184,7 @@ The image data will be loaded along with the lineages.
 We want to track automatically all the cells in this dataset, and the first step is therefore to detect them.
 Mastodon ships a wizard to perform cell detection. 
 It is very much inspired by the \wikilink{TrackMate}{TrackMate} GUI, and if you know this software you will find your marks here.
-Also, the algorithms are very close to what was in TrackMate, but they have been heavily optimized for Mastodon.
+Also, the algorithms are very close to what was in TrackMate~\cite{TrackMate}, but they have been heavily optimized for Mastodon.
 
 The detection wizard can be launched from the \menu{Plugins > Tracking > Detection...} menu item. 
 You should have a window like this one appearing:
@@ -281,3 +281,42 @@ You can do this and more, but for this kind of approach, the \textbf{Advanced Do
 
 
 \subsection{Linking cells.}
+
+What we just did is the detection step. 
+It yields one Mastodon spot per cell, but the notion of cell identity propagated over time is missing yet.
+The particle linking step just does that.
+A particle linking or tracking algorithm accepts a collection of spots, ordered by frames (time-points), and tries to link each spot to the next spot(s) in the next frame or so. 
+All the spots you can reach by starting from one spot and navigating across links build a \textit{track}, and in our case it represents one cell (or any other object) followed over time. 
+In most cases there is one spot per frame for a track, meaning that that a spot has at most one incoming link (spot from previous frame) and one outgoing kink (spot in next frame). 
+But some algorithms can accommodate \textit{e.g.} dividing cells (2 outgoing links for the mother cell going to the two daughter cells) and merging events. There is a vast literature behind tracking algorithms, and it is an active domain of Research. A relatively recent paper compare implementation and list some pros and pitfalls of many of them~\cite{Chenouard2014}.
+
+\begin{wrapfigure}{r}{0.3\textwidth}
+    \centering
+    \includegraphics[height=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_LinkingWizard_01.png}
+\end{wrapfigure}
+
+Like for the detection step, linking in Mastodon happens in a wizard.
+And also like for detection, the linking algorithms currently available in Mastodon are adapted from TrackMate. 
+
+Launch the wizard from the GUI, with the \menu{Plugins > Tracking > Linking...} menu item. 
+The first panel you are shown lets you select what spots to include in linking. 
+There are two modes:
+\begin{myitemize}
+    \item Either you take all the spots between a start and and end frame. By default, all frames are selected.
+    \item Either you specify you want to link only the spots that are in the selection. 
+    This mode offers a lot of flexibility when facing complicated cases. 
+    It is best use along with the selection creator, that we will introduce later in this manual.
+\end{myitemize}
+For now, just leave the parameters as they are, which will include all spots in the linking process, and click next.
+You can now choose between several linking algorithms. 
+In Mastodon, they fall mainly in two categories.
+
+The first two LAP trackers are based on the \textbf{Linear Assignment Problem (LAP) framework}, first developed by Jaqaman \textit{et al.}~\cite{Jaqaman2008}, with important differences from the original paper described elsewhere~\cite{TrackMate}. We focused on this method for it gave us a lot of flexibility and it can be configured easily to handle many cases. You can tune it to allow splitting events, where a track splits in two, for instance following a cell that encounters mitosis. Merging events are handled too in the same way. More importantly are gap-closing events, where a spot disappear for one frame (because it moves out of focus, because detection failed, ...) but the track manages to recuperates and connect with reappearing spots later.
+
+In Mastodon the LAP algorithms exists in two flavors: a simple one and a not simple one. There are again the same, but the simple ones propose fewer configuration options and a thus more concise configuration panel. In short:
+\begin{myitemize}
+    \item The simple one only allows to deal with gap-closing events, and prevent splitting and merging events to be detected. Also, the costs to link two spots are computed solely based on their respective distance.
+    
+    \item The not simple one allows to detect any kind of event, so if you need to build tracks that are splitting or merging, you must go for this one. If you want to forbid the detection of gap-closing events, you want to use it as well. Also, you can alter the cost calculation to disfavor the linking of spots that have very different feature values.
+\end{myitemize}
+
