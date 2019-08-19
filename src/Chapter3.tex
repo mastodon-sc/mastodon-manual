@@ -1,1 +1,57 @@
-\section{Automatic cell lineaging of large, multi-view images in Mastodon.}
+\section{Manually editing tracks in Mastodon. TrackScheme.}
+
+One of the key feature of Mastodon, the implementation of which made our lives extremely hard and rich, is the ability to edit manually at any time any spot or link within a data model that can contains billions of them, while retaining a good and pleasant response time from the software.
+I am not even speaking of the undo/redo mechanism, which getting right was also very interesting. 
+
+In this short tutorial, we will show how to do just that, from existing tracking data, the one we generated in the previous section. 
+We will use it as an opportunity to present TrackScheme, the track visualizer of Mastodon, as well as introduce several useful editing features such as undo/redo mechanism mentioned above.
+
+Manual editing is often \textbf{not desirable}, first because it is not objective which might be detrimental in situations where the performance of an algorithm is evaluated, or when an unknown motion characteristics is investigated. 
+Second, because it does not look like a realistic solution when \textit{e.g.} thousands of cells are to be followed over thousands of time-points.
+Regarding the latter however, several courageous individuals sacrificed their time, energy and sometimes sanity in doing so, for the sake of finally getting a scientific answer when there was no other working solutions. 
+See for instance~\cite{MaMuT} and~\cite{McDole2018}.
+If you are going this way, Mastodon aims at providing tools to do so, in the fastest and least painful way possible. 
+Also, you can combine the fully automated approach of the previous chapter with manual editing to correct hopefully a few numbers of mistakes.
+Finally, there is also a semi-automated tracking tool, that we will introduce later.
+
+
+\subsection{TrackScheme, the lineage view and editor.}
+
+First, load or retrieve the tracking data of the previous chapter. 
+You should have a few hundreds of tracks. 
+
+navigating in tracksheme
+
+the zoom in trackscheme
+
+
+\subsection{Linking several views together.}
+
+the locks.
+
+navigating over time within a track.
+
+
+\subsection{The focus. How tracks are sorted in TrackScheme.}
+
+how the focus is diplayed
+
+editing a spot name
+
+how tracks are sorted in trackscheme.
+
+\subsection{Deleting individual spots and links.}
+
+\subsection{The selection.}
+
+adding removing to the selection
+
+editing with the selection (deleting)
+
+\subsection{Manually adding spots and linking them.}
+
+\subsection{The undo/redo mechanism.}
+
+
+
+

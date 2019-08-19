@@ -1,4 +1,4 @@
-\section{Getting started with Mastodon.}
+\section{Getting started with Mastodon. Automated tracking.}
 
 This tutorial is the starting point for new Mastodon users. 
 It will walk you through basic operations in Mastodon, opening a dataset and creating a Mastodon project, automatically detect cells and link them, and show you how to use the main views of Mastodon.
@@ -379,11 +379,23 @@ If you have a BDV window opened, it should be updated with the tracking results,
 By default the tracks are represented by colored lines, extending backward in time.
 Points in tracks that are close to the current time-point are greenish.
 Points that are far back in time are painted in red.
-When you change the Z focus, the points that are not close to the current Z-slice are faded away.
+When you change the Z focus, the spots are painted as circle of radius corresponding the the intersection of the sphere with the current Z-plane. 
+When the spot sphere does not interest with current Z-plane, it is painted as a small dots.
+The points of the track away in time that are not close to the current Z-slice are faded away.
  
 \begin{center}
     \includegraphics[width=0.6\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_LinkingResults.png}
 \end{center}
 
- 
+\subsection{Wrapping up.} 
 
+This concludes our first tutorial on automated tracking with Mastodon.
+To continue with the next chapter, save the project with the tracks you just generated.
+
+As you can see, after creating a project from a BDV file, the process consists mainly in running in succession the two wizards, one for detection, one for particle linking. 
+Even if they provide fully automated tracking, Mastodon is made for interacting with the data as you generate it. 
+We will see in a next section how to manually edit a spot, a link or a track even at the finest granularity.
+But keep in mind that the tools we quickly surveyed can be used interactively too. 
+First the wizards let you go back to change a tracking parameter and check how the results are improved or not. 
+Second, because you can specify a region-of-interest (ROI) in the detection step, and select the spots you want to track in the linking step, several runs of these wizard can be combined on different parts of the same image, to accommodate \textit{e.g.} for changing image quality over time, or cell shape over time. 
+Mastodon aims at being the workbench for tracking that will get you to the results whatever the image.
