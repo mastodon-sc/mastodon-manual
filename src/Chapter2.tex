@@ -375,18 +375,22 @@ Which results of bridging over detections missed by no more than 1 frame.
 In our case, the default parameters turn to work fine. 
 Click \menu{\smallimg{arrow_right.png} Next} and the linking will proceed. 
 Click on the \menu{\smallimg{accept-icon.png} Finish} button to end the tracking process.
-If you have a BDV window opened, it should be updated with the tracking results, like the following.
+If you have a BDV window opened, it should be updated with the tracking results, like in figure~\ref{fig:Tracking results}.
 By default the tracks are represented by colored lines, extending backward in time.
-Points in tracks that are close to the current time-point are greenish.
-Points that are far back in time are painted in red.
+Points in tracks that are close to the current time-point are green and fade to ref for points that are far back in time.
 When you change the Z focus, the spots are painted as circle of radius corresponding the the intersection of the sphere with the current Z-plane. 
 When the spot sphere does not interest with current Z-plane, it is painted as a small dots.
 The points of the track away in time that are not close to the current Z-slice are faded away.
+We will see later how to customize the display of tracks. 
  
-\begin{center}
+ 
+\begin{figure}
+    \centering
     \includegraphics[width=0.6\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_LinkingResults.png}
-\end{center}
-
+     \caption{How tracking results are displayed in BDV views.}
+     \label{fig:Tracking results}
+\end{figure}  
+ 
 \subsection{Wrapping up.} 
 
 This concludes our first tutorial on automated tracking with Mastodon.
