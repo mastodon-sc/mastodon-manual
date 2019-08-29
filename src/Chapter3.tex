@@ -19,23 +19,110 @@ Finally, there is also a semi-automated tracking tool, that we will introduce la
 
 First, load or retrieve the tracking data of the previous chapter. 
 You should have a few hundreds of tracks. 
+To open a TrackScheme view window, press the \menu{trackscheme} button on the main window (Figure~\ref{fig:MastodonMainWindow} page~\pageref{fig:MastodonMainWindow}).
+This window should show up. 
 
-navigating in tracksheme
+The TrackScheme view is a special way of displaying tracks. 
+If you are familiar with TrackMate, you will see that we brought the same kind of features here, but scaled to large data.
+You can think of TrackScheme as a workbench for tracks, where you will edit, cut, stitch and rename them.
+It displays a kind of "track map", where a track is laid on a panel, arranged vertically over time, as a Parisian subway train map. 
+Tracks are displayed hierarchically, discarding the spatial location of each spot. 
+Each track is laid out going through time from top to bottom.
+One horizontal line corresponds to a single time-point in the movie.
+One vertical column corresponds to a single track, that is all the spots that are connected by links over time, including divisions and merges.
+It is a great tool particularly to study and edit cell lineages.
 
-the zoom in trackscheme
-
+When opened, the view in TrackScheme is scaled so that the full data is shown, all tracks over all time-points. 
+Even on our small dataset, most of the tracks and spots appear as single lines or dense boxes.
+To see the details of each track, you need to zoom in and navigate around the data.
+The navigation actions their mappings are listed in the Table~\ref{tab:MastodonTrackSchemeNavigationKeys} below.
 
 \begin{table}[!htbp]
     \centering
-    
     \caption{Default navigation key-bindings for Mastodon-TrackScheme views.}
-
     \input{src/TableTrackSchemeNavigationKeys.tex}
-
     \label{tab:MastodonTrackSchemeNavigationKeys}
-    \vspace{-10pt}
-
 \end{table}
+
+Try to zoom in until you can see the label of a few spots.
+TrackScheme implements adaptive level of details depending on the zoom level, so that we can accommodate plotting a large amount of data without compromising the responsiveness of Mastodon too much.
+On the finer level of details, spots are plotted as circles, with the spot label shown.
+As you zoom out, they becomes just empty circles, then points, then they disappear to only show the track as a line.
+When the zoom level is so low that several tracks coalesce, they are drawn as a gray box. 
+
+
+\subsection{The focus and the spot labels.}
+
+You probably noticed that some spots are painted differently from their neighbors. 
+Mastodon manages three special collections of spots and links to facilitate making sense of the data across views:
+\begin{myitemize}
+    \item the \textbf{selection}, painted in green, that manages a classical selection of spots and links;
+    \item the \textbf{highlight}, used to highlight the spot or link currently under the mouse;
+    \item the \textbf{focus}, particularly used in TrackScheme, to indicate what spot is currently focused on by the keyboard interaction.
+\end{myitemize}
+
+We will first present the focus (see Table~\ref{tab:MastodonTrackSchemeFocusKeys}). 
+
+\begin{table}[htbp]
+    \centering
+    \caption{Default key-bindings for the focus in TrackScheme and BDV views.}
+    \input{src/TableFocusKeys.tex}
+    \label{tab:MastodonTrackSchemeFocusKeys}
+\end{table}
+
+
+\subsubsection{Moving the focus.}
+
+The spot that has the focus is painted with a thick and dashed contour. 
+Only one spot can have the focus and it is set by mouse or keyboard interaction.
+Click on one spot in TrackScheme when fully zoomed, and move across track and time with the arrow cursor keys \keys{\arrowkeyleft} \keys{\arrowkeyright} \keys{\arrowkeyup} and \keys{\arrowkeydown}.
+If the focus reaches the border of the window, the view will be moved to follow it.
+You can think of the focus as the caret in a text editor. 
+It is meant to facilitate keyboard interaction.
+
+\subsubsection{Editing the spot labels.}
+
+By the way, the focus is used to rename individual spots.
+Zoom in so that we can see the label of the spots and move the focus to a spot. 
+Press \keys{\return}.
+A small editing box appears inside the spot and lets you change its label.
+
+By default the spot label display the spot ID. 
+If you edit the label then it shows the new label you entered.
+Editing the label of a spot does not affect its ID or any other properties. 
+The spot label is just a convenient text field that you can use to annotate cells and search them later.
+Only the spots have a label. 
+The links don't.
+
+\subsubsection{The order of tracks in TrackScheme.}
+
+The spot labels also control how the tracks are ordered in TrackScheme.
+We said before that in TrackScheme all the spatial information is discarded. 
+However the tracks are laid out in a deterministic order.
+This order is set by the label of of a track. 
+
+There is no special structure to follow individual tracks in Mastodon. 
+For this, we simply use the first spot of a track. 
+So when we speak of the label of a track, we simply means the label of the first spot (in time) in the track. 
+
+The tracks are arranged from left to right following the alphanumerical order of the track labels.
+So you can change the tracks arrangement by editing theirs first spot's label.
+For instance a track named \texttt{A} will be laid out to the left of a tracks named \texttt{B}, and a track named \texttt{D9} will be put to the left of a track named \texttt{D10}.
+
+If you change the track labels now, the tracks will not move immediately in TrackScheme.
+For the new arrangement to happen, you need to either open another TrackScheme window, or to edit the data, which we will see soon.
+
+\subsubsection{The focus in BDV views.}
+
+The focus also works in the BDV views.
+In these views, the spot that has the focus is also painted with a thick dashed circle.
+Parenthetically, notice that the focus is shared across all opened views. 
+If you have a TrackScheme view and a BDV view opened, and that they show show roughly the same spot, setting the focus in one view will update the spot display in the other views.
+
+When you are in a BDV view and have set the focus, you can also navigate with the arrow keys.
+But in these views, only navigating in time (\keys{\arrowkeyup} and \keys{\arrowkeydown}) will work.
+Also you cannot edit the spot labels in a BDV view.
+
 
 
 \subsection{Linking several views together.}
@@ -45,13 +132,6 @@ the locks.
 navigating over time within a track.
 
 
-\subsection{The focus. How tracks are sorted in TrackScheme.}
-
-how the focus is diplayed
-
-editing a spot name
-
-how tracks are sorted in trackscheme.
 
 \subsection{Deleting individual spots and links.}
 
