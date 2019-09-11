@@ -20,7 +20,14 @@ Finally, there is also a semi-automated tracking tool, that we will introduce la
 First, load or retrieve the tracking data of the previous chapter. 
 You should have a few hundreds of tracks. 
 To open a TrackScheme view window, press the \menu{trackscheme} button on the main window (Figure~\ref{fig:MastodonMainWindow} page~\pageref{fig:MastodonMainWindow}).
-This window should show up. 
+A window as shown in Figure~\ref{fig:TrackScheme} should open.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme.png}
+     \caption{The TrackScheme window.}
+     \label{fig:TrackScheme}
+\end{figure}  
 
 The TrackScheme view is a special way of displaying tracks. 
 If you are familiar with TrackMate, you will see that we brought the same kind of features here, but scaled to large data.
@@ -45,11 +52,23 @@ The navigation actions their mappings are listed in the Table~\ref{tab:MastodonT
 \end{table}
 
 Try to zoom in until you can see the label of a few spots.
-TrackScheme implements adaptive level of details depending on the zoom level, so that we can accommodate plotting a large amount of data without compromising the responsiveness of Mastodon too much.
+TrackScheme implements adaptive level of details depending on the zoom level, so that we can accommodate plotting a large amount of data without compromising the responsiveness of Mastodon too much (Figure~\ref{fig:TrackSchemeZoomLevel}).
 On the finer level of details, spots are plotted as circles, with the spot label shown.
 As you zoom out, they becomes just empty circles, then points, then they disappear to only show the track as a line.
 When the zoom level is so low that several tracks coalesce, they are drawn as a gray box. 
 
+\begin{figure}
+    \centering
+    \subfloat[]{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_0.png}}
+    \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_1.png}}
+    \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_2.png}}
+    \\
+    \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_3.png}}
+    \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_4.png}}
+    
+    \caption{TrackScheme displays spots and links differently depending on the zoom level. \textbf{a.}~At low zoom level tracks that coalesce are shown as a gray box. \textbf{b.}~Zooming in, the individual tracks appear first as black lines. \textbf{c.}~When they are separated enough, spots appear as black dots. \textbf{d.}~With an even higher zoom level they are shown as empty circles. \textbf{e.}~Until they grow big enough so that the spot labels can be painted. Notice the size of the sliders at the bottom and at the right of the view.}
+    \label{fig:TrackSchemeZoomLevel}
+\end{figure}  
 
 \subsection{The focus and the spot labels.}
 
@@ -61,7 +80,7 @@ Mastodon manages three special collections of spots and links to facilitate maki
     \item the \textbf{focus}, particularly used in TrackScheme, to indicate what spot is currently focused on by the keyboard interaction.
 \end{myitemize}
 
-We will first present the focus (see Table~\ref{tab:MastodonTrackSchemeFocusKeys}). 
+\noindent We will first present the focus (see Table~\ref{tab:MastodonTrackSchemeFocusKeys}). 
 
 \begin{table}[htbp]
     \centering
@@ -73,19 +92,27 @@ We will first present the focus (see Table~\ref{tab:MastodonTrackSchemeFocusKeys
 
 \subsubsection{Moving the focus.}
 
-The spot that has the focus is painted with a thick and dashed contour. 
+The spot that has the focus is painted with a thick and dashed contour (Figure~\ref{fig:FocusedSpots}, left). 
 Only one spot can have the focus and it is set by mouse or keyboard interaction.
 Click on one spot in TrackScheme when fully zoomed, and move across track and time with the arrow cursor keys \keys{\arrowkeyleft} \keys{\arrowkeyright} \keys{\arrowkeyup} and \keys{\arrowkeydown}.
 If the focus reaches the border of the window, the view will be moved to follow it.
 You can think of the focus as the caret in a text editor. 
 It is meant to facilitate keyboard interaction.
 
+\begin{figure}
+    \centering
+    \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_FocusInTrackScheme.png}
+    \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_FocusInBDV.png}
+    \caption{Focused spots are painted in TrackScheme (left) and in BDV (right) views as ellipses with a thick, dashed-contour.}
+     \label{fig:FocusedSpots}
+\end{figure}  
+
 \subsubsection{Editing the spot labels.}
 
 By the way, the focus is used to rename individual spots.
 Zoom in so that we can see the label of the spots and move the focus to a spot. 
 Press \keys{\return}.
-A small editing box appears inside the spot and lets you change its label.
+A small editing box appears inside the spot and lets you change its label (Figure~\ref{fig:EditSpotLabel}).
 
 By default the spot label display the spot ID. 
 If you edit the label then it shows the new label you entered.
@@ -93,6 +120,23 @@ Editing the label of a spot does not affect its ID or any other properties.
 The spot label is just a convenient text field that you can use to annotate cells and search them later.
 Only the spots have a label. 
 The links don't.
+
+\begin{figure}
+    \begin{minipage}{.35\textwidth}
+        \centering
+        \includegraphics[height=0.22\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_EditSpotLabel.png}
+        \caption{Editing a spot label in \TrackScheme.}
+        \label{fig:EditSpotLabel}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{.55\textwidth}
+        \centering
+        \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeTrackOrder.png}
+        \caption{The left to right order of tracks in TrackScheme. Track names are set by the label of their first spot in time, regardless of the time-point this spot is in. Tracks are then laid out by alphanumerical order of the track label.}
+        \label{fig:TrackOrder}
+    \end{minipage}
+\end{figure}  
+
 
 \subsubsection{The order of tracks in TrackScheme.}
 
@@ -104,20 +148,20 @@ This order is set by the label of of a track.
 There is no special structure to follow individual tracks in Mastodon. 
 For this, we simply use the first spot of a track. 
 So when we speak of the label of a track, we simply means the label of the first spot (in time) in the track. 
-
 The tracks are arranged from left to right following the alphanumerical order of the track labels.
 So you can change the tracks arrangement by editing theirs first spot's label.
-For instance a track named \texttt{A} will be laid out to the left of a tracks named \texttt{B}, and a track named \texttt{D9} will be put to the left of a track named \texttt{D10}.
+For instance a track named \texttt{A} will be laid out to the left of a tracks named \texttt{B}, and a track named \texttt{D9} will be put to the left of a track named \texttt{D10} (Figure~\ref{fig:TrackOrder}).
 
 If you change the track labels now, the tracks will not move immediately in TrackScheme.
 For the new arrangement to happen, you need to either open another TrackScheme window, or to edit the data, which we will see soon.
 
+
 \subsubsection{The focus in BDV views.}
 
 The focus also works in the BDV views.
-In these views, the spot that has the focus is also painted with a thick dashed circle.
+In these views, the spot that has the focus is also painted with a thick dashed circle (Figure~\ref{fig:FocusedSpots}, right).
 Parenthetically, notice that the focus is shared across all opened views. 
-If you have a TrackScheme view and a BDV view opened, and that they show show roughly the same spot, setting the focus in one view will update the spot display in the other views.
+If you have a TrackScheme view and a BDV view opened, and that they both contain a display of the same spot, setting the focus in one view will update this very spot display in the other views.
 
 When you are in a BDV view and have set the focus, you can also navigate with the arrow keys.
 After clicking inside a cell, you can navigate in time and follow a cell lineage through the movie with \keys{\arrowkeyup} and \keys{\arrowkeydown}.
@@ -128,9 +172,29 @@ However, you cannot edit the spot labels in a BDV view nor jump from one track t
 
 \subsection{Linking several views together.}
 
-the locks.
+You probably noticed that both BDV and \TrackScheme views have a toolbar on the of the view itself.
+This toolbar can be hidden and shown by a press of the \keys{T} key.
+In both view types, the toolbar contains 3 gray locks \smallimg{lock_open_grey.png}, that are used to link several views together for navigation.
+For instance, if you click on the lock 1 \smallimg{lock.png} on a BDV view and the same lock on a \TrackScheme view, they will be synchronized.
+If you move with the focus in the \TrackScheme view, the BDV view will be translated to show the focused spot.
+If you \keys{Double-click} on a spot in any view, all views in sync will translate to show the spot.
+This is very handy to navigate around in TrackScheme, for instance following a cell over time while the BDV view displays where it is in the sample. 
+You can even combine several BDV views in sync at different magnification to have both an overview of the cell position in the sample and a close view of the cell itself.
 
-navigating over time within a track.
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_Sync1.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_Sync2.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_Sync3.png}}
+    
+    \caption{Three views of the same dataset in sync. Notice that the lock number 1 is activated on the three views (in yellow). The second view is zoomed in a XY plane. The third view is dezoomed and align with XZ.}
+    \label{fig:ViewsInSync}
+\end{figure}  
+
+
 
 
 

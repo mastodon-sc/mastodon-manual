@@ -236,10 +236,10 @@ This is an important limitation of Mastodon.
 For now, select the \textbf{DoG detector} and click \menu{\smallimg{arrow_right.png} Next}.
 
 Here is briefly  how it works.
-The LoG detector, and its approximation the DoG detector, is the best detector for Gaussian-like particles in the presence of noise. 
+The LoG detector, and its approximation the DoG detector, is the best detector for blob-like particles in the presence of noise~\cite{Sage2005}. 
 It is based on applying a Laplacian of Gaussian (LoG) filter on the image and looking for local maxima. The result is obtained by summing the second order spatial derivatives of the gaussian- filtered image, and normalizing for scale.
 Local maxima in the filtered image yields spot detections. 
-Each detected spot is assigned a \textbf{quality} value by taking the local maxima value in the filtered image.
+Each detected spot is assigned a \textbf{quality} value, that is obtained by taking the intensity value in the LoG filtered image at the location of the spot.
 So by properties of the LoG filter, this quality value is larger for :
 \begin{myitemize}
     \item bright spots;
