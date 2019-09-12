@@ -5,6 +5,7 @@ I am not even speaking of the undo/redo mechanism, which getting right was also 
 
 In this short tutorial, we will show how to do just that, from existing tracking data, the one we generated in the previous section. 
 We will use it as an opportunity to present TrackScheme, the track visualizer of Mastodon, as well as introduce several useful editing features such as undo/redo mechanism mentioned above.
+We will also introduce the various visual hints that help the user knowing what spot or link is currently edited or inspected, such as the \textbf{focus}, the \textbf{highlight} and the \textbf{selection}.
 
 Manual editing is often \textbf{not desirable}, first because it is not objective which might be detrimental in situations where the performance of an algorithm is evaluated, or when an unknown motion characteristics is investigated. 
 Second, because it does not look like a realistic solution when \textit{e.g.} thousands of cells are to be followed over thousands of time-points.
@@ -99,6 +100,12 @@ If the focus reaches the border of the window, the view will be moved to follow 
 You can think of the focus as the caret in a text editor. 
 It is meant to facilitate keyboard interaction.
 
+You can also jumps across branches.
+A branch in a track is a linear section of the track between divisions, fusions or the track end or start.
+\keys{Alt+\arrowkeyup} and \keys{Alt+\arrowkeydown} will move the focus to the branch start and end.
+In the case where you could navigate to several branches, for instance you are currently at a cell division and you can go the end of either daughter cells branches, you can navigate to one or the other with \keys{Alt+\arrowkeydown} or \keys{Control+Alt+\arrowkeydown}.
+
+
 \begin{figure}
     \centering
     \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_FocusInTrackScheme.png}
@@ -167,7 +174,7 @@ When you are in a BDV view and have set the focus, you can also navigate with th
 After clicking inside a cell, you can navigate in time and follow a cell lineage through the movie with \keys{\arrowkeyup} and \keys{\arrowkeydown}.
 If you reach the border of the view or if the cell moves in Z, the view will be translated to keep the cell in focus.
 However, you cannot edit the spot labels in a BDV view nor jump from one track to another with \keys{\arrowkeyleft} \keys{\arrowkeyright}.
-
+Navigating across branch with \keys{Alt+\arrowkeyup} and \keys{Alt+\arrowkeydown} \etc also works.
 
 
 \subsection{Linking several views together.}
@@ -195,18 +202,86 @@ You can even combine several BDV views in sync at different magnification to hav
 \end{figure}  
 
 
+\subsection{The highlight.}
 
+The highlight is the second visual hint we will introduce. 
+You probably already noticed it and used it: the display of spots and links that are just below the mouse cursor changes.
+Highlighted spots and links are painted with a thick continuous line. 
+To highlight a spot or link you just have to lay the mouse over it.
+As for the focus, the highlight is common to all views, and if you highlight a spot or a link in a view, its display is changed in all the views that show it.
 
 
 \subsection{Deleting individual spots and links.}
 
+The highlight is especially important for track editing. 
+The commands that delete a single object are actually applied to the highlighted spot or link.
+For instance, to delete a spot or a link in \TrackScheme, simply move the mouse cursor over it so that it is highlighted and press \keys{D}.
+You should see the tracks being rearranged following the deletion. 
+In a BDV view, the highlight and deletion mechanism is the same. 
+
+
+
+\subsection{Linking spots together.}
+
+Creating links between existing spots happens in a similar way, except that you have to point to a source spot and another target spot for a single link.
+In \TrackScheme, move inside a spot until it is highlighted (no mouse-click).
+You must be at a zoom level large enough so that a spot is at least painted as a dot or a circle (Figure~\ref{fig:TrackSchemeZoomLevel}c, d, e). 
+Then press and hold the \keys{L} key.
+Without releasing the \keys{L} key, move the mouse out of the spot.
+You should see a red line representing the link to create.
+Move the mouse to the desired target spot, until it becomes highlighted.
+The red line should snap to it and become thicker.
+If you now release the \keys{L} key now, a new link between the source and target spot is created and in TrackScheme it should cause a rearrangement of the tracks.
+Notice that you cannot add a link between spots in the same frame.
+
+In BDV views, it is again very similar.
+Move the mouse over a spot until it is highlighted then press and hold the \keys{L} key.
+The view will automatically move to the next frame. 
+The link to create will be painted as a white line, and the ghost shape of the source spot is painted as a dashed white ellipse. 
+Move the mouse to the target spot in this frame until it is highlighted, then release the \keys{L} key.
+The link is created.
+If you press \keys{Shift+L} in a spot, the BDV view will move to the \textbf{previous} frame, and create a backward link.
+
+You cannot move in Z while creating a link this way. 
+You must orient the BDV view so that the source and target spot are roughly in the same displayed slice. 
+However you can move in time. 
+While still holding the \keys{L} key, press the \keys{N} or \keys{[} and \keys{M} or \keys{]} key to navigate backward and forward in time.
+This way you can create links between spots separated by more than one time-point.
+
+
+
+
 \subsection{The selection.}
 
-adding removing to the selection
+The selection is the third visual cue of Mastodon and probably the most important one. 
+It behaves and has the role of a classical selection tool you would find in another software that manages a collection of data items. 
+It is meant to select a subset of spots and links and apply operations to this subset.
+Contrary to the focus and the highlight, any number of spots and links can be put in the selection. 
 
-editing with the selection (deleting)
+The selection in \TrackScheme is built in a classical way. 
+Click and drag from an empty part of the view
+A red box will paint a box 
+Release it when it contains the part of the tracks you want to select, and they should now be painted in green.
+All spots and tracks in the selection box are put in the selection, even if the zoom level is too small for them to be painted.
+\keys{Control+A} selects the whole data. 
+There are variants to select only all the spots (\keys{Control+Alt+A}) or only all the links (\keys{Control+Shift+A}).
+
+\keys{Shift+click} on a spot or a link toggles it in the selection.
+To clear the selection, click on an empty part of the \TrackScheme view.
+In \TrackScheme you can also add spots - but not links - to the selection using the focus.
+For instance, if you combine navigating with the focus while holding the \keys{Shift} key, spots that you navigate to will be added to the selection. 
+\keys{Shift+Alt+\arrowkeydown} will add all the spots from the focused spot to the end of the branch it belongs to.
+Finally there are commands to add a full track from the currently focused spot. 
+\keys{Shift+Space} will select the whole track of the focused spot.
+\keys{Shift+Page\ \arrowkeydown} selects all the spots and links in the track that are forward in time relative to the focused spot, and \keys{Shift+Page\ \arrowkeyup} does the converse backward in time.
+
+In BDV views you can only edit the selection via \keys{Shift+click}.
+The interaction with the focus also work as described above.
+
 
 \subsection{Manually adding spots and linking them.}
+
+\subsection{Moving spots around.}
 
 \subsection{The undo/redo mechanism.}
 
