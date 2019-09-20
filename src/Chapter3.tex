@@ -67,7 +67,7 @@ When the zoom level is so low that several tracks coalesce, they are drawn as a 
     \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_3.png}}
     \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_4.png}}
     
-    \caption{TrackScheme displays spots and links differently depending on the zoom level. \textbf{a.}~At low zoom level tracks that coalesce are shown as a gray box. \textbf{b.}~Zooming in, the individual tracks appear first as black lines. \textbf{c.}~When they are separated enough, spots appear as black dots. \textbf{d.}~With an even higher zoom level they are shown as empty circles. \textbf{e.}~Until they grow big enough so that the spot labels can be painted. Notice the size of the sliders at the bottom and at the right of the view.}
+    \caption{TrackScheme displays spots and links differently depending on the zoom level. \textbf{a.}~At low zoom level tracks that coalesce are shown as gray boxes. \textbf{b.}~Zooming in, the individual tracks appear first as black lines. \textbf{c.}~When they are separated enough, spots appear as black dots. \textbf{d.}~With an even higher zoom level they are shown as empty circles. \textbf{e.}~Until they grow big enough so that the spot labels can be painted. Notice the size of the sliders at the bottom and at the right of the view.}
     \label{fig:TrackSchemeZoomLevel}
 \end{figure}  
 
@@ -93,7 +93,7 @@ Mastodon manages three special collections of spots and links to facilitate maki
 
 \subsubsection{Moving the focus.}
 
-The spot that has the focus is painted with a thick and dashed contour (Figure~\ref{fig:FocusedSpots}, left). 
+The spot that has the focus is painted with a dashed contour (Figure~\ref{fig:FocusedSpots}, left). 
 Only one spot can have the focus and it is set by mouse or keyboard interaction.
 Click on one spot in TrackScheme when fully zoomed, and move across track and time with the arrow cursor keys \keys{\arrowkeyleft} \keys{\arrowkeyright} \keys{\arrowkeyup} and \keys{\arrowkeydown}.
 If the focus reaches the border of the window, the view will be moved to follow it.
@@ -110,7 +110,7 @@ In the case where you could navigate to several branches, for instance you are c
     \centering
     \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_FocusInTrackScheme.png}
     \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_FocusInBDV.png}
-    \caption{Focused spots are painted in TrackScheme (left) and in BDV (right) views as ellipses with a thick, dashed-contour.}
+    \caption{Focused spots are painted in TrackScheme (left) and in BDV (right) views as ellipses with a dashed-contour.}
      \label{fig:FocusedSpots}
 \end{figure}  
 
@@ -186,7 +186,7 @@ For instance, if you click on the lock 1 \smallimg{lock.png} on a BDV view and t
 If you move with the focus in the \TrackScheme view, the BDV view will be translated to show the focused spot.
 If you \keys{Double-click} on a spot in any view, all views in sync will translate to show the spot.
 This is very handy to navigate around in TrackScheme, for instance following a cell over time while the BDV view displays where it is in the sample. 
-You can even combine several BDV views in sync at different magnification to have both an overview of the cell position in the sample and a close view of the cell itself.
+You can even combine several BDV views in sync at different magnification to have both an overview of the cell position in the sample and a close view of the cell itself (Figure~\ref{fig:ViewsInSync}).
 
 
 \begin{figure}
@@ -206,7 +206,7 @@ You can even combine several BDV views in sync at different magnification to hav
 
 The highlight is the second visual hint we will introduce. 
 You probably already noticed it and used it: the display of spots and links that are just below the mouse cursor changes.
-Highlighted spots and links are painted with a thick continuous line. 
+Highlighted spots and links are painted with a thick continuous line (Figure~\ref{fig:Highlight}). 
 To highlight a spot or link you just have to lay the mouse over it.
 As for the focus, the highlight is common to all views, and if you highlight a spot or a link in a view, its display is changed in all the views that show it.
 
@@ -220,6 +220,23 @@ You should see the tracks being rearranged following the deletion.
 In a BDV view, the highlight and deletion mechanism is the same. 
 
 
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[height=0.14\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_HighlightSpotBDV.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.14\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_HighlightLinkBDV.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.14\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_HighlightSpot.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.14\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_HighlightLink.png}}
+    
+    \caption{The highlight in Mastodon. The highlighted spot or link will appear painted with a thicker line, both in the BDV and TrackScheme views.}
+    \label{fig:Highlight}
+\end{figure}  
+
+
+
+
 
 \subsection{Linking spots together.}
 
@@ -228,13 +245,15 @@ In \TrackScheme, move inside a spot until it is highlighted (no mouse-click).
 You must be at a zoom level large enough so that a spot is at least painted as a dot or a circle (Figure~\ref{fig:TrackSchemeZoomLevel}c, d, e). 
 Then press and hold the \keys{L} key.
 Without releasing the \keys{L} key, move the mouse out of the spot.
-You should see a red line representing the link to create.
+You should see a red line representing the link to create (Figure~\ref{fig:TrackSchemeManualLink}).
 Move the mouse to the desired target spot, until it becomes highlighted.
 The red line should snap to it and become thicker.
 If you now release the \keys{L} key now, a new link between the source and target spot is created and in TrackScheme it should cause a rearrangement of the tracks.
 Notice that you cannot add a link between spots in the same frame.
+Also notice that you can toggle links this way.
+If you draw a link between two spots that are already connected, their link will be removed.
 
-In BDV views, it is again very similar.
+In BDV views, it is again very similar (Figure~\ref{fig:BDVManualLink}).
 Move the mouse over a spot until it is highlighted then press and hold the \keys{L} key.
 The view will automatically move to the next frame. 
 The link to create will be painted as a white line, and the ghost shape of the source spot is painted as a dashed white ellipse. 
@@ -250,6 +269,40 @@ This way you can create links between spots separated by more than one time-poin
 
 
 
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking1.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking2.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking3.png}}
+    \hfill\null
+    
+    \caption{Manually creating links in TrackScheme. Press and hold \keys{L} while hovering the mouse over a spot. Then drag the link in red to the target spot. A new link will be created between the two spots when you release \keys{L}. Doing this between two spots that are already connected removes the link between them.}
+    \label{fig:TrackSchemeManualLink}
+\end{figure}  
+
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking1.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking2.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking3.png}}
+    \hfill\null
+    
+    \caption{Manually creating links in BDV views. Press and hold \keys{L} while hovering the mouse over a spot. 
+    The viewer moves to the next frame and paints the source spot as a dashed, white outline, and the link to create as a white line.
+    Then drag the white link to the target spot. 
+    A new link will be created between the two spots when you release \keys{L}. 
+    As for \TrackScheme, doing this between two spots that are already connected removes the link between them.}
+    \label{fig:BDVManualLink}
+\end{figure}  
+
+
 
 \subsection{The selection.}
 
@@ -259,14 +312,14 @@ It is meant to select a subset of spots and links and apply operations to this s
 Contrary to the focus and the highlight, any number of spots and links can be put in the selection. 
 
 The selection in \TrackScheme is built in a classical way. 
-Click and drag from an empty part of the view
-A red box will paint a box 
-Release it when it contains the part of the tracks you want to select, and they should now be painted in green.
+Click and drag from an empty part of the view.
+A red box appears to let you select an area of the view.
+Release it when it contains the part of the tracks you want to select, and selected items should now be painted in green (Figure~\ref{fig:SelectionBox}).
 All spots and tracks in the selection box are put in the selection, even if the zoom level is too small for them to be painted.
 \keys{Control+A} selects the whole data. 
 There are variants to select only all the spots (\keys{Control+Alt+A}) or only all the links (\keys{Control+Shift+A}).
 
-\keys{Shift+click} on a spot or a link toggles it in the selection.
+\keys{Shift+click} on a spot or a link to toggle it in the selection.
 To clear the selection, click on an empty part of the \TrackScheme view.
 In \TrackScheme you can also add spots - but not links - to the selection using the focus.
 For instance, if you combine navigating with the focus while holding the \keys{Shift} key, spots that you navigate to will be added to the selection. 
@@ -275,8 +328,22 @@ Finally there are commands to add a full track from the currently focused spot.
 \keys{Shift+Space} will select the whole track of the focused spot.
 \keys{Shift+Page\ \arrowkeydown} selects all the spots and links in the track that are forward in time relative to the focused spot, and \keys{Shift+Page\ \arrowkeyup} does the converse backward in time.
 
+The selection is shown in BDV views as red or magenta spots and links by default.
 In BDV views you can only edit the selection via \keys{Shift+click}.
 The interaction with the focus also work as described above.
+
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_SelectionBox1.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_SelectionBox2.png}}
+    \hfill\null
+    
+    \caption{The selection box in \TrackScheme.}
+    \label{fig:SelectionBox}
+\end{figure}  
 
 
 \subsection{Manually adding spots and linking them.}
