@@ -102,8 +102,8 @@ It is meant to facilitate keyboard interaction.
 
 You can also jumps across branches.
 A branch in a track is a linear section of the track between divisions, fusions or the track end or start.
-\keys{Alt+\arrowkeyup} and \keys{Alt+\arrowkeydown} will move the focus to the branch start and end.
-In the case where you could navigate to several branches, for instance you are currently at a cell division and you can go the end of either daughter cells branches, you can navigate to one or the other with \keys{Alt+\arrowkeydown} or \keys{Control+Alt+\arrowkeydown}.
+\keys{\Alt+\arrowkeyup} and \keys{\Alt+\arrowkeydown} will move the focus to the branch start and end.
+In the case where you could navigate to several branches, for instance you are currently at a cell division and you can go the end of either daughter cells branches, you can navigate to one or the other with \keys{\Alt+\arrowkeydown} or \keys{\ctrl+\Alt+\arrowkeydown}.
 
 
 \begin{figure}
@@ -174,10 +174,10 @@ When you are in a BDV view and have set the focus, you can also navigate with th
 After clicking inside a cell, you can navigate in time and follow a cell lineage through the movie with \keys{\arrowkeyup} and \keys{\arrowkeydown}.
 If you reach the border of the view or if the cell moves in Z, the view will be translated to keep the cell in focus.
 However, you cannot edit the spot labels in a BDV view nor jump from one track to another with \keys{\arrowkeyleft} \keys{\arrowkeyright}.
-Navigating across branch with \keys{Alt+\arrowkeyup} and \keys{Alt+\arrowkeydown} \etc also works.
+Navigating across branch with \keys{\Alt+\arrowkeyup} and \keys{\Alt+\arrowkeydown} \etc also works.
 
 
-\subsection{Linking several views together.}
+\subsection{Synchronizing several views together.}
 
 You probably noticed that both BDV and \TrackScheme views have a toolbar on the of the view itself.
 This toolbar can be hidden and shown by a press of the \keys{T} key.
@@ -259,7 +259,7 @@ The view will automatically move to the next frame.
 The link to create will be painted as a white line, and the ghost shape of the source spot is painted as a dashed white ellipse. 
 Move the mouse to the target spot in this frame until it is highlighted, then release the \keys{L} key.
 The link is created.
-If you press \keys{Shift+L} in a spot, the BDV view will move to the \textbf{previous} frame, and create a backward link.
+If you press \keys{\shift+L} in a spot, the BDV view will move to the \textbf{previous} frame, and create a backward link.
 
 You cannot move in Z while creating a link this way. 
 You must orient the BDV view so that the source and target spot are roughly in the same displayed slice. 
@@ -316,20 +316,20 @@ Click and drag from an empty part of the view.
 A red box appears to let you select an area of the view.
 Release it when it contains the part of the tracks you want to select, and selected items should now be painted in green (Figure~\ref{fig:SelectionBox}).
 All spots and tracks in the selection box are put in the selection, even if the zoom level is too small for them to be painted.
-\keys{Control+A} selects the whole data. 
-There are variants to select only all the spots (\keys{Control+Alt+A}) or only all the links (\keys{Control+Shift+A}).
+\keys{\ctrl+A} selects the whole data. 
+There are variants to select only all the spots (\keys{\ctrl+\Alt+A}) or only all the links (\keys{\ctrl+\shift+A}).
 
-\keys{Shift+click} on a spot or a link to toggle it in the selection.
+\keys{\shift+click} on a spot or a link to toggle it in the selection.
 To clear the selection, click on an empty part of the \TrackScheme view.
 In \TrackScheme you can also add spots - but not links - to the selection using the focus.
-For instance, if you combine navigating with the focus while holding the \keys{Shift} key, spots that you navigate to will be added to the selection. 
-\keys{Shift+Alt+\arrowkeydown} will add all the spots from the focused spot to the end of the branch it belongs to.
+For instance, if you combine navigating with the focus while holding the \keys{\shift} key, spots that you navigate to will be added to the selection. 
+\keys{\shift+\Alt+\arrowkeydown} will add all the spots from the focused spot to the end of the branch it belongs to.
 Finally there are commands to add a full track from the currently focused spot. 
-\keys{Shift+Space} will select the whole track of the focused spot.
-\keys{Shift+Page\ \arrowkeydown} selects all the spots and links in the track that are forward in time relative to the focused spot, and \keys{Shift+Page\ \arrowkeyup} does the converse backward in time.
+\keys{\shift+Space} will select the whole track of the focused spot.
+\keys{\shift+Page\ \arrowkeydown} selects all the spots and links in the track that are forward in time relative to the focused spot, and \keys{\shift+Page\ \arrowkeyup} does the converse backward in time.
 
 The selection is shown in BDV views as red or magenta spots and links by default.
-In BDV views you can only edit the selection via \keys{Shift+click}.
+In BDV views you can only edit the selection via \keys{\shift+click}.
 The interaction with the focus also work as described above.
 
 
@@ -346,12 +346,53 @@ The interaction with the focus also work as described above.
 \end{figure}  
 
 
+
+\subsection{Editing spots and links with the selection.}
+
+The selection actions are all applied in bulk. 
+You can delete all the spots and the links currently in the selection with \keys{\shift+\backdel}.
+If your selection includes spots that are not linked, pressing \keys{\shift+K} will link them sequentially. 
+If the selection contains more than one spot per frame, only one of them, picked randomly, will be linked. 
+
+
+
 \subsection{Manually adding spots and linking them.}
+
+Adding new spots requires specifying where to add them.
+Since \TrackScheme does not include spatial information you cannot use it to add spots.
+You can only add spots in the BDV views. 
+
+To add a new spot, simply hover the mouse in a BDV view where you want the spot to be created, and press \keys{A}.
+A new spot will appear, with a radius given by the last radius value you used.
+You can respectively decrease or increase the radius of a spot by pressing \keys{Q} and \keys{E}.
+Modifiers affect the amount of radius changes.
+\keys{\shift+Q} and \keys{\shift+E} change the radius by a larger amount and \keys{\ctrl+Q} and \keys{\ctrl+E} by a finer amount.
+
+Spots created this way are not linked. 
+It might not be the quicker way to follow manually a cell over several frames. 
+To do so, you can use a little trick. 
+When you want to add a spot, and link it to an existing one, arrange the BDV view so that this source spot is visible in the displayed time-point.
+Then place the mouse cursor \textit{inside} the source spot, and press and hold \keys{A}.
+Like for creating links, the BDV moves to the next time-point, paint the source spot and link with white, dashed lines, and let you position the new target spot.
+While you keep \keys{A} pressed, you can move the target spot around.
+When it is in the desired position, release \keys{A}.
+The new spot is created and linked to the source spot.
+This way, you can quickly follow a cell or an object and manually creates a track for it by just positioning the mouse with a few presses of \keys{A}.
 
 \subsection{Moving spots around.}
 
+To move an existing spot we use a similar interaction with the spots.
+In a BDV view, place the mouse cursor inside the spot you want to move, then press and hold \keys{Space}.
+While you hold \keys{Space} pressed the spot will move where you move the mouse. 
+Release the \keys{Space} key at the desired location.
+
+
 \subsection{The undo/redo mechanism.}
 
-
+One of the most useful actions is undoubtedly undo and redo. 
+To undo just press \keys{\ctrl+Z} and to redo use \keys{\ctrl+\shift+Z}. 
+There is no limit to the number of undos you can do. 
+And everything can be undone in Mastodon, even tag definitions.
+In our humble opinion, this is one of the core reasons for Mastodon, a tracking and lineaging software that aims at combining automated and manual approaches, to exist.
 
 
