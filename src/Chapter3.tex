@@ -11,9 +11,13 @@ Manual editing is often \textbf{not desirable}, first because it is not objectiv
 Second, because it does not look like a realistic solution when \textit{e.g.} thousands of cells are to be followed over thousands of time-points.
 Regarding the latter however, several courageous individuals sacrificed their time, energy and sometimes sanity in doing so, for the sake of finally getting a scientific answer when there was no other working solutions. 
 See for instance~\cite{MaMuT} and~\cite{McDole2018}.
-If you are going this way, Mastodon aims at providing tools to do so, in the fastest and least painful way possible. 
+If you are going this way, Mastodon aims at providing tools to do so, in the hopefully fastest and least painful way possible. 
 Also, you can combine the fully automated approach of the previous chapter with manual editing to correct hopefully a few numbers of mistakes.
 Finally, there is also a semi-automated tracking tool, that we will introduce later.
+
+This tutorial will start by presenting you the manual editing tools of Mastodon, as well as \TrackScheme and the focus, highlight and selection tools.
+Because this catalogue of actions can be a bit dry and long to swallow, we will in the last paragraph use it to remove and rebuild some tracks from the results of the last tutorial.
+
 
 
 \subsection{TrackScheme, the lineage view and editor.}
@@ -30,7 +34,7 @@ A window as shown in Figure~\ref{fig:TrackScheme} should open.
      \label{fig:TrackScheme}
 \end{figure}  
 
-The TrackScheme view is a special way of displaying tracks. 
+The TrackScheme view offers a special way of displaying tracks. 
 If you are familiar with TrackMate, you will see that we brought the same kind of features here, but scaled to large data.
 You can think of TrackScheme as a workbench for tracks, where you will edit, cut, stitch and rename them.
 It displays a kind of "track map", where a track is laid on a panel, arranged vertically over time, as a Parisian subway train map. 
@@ -394,5 +398,58 @@ To undo just press \keys{\ctrl+Z} and to redo use \keys{\ctrl+\shift+Z}.
 There is no limit to the number of undos you can do. 
 And everything can be undone in Mastodon, even tag definitions.
 In our humble opinion, this is one of the core reasons for Mastodon, a tracking and lineaging software that aims at combining automated and manual approaches, to exist.
+
+
+\subsection{Putting things in practice.}
+
+Make sure you have one BDV view and one \TrackScheme view open, and that both are linked using the same lock \smallimg{lock.png}.
+In \TrackScheme, select one of the spot or link that belongs to one of the long tracks; the ones that extend from the first time-point to the last.
+Press \keys{\shift+Space}.
+You selected the whole track to which the spot or link you selected belong to.
+Press \keys{\shift+\backdel}.
+The track has been removed.
+
+Let's remove a couple of other tracks another way.
+Click and drag in \TrackScheme to draw a selection box around some long tracks.
+Then press \keys{\shift+\backdel}.
+Our model should now lack several good tracks we will try to put back manually.
+
+In the BDV view, go to the first time-point, and look for a cell whose spot has been removed.
+Pan the view (right-click and drag), adjust the zoom (\keys{\ctrl+\shift+Mousewheel}) and the Z position (\keys{Mousewheel} with or without \keys{\shift}) so that the cell is well in view.
+Then put the mouse cursor over it and press \keys{A}.
+A spot has been added on the cell.
+The fine adjustment of the spot position in 3D can be made easier with a second BDV view.
+Open another BDV view, zoom and rotate it so that it is aligned with the XZ plane by pressing \keys{\shift+Y}.
+Add it to the lock group by toggling the right lock \smallimg{lock.png} in the toolbar.
+Go back to the first BDV view, and align it with the XY plane by pressing \keys{\shift+Z}.
+You must now find the spot we just added. 
+If you cannot find it in any of the two BDV view, look for it in \TrackScheme.
+It will be in the rightmost column at the first line, since we added the spot to the first time-point.
+Double-clicking on it in \TrackScheme will center the two BDV views on it.
+Now that the two BDV views are centered on the spot, you can adjust its XY and Z positions over the cell using the two views.
+In any of the two BDV views, put the mouse cursor, then press and hold \keys{Space}.
+Move the spot the desired location and release \keys{Space}.
+The spot might not have the right diameter to encompass the cell.
+Change its radius by pressing \keys{\shift+Q} and \keys{\shift+E} (without \keys{\shift} for finer adjustments) until you are happy with it.
+
+You must now do it for the same cell in the subsequent time-points.
+Press \keys{M} in a BDV view to move to the next time-point.
+Again, put the mouse cursor roughly at the center of the cell and press \keys{A}.
+Adjust its position with \keys{Space} and move to the next time-point.
+
+We have to repeat this for all the time-points of the movie. 
+This might be tedious but does not have to be too long. 
+When I need to do this I adopt a posture similar to what I have when I play PC video-games: the right hand on the mouse, the left hand over the left side of the keyboard, over the \keys{A}, \keys{D}, \keys{Q}, and \keys{E}.
+The \keys{\shift} key can be accessed with the little finger, the \keys{Space} key with the thumb.
+The \keys{N} and \keys{M} keys to navigate over time are accessible with the left thumb also.
+
+We created a bunch of spots, but they are not linked. 
+Move to the \TrackScheme view. 
+You will find the spots you last created there always at rightmost part of the view.
+Since they are not linked, they should appear each in their separate column, in a stairway manner. 
+Select them all by dragging a selection box around them and press \keys{\shift+K}.
+They should now link together into a new track.
+With one of the spot of this newly created track selected, press \keys{\Alt+\arrowkeyup} to jump to the first spot in the track.
+Then press \keys{\return} to edit its name into something like \texttt{My first track}.
 
 
