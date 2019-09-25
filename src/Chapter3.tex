@@ -402,6 +402,23 @@ In our humble opinion, this is one of the core reasons for Mastodon, a tracking 
 
 \subsection{Putting things in practice.}
 
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat[]{\includegraphics[height=0.18\textheight]{figures/Mastodon_ManualTracking_01.png}}
+    \hfill
+    \subfloat[]{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_ManualTracking_02.png}}
+    \hfill
+    \subfloat[]{\includegraphics[height=0.18\textheight]{figures/Mastodon_ManualTracking_03.png}}
+    \hfill\null
+    
+    \caption{Manual tracking in Mastodon. \textbf{a.}~After selecting the spots we added to each time-point. \textbf{b.}~After linking them with \keys{Shift+K}. \textbf{c.}~Backtracking a cell with \keys{Shift+A}.  }
+    \label{fig:ManualTracking}
+\end{figure}  
+
+
+
 Make sure you have one BDV view and one \TrackScheme view open, and that both are linked using the same lock \smallimg{lock.png}.
 In \TrackScheme, select one of the spot or link that belongs to one of the long tracks; the ones that extend from the first time-point to the last.
 Press \keys{\shift+Space}.
@@ -460,20 +477,5 @@ Create a spot over it by pressing \keys{A} and center and resize it until satisf
 Now keep the mouse cursor inside this spot, and press \keys{\shift+A} and hold the \keys{A} key.
 The BDV view moves to the previous time-point and creates a new spot there, already linked to the other one.
 By repeating this you can create a track that will backtrack the cell until it appears in the movie (Figure~\ref{fig:ManualTracking}c).
-
-\begin{figure}
-    \centering
-    \null\hfill
-    \subfloat[]{\includegraphics[height=0.18\textheight]{figures/Mastodon_ManualTracking_01.png}}
-    \hfill
-    \subfloat[]{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_ManualTracking_02.png}}
-    \hfill
-    \subfloat[]{\includegraphics[height=0.18\textheight]{figures/Mastodon_ManualTracking_03.png}}
-    \hfill\null
-    
-    \caption{Manual tracking in Mastodon. \textbf{a.}~After selecting the spots we added to each time-point. \textbf{b.}~After linking them with \keys{Shift+K}. \textbf{c.}~Backtracking a cell with \keys{Shift+A}.  }
-    \label{fig:ManualTracking}
-\end{figure}  
-
 
 
