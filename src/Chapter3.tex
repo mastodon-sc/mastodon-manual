@@ -1,10 +1,10 @@
 \section{Manually editing tracks in Mastodon. TrackScheme.}
 
-One of the key feature of Mastodon, the implementation of which made our lives extremely hard and rich, is the ability to edit manually at any time any spot or link within a data model that can contains billions of them, while retaining a good and pleasant response time from the software.
+One of the key feature of Mastodon, the implementation of which made our lives extremely hard and rich, is the ability to edit manually at any time any spot or link within an annotation that can contains billions of them, while retaining a good and pleasant response time from the software.
 I am not even speaking of the undo/redo mechanism, which getting right was also very interesting. 
 
-In this short tutorial, we will show how to do just that, from existing tracking data, the one we generated in the previous section. 
-We will use it as an opportunity to present TrackScheme, the track visualizer of Mastodon, as well as introduce several useful editing features such as undo/redo mechanism mentioned above.
+In this tutorial, we will show how to do just that, from existing tracking data, the one we generated in the previous section. 
+We will use it as an opportunity to present \TrackScheme, the track visualizer of Mastodon, as well as introduce several useful editing features such as the undo/redo mechanism mentioned above.
 We will also introduce the various visual hints that help the user knowing what spot or link is currently edited or inspected, such as the \textbf{focus}, the \textbf{highlight} and the \textbf{selection}.
 
 Manual editing is often \textbf{not desirable}, first because it is not objective which might be detrimental in situations where the performance of an algorithm is evaluated, or when an unknown motion characteristics is investigated. 
@@ -161,7 +161,7 @@ For this, we simply use the first spot of a track.
 So when we speak of the label of a track, we simply means the label of the first spot (in time) in the track. 
 The tracks are arranged from left to right following the alphanumerical order of the track labels.
 So you can change the tracks arrangement by editing theirs first spot's label.
-For instance a track named \texttt{A} will be laid out to the left of a tracks named \texttt{B}, and a track named \texttt{D9} will be put to the left of a track named \texttt{D10} (Figure~\ref{fig:TrackOrder}).
+For instance a track named \texttt{A} will be laid out to the left of a track named \texttt{B}, and a track named \texttt{D9} will be put to the left of a track named \texttt{D10} (Figure~\ref{fig:TrackOrder}).
 
 If you change the track labels now, the tracks will not move immediately in TrackScheme.
 For the new arrangement to happen, you need to either open another TrackScheme window, or to edit the data, which we will see soon.
@@ -276,11 +276,11 @@ This way you can create links between spots separated by more than one time-poin
 \begin{figure}
     \centering
     \null\hfill
-    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking1.png}}
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking1.png}}
     \hfill
-    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking2.png}}
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking2.png}}
     \hfill
-    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking3.png}}
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking3.png}}
     \hfill\null
     
     \caption{Manually creating links in TrackScheme. Press and hold \keys{L} while hovering the mouse over a spot. Then drag the link in red to the target spot. A new link will be created between the two spots when you release \keys{L}. Doing this between two spots that are already connected removes the link between them.}
@@ -291,11 +291,11 @@ This way you can create links between spots separated by more than one time-poin
 \begin{figure}
     \centering
     \null\hfill
-    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking1.png}}
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking1.png}}
     \hfill
-    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking2.png}}
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking2.png}}
     \hfill
-    \subfloat{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking3.png}}
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking3.png}}
     \hfill\null
     
     \caption{Manually creating links in BDV views. Press and hold \keys{L} while hovering the mouse over a spot. 
@@ -478,4 +478,6 @@ Now keep the mouse cursor inside this spot, and press \keys{\shift+A} and hold t
 The BDV view moves to the previous time-point and creates a new spot there, already linked to the other one.
 By repeating this you can create a track that will backtrack the cell until it appears in the movie (Figure~\ref{fig:ManualTracking}c).
 
-
+We have now restored two of the tracks we removed at the beginning of this paragraph.
+Hopefully now you feel enough at ease to do these manipulations quickly, efficiently and without too much hassle.
+But one of the concluding beauty of this chapter is that you can restore the data as we had it at the beginning by roughly 100 presses of the \keys{\ctrl+Z} keys.
