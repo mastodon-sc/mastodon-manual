@@ -413,6 +413,7 @@ Let's remove a couple of other tracks another way.
 Click and drag in \TrackScheme to draw a selection box around some long tracks.
 Then press \keys{\shift+\backdel}.
 Our model should now lack several good tracks we will try to put back manually.
+For clarity, also remove all the tracks on the right part of the \TrackScheme view, that do not start at the first time-point.
 
 In the BDV view, go to the first time-point, and look for a cell whose spot has been removed.
 Pan the view (right-click and drag), adjust the zoom (\keys{\ctrl+\shift+Mousewheel}) and the Z position (\keys{Mousewheel} with or without \keys{\shift}) so that the cell is well in view.
@@ -437,7 +438,7 @@ Press \keys{M} in a BDV view to move to the next time-point.
 Again, put the mouse cursor roughly at the center of the cell and press \keys{A}.
 Adjust its position with \keys{Space} and move to the next time-point.
 
-We have to repeat this for all the time-points of the movie. 
+We have to repeat this for all the time-points of the movie (Figure~\ref{fig:ManualTracking}a).
 This might be tedious but does not have to be too long. 
 When I need to do this I adopt a posture similar to what I have when I play PC video-games: the right hand on the mouse, the left hand over the left side of the keyboard, over the \keys{A}, \keys{D}, \keys{Q}, and \keys{E}.
 The \keys{\shift} key can be accessed with the little finger, the \keys{Space} key with the thumb.
@@ -448,8 +449,31 @@ Move to the \TrackScheme view.
 You will find the spots you last created there always at rightmost part of the view.
 Since they are not linked, they should appear each in their separate column, in a stairway manner. 
 Select them all by dragging a selection box around them and press \keys{\shift+K}.
-They should now link together into a new track.
+They should now link together into a new track (Figure~\ref{fig:ManualTracking}b).
 With one of the spot of this newly created track selected, press \keys{\Alt+\arrowkeyup} to jump to the first spot in the track.
 Then press \keys{\return} to edit its name into something like \texttt{My first track}.
+
+We can create a track directly.
+Let's do this by backtracking a cell from the last time-point to the first.
+In a BDV view, move to the last time-point, and place the mouse cursor over an annotated cell. 
+Create a spot over it by pressing \keys{A} and center and resize it until satisfaction.
+Now keep the mouse cursor inside this spot, and press \keys{\shift+A} and hold the \keys{A} key.
+The BDV view moves to the previous time-point and creates a new spot there, already linked to the other one.
+By repeating this you can create a track that will backtrack the cell until it appears in the movie (Figure~\ref{fig:ManualTracking}c).
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat[]{\includegraphics[height=0.18\textheight]{figures/Mastodon_ManualTracking_01.png}}
+    \hfill
+    \subfloat[]{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_ManualTracking_02.png}}
+    \hfill
+    \subfloat[]{\includegraphics[height=0.18\textheight]{figures/Mastodon_ManualTracking_03.png}}
+    \hfill\null
+    
+    \caption{Manual tracking in Mastodon. \textbf{a.}~After selecting the spots we added to each time-point. \textbf{b.}~After linking them with \keys{Shift+K}. \textbf{c.}~Backtracking a cell with \keys{Shift+A}.  }
+    \label{fig:ManualTracking}
+\end{figure}  
+
 
 
