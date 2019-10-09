@@ -58,7 +58,7 @@ A single link deletion will generate a big rearrangement in the track hierarchy,
 Without any subtle cues to the user, these changes will disorient them quickly.
 Animating the editing events is a great way to hint them about what happens to the data modify in a user-friendly way.
 
-We also added some fluidity in \TrackScheme navigation. 
+We also added some fluidity and inertia in \TrackScheme navigation. 
 In the TrackMate~\cite{TrackMate} and MaMuT~\cite{MaMuT} version of \TrackScheme, panning and zooming were done in discrete discontinuous steps, that would also lead to confusion.
 In Mastodon, moving and zooming are done continuously. 
 There is even some inertia again to emulate interacting with a tangible panel.
@@ -66,3 +66,25 @@ There is even some inertia again to emulate interacting with a tangible panel.
 
 
 \subsection{Spatial context in TrackScheme.}
+
+There are situations where the density of cells displayed in \TrackScheme is so high that even at high zoom level this view is barely useful. 
+The hierarchical arrangement of tracks in \TrackScheme is handy to grasp how tracks behave over time.
+But since it eliminates spatial information, the neighbors of a track do not bring information to it.
+
+The spatial context in \TrackScheme reconciles spatial information with the hierarchical layout. 
+In \TrackScheme views, the toolbar has a \menu{context} list box, from which you can select between \texttt{full graph} and the names of all the BDV views currently opened (typically \texttt{BigDataViewer 1}, \etc).
+When \texttt{full graph} is selected, the full lineage data is shown in \TrackScheme. 
+This is the classic view.
+If you pick an item corresponding to an opened BDV view, then this \TrackScheme view will only display the lineages of the cells currently displayed in the target BDV view. 
+And the \TrackScheme view will be updated (and animated) as you pan, move in Z, zoom or unzoom the BDV view. 
+
+Try it now with the data from the previous tutorial.
+Open a BDV view and a \TrackScheme view.
+In the \TrackScheme view, select the \texttt{BigDataViewer 1} item (it might not be 1 in your case).
+Then in the BDV view, zoom so that almost only one cell is displayed. 
+The \TrackScheme view should display considerably fewer tracks. 
+As you unzoom, some lineages will appear in \TrackScheme.
+You will probably see that some lineages appear in gray, with dashed lines.
+They are called "ghost" lineages: 
+These are the lineages of cells that are not within the BDV view at the time-point currently displayed, but that will enter this view later or earlier in time. 
+The context feature is immensely useful when studying tissue development or coordinated cells movement. 
