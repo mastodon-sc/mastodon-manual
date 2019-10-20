@@ -10,3 +10,63 @@ Coupled with feature-based coloring, the display and sorting of values in the ta
 
 Numerical features are numbers that classically relate to a physical quantity.
 When we need to \textit{categorize} items, we rely on \textit{tags}.
+We describe them just below. 
+This chapter will also show you how to compute numerical features and create a coloring view from the feature values and  tags.
+Doing so, we will introduce the third kind of data view in Mastodon: the data tables.
+
+
+\subsection{Tags and tag-sets.}
+
+As we said above, every-time you need to categorize certain data items, or need to visualize categories, you should rely on tags.
+Let's suppose that you are investigating the trajectories of cells in a developing embryo from an early stage to a stage where the embryo is polarized.
+Some cells will migrate to the anterior part, some others to the posterior part, \etc. 
+You might want to tag cell tracks with the \texttt{Anterior} or \texttt{Posterior} tag, to investigate where does these cell come from in the early embryo.
+Or let's say that you are curating the results of the automated tracking on a large images. 
+The tracking results might have some inaccuracies, and you want to correct them for important tracks.
+Because there is a lot of tracks, you share the workload with some colleagues. 
+You work asynchronously with them, editing the Mastodon file one after another. 
+Doing so, you can use tags in Mastodon to mark some tracks as reviewed by you.
+Your colleagues will use a tag for themselves, to ensure that no two scientists are reviewing the same track twice.
+All the cells that are not tagged in this categorisation are still waiting to be reviewed. 
+
+In Mastodon, a categorization corresponds to a \textbf{tag-set}.
+A tag-set defines a property that can have a discrete number of possible values, or \textbf{tags}.
+In the first of the two examples above, \texttt{Location} would be a tag-set to specify the location of cells.
+\texttt{Anterior} and \texttt{Posterior} would be two tags belonging to the \texttt{Location} tag-set.
+In the second example, \texttt{Reviewed by} would be a tag-set, and \texttt{Mette}, \texttt{Pavel}, \texttt{Tobias} and \texttt{Jean-Yves} would be 4 tags of this tag-set.
+
+You can assign tags to spots and links.
+To assign a tag to a whole track, you have to assign this tag to all the spots and links of this track.
+One data item (a spot or a ling) can have 1 or 0 tags per existing tag-set.
+But they can be categorized by as many tag-sets as there is.
+For instance, a spot can have the tag \texttt{Anterior} in the \texttt{Location} tag-set, and the tag \texttt{Pavel} in the \texttt{Reviewed by} tag-set. 
+Or it can be not tagged in the \texttt{Reviewed by} tag-set.
+But it cannot have both the tag \texttt{Mette} and the tag \texttt{Tobias} because they belong to the same tag-set.
+Each tag-set works independently, and clearing a tag-set does not affect the others even for one data item.
+With this, let's see how to create tag-sets.
+
+
+\subsubsection{Creating tag-sets.}
+
+
+
+
+
+\subsubsection{Assigning tags to data items.}
+
+\subsubsection{Coloring views by tag-sets.}
+
+
+\subsection{Numerical features.}
+
+\subsubsection{Feature computation.}
+
+\subsubsection{Coloring views by numerical features.}
+
+\subsubsection{Accelerating feature computation with the update mechanism.}
+
+
+\subsection{Tags, numerical features and saving the data to disk.}
+
+\subsection{The data table views.}
+
