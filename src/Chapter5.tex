@@ -30,7 +30,7 @@ Your colleagues will use a tag for themselves, to ensure that no two scientists 
 All the cells that are not tagged in this categorisation are still waiting to be reviewed. 
 
 In Mastodon, a categorization corresponds to a \textbf{tag-set}.
-A tag-set defines a property that can have a discrete number of possible values, or \textbf{tags}.
+A tag-set defines a property that can have a reasonable number of discrete values, or \textbf{tags}.
 In the first of the two examples above, \texttt{Location} would be a tag-set to specify the location of cells.
 \texttt{Anterior} and \texttt{Posterior} would be two tags belonging to the \texttt{Location} tag-set.
 In the second example, \texttt{Reviewed by} would be a tag-set, and \texttt{Mette}, \texttt{Pavel}, \texttt{Tobias} and \texttt{Jean-Yves} would be 4 tags of this tag-set.
@@ -43,18 +43,66 @@ For instance, a spot can have the tag \texttt{Anterior} in the \texttt{Location}
 Or it can be not tagged in the \texttt{Reviewed by} tag-set.
 But it cannot have both the tag \texttt{Mette} and the tag \texttt{Tobias} because they belong to the same tag-set.
 Each tag-set works independently, and clearing a tag-set does not affect the others even for one data item.
-With this, let's see how to create tag-sets.
+Now that we set things straight, let's see how to create tag-sets.
+We will base the demonstration in this chapter on the data we generated in the tutorial chapter~\ref{Getting_started}.
 
 
 \subsubsection{Creating tag-sets.}
 
+On the main window (see Figure~\ref{fig:MastodonMainWindow} page~\pageref{fig:MastodonMainWindow}), there is a button \texttt{configure tags}. 
+Pressing it opens the tag-set dialog. 
+Right now, it appears as an empty table made of two columns. 
+This is where you enter tag-sets and tags.
 
+Press the \smallimg{add.png} button on the left column to create a new tag-set. 
+A default name is shown for the tag-set, that you can edit.
+You can also directly press the  \keys{\return} key to immediately start editing the new tag-set.
+Let's say we want to create the location tag we talked about before.
+Type \texttt{Location} in the text field. 
+An empty line followed by a \smallimg{add.png} button should appear on the right column.
+This is where you will enter the tags of this tag-set.
+Click on this button, or press the \keys{\tab} key followed by the \keys{\return} key to create a new tag.
+For instance, the \texttt{Anterior} tag.
+Note that a tag is only made of a label (the text) and a color.
+The color will be used in Mastodon views.
+Create a second tag for the same tag-set called \texttt{Posterior}.
+Pick the color as you like. 
+Now try to create another tag-set called \texttt{Reviewed by} and create some tags in this tag-set. 
+The tag-set dialog is normally fully navigable with the \keys{\tab}, \keys{\arrowkeyup} and \keys{\arrowkeydown} keys, so that you can enter tags quickly if you have a lot of them.
+You can create new tag-set or new tags with the \keys{\return} key, and delete them either with the \keys{\del} key or by pressing the \smallimg{delete.png} button.
+
+When you are finished, press the \menu{OK} button.
 
 
 
 \subsubsection{Assigning tags to data items.}
 
+Tags are set via the selection tool, presented above (chapter~\ref{Selection_tool} page~\pageref{Selection_tool}).
+Once you have some spots and links in the selection, you can assign a tag to it via the \menu{Edit > Tags > The tag set name > The tag label} menu.
+The menu content will be updated with the tag-sets and tags you defined in the tag-set dialog, described above.
+This will work in any Mastodon views, BDV or \TrackScheme.
+
+\TrackScheme ships a second way to set tags quickly from the keyboard.
+After selecting the spots and links of interest, press the \keys{Y} key.
+A floating menu should appear on the left part of the view panel. 
+Select the desired tag-set with the \keys{1}, \keys{2}, .. keys.
+The menu now shows the tags defined within this tag-set, that you can select the same way.
+Note that there is a way to remove all the tags over all the tag-sets on the selection by pressing \keys{\shift+\del} on the first menu, or just the tags of the selected tag-set by pressing \keys{0} on the second menu.
+
+
+
 \subsubsection{Coloring views by tag-sets.}
+
+The tags we just defined and assigned can be used in with the views, to highlight the items that are tagged. 
+In the \menu{View > Coloring} menu of any view in Mastodon, you will find a sub-menu updated with the tag-sets you created among other choices. 
+By default, newly created views are colored with the \menu{None} coloring mode, which simply colors all the spots and links the same way, taking colors from render settings. 
+If you select a mode corresponding to a tag-set, tagged spots and links will appear painted with the color you chose for the tags of this tag-sets.
+This is very handy to mark some locations in the image or highlight interesting tracks in the data.
+Later we will see that tags can be used to retrieve specific items for further processing.
+Finally, in \TrackScheme there is an option to show a legend of the current coloring mode.
+You can toggle it on or off and set the location of this legend in the \menu{View > Colorbar} menu.
+
+
 
 
 \subsection{Numerical features.}
