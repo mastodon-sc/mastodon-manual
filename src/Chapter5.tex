@@ -107,7 +107,55 @@ You can toggle it on or off and set the location of this legend in the \menu{Vie
 
 \subsection{Numerical features.}
 
+Numerical features are values that are calculated from the data.
+For instance the mean intensity within a spot, or the displacement along a link.
+They are very generic: thr main restrictions is that there must be a data item (a spot or a link) per feature value. 
+But the feature itself can be scalar, non-scalar, real, integer, a string, a vector, 
+\etc.
+They are \textit{labile}. 
+Because they are defined for a data item, they will become invalid as soon as the data item changes.
+Think of what happens to the spot mean intensity if the spot is moved over the image for instance.
+Because we want to accommodate extensibility and large data, we have to use a special system that we describe below. 
+
 \subsubsection{Feature computation.}
+
+Numerical feature values are calculated by \textbf{feature computers}.
+Feature computers are actually specialized Mastodon plugins, made so that it is easy for a 3rd party (you) to implement their own features in Mastodon.
+We explain you to write your own feature computer in the second part of this manual, dedicated to technical information.
+
+Because feature computation can take very long on large images, you have to trigger it manually.
+On Mastodon main window, you can find a button \texttt{compute features} button.
+Pressing it will show the dialog below
+TODO
+Each feature computer is listed on the left panel.
+By clicking on the name the right panel shows some information about the feature they compute. 
+
+Note that they are named 'features' on this panel, but they are in reality the feature computers.
+For instance if you click on the \texttt{Spot gaussian-filtered intensity}, you will see in the information panel that this computer generates a feature for the mean intensity (weighted by a gaussian) and its standard deviation within a spot.
+Note also that they can have dependencies.
+For instance, the \texttt{Link velocity} feature computer depends on the \texttt{Link displacement} feature to be present at the time of computation.
+
+The check-box on the left of each feature computer name triggers whether they will be part of the next feature computation.
+Press the \menu{Compute} button to trigger computation of features.
+You will probably notice, thanks to the progress bar, that the intensity-related features are the ones that take the most time to compute. 
+
+Once the computation of all the features is complete, all the small clock icons that were shown right to the feature computer names now turned to a green dot.
+This is how we keep track of the validity of the feature values.
+Since the feature computation is triggered manually, and that a feature value might invalidated if the data changes (new spots added, removed, moved, changed the radius, added or removed some links), this icon serves as a signal for feature value de-synchronization.     
+If the icon is shows as a clock, it means that the data changed since the last feature computation, and that the feature values are out of sync. 
+If is shows a green dot, then the data did not change since last computation, and the feature values are sure to be valid. 
+This is very important for proper interpretation of the data, and you will have to show the computation dialog often just to check the feature values validity. 
+By the way, you can check now how the validity flag works. 
+While keeping the feature computation dialog open, move a spot in a BDV view. 
+You should see that all the green dot icons now turn to the clock icon.
+Also, if you now deselect some feature computers before launching a new computation, the validity flag will not turn to the green dot icon for those feature computers.
+
+
+
+
+
+
+
 
 \subsubsection{Coloring views by numerical features.}
 
