@@ -136,14 +136,14 @@ Note also that they can have dependencies.
 For instance, the \texttt{Link velocity} feature computer depends on the \texttt{Link displacement} feature to be present at the time of computation.
 
 The check-box on the left of each feature computer name triggers whether they will be part of the next feature computation.
-Press the \menu{Compute} button to trigger computation of features.
+Press the \menu{\smallimg{bullet_green.png}Compute} button to trigger computation of features.
 You will probably notice, thanks to the progress bar, that the intensity-related features are the ones that take the most time to compute. 
 
-Once the computation of all the features is complete, all the small clock icons that were shown right to the feature computer names now turned to a green dot.
+Once the computation of all the features is complete, all the small clock icons that were shown right to the feature computer names now turned to a green dot\smallimg{bullet_green.png}.
 This is how we keep track of the validity of the feature values.
 Since the feature computation is triggered manually, and that a feature value might invalidated if the data changes (new spots added, removed, moved, changed the radius, added or removed some links), this icon serves as a signal for feature value de-synchronization.     
-If the icon is shows as a clock, it means that the data changed since the last feature computation, and that the feature values are out of sync. 
-If is shows a green dot, then the data did not change since last computation, and the feature values are sure to be valid. 
+If the icon is shows as a clock~\smallimg{time.png}, it means that the data changed since the last feature computation, and that the feature values are out of sync. 
+If is shows a green dot\smallimg{bullet_green.png}, then the data did not change since last computation, and the feature values are sure to be valid. 
 This is very important for proper interpretation of the data, and you will have to show the computation dialog often just to check the feature values validity. 
 By the way, you can check now how the validity flag works. 
 While keeping the feature computation dialog open, move a spot in a BDV view. 
