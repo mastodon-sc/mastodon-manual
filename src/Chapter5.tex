@@ -150,14 +150,100 @@ While keeping the feature computation dialog open, move a spot in a BDV view.
 You should see that all the green dot icons now turn to the clock icon.
 Also, if you now deselect some feature computers before launching a new computation, the validity flag will not turn to the green dot icon for those feature computers.
 
-
-
-
-
-
+I guess that since we have feature values computed, you would like to inspect them and export them for further analysis.
+This is the role of the table view, but before getting to it, we will make a little detour to showing how to use features to generate coloring, accelerating updates of computation and saving them to disk.
 
 
 \subsubsection{Coloring views by numerical features.}
+
+We have seen above that tag-sets could be used to generate coloring of the data items shown in a view. 
+Indeed, in the \menu{View > Coloring} menu of each view, that tag-sets are listed and when selected, are used to assign a color to each data item.
+We can do something similar with feature values, except that feature based coloring requires more input from us.
+
+Feature color modes need to be created first, and this is done in a dedicated user interface. 
+Select the \menu{File > Preferences} menu item in the main window or any view.
+The preferences dialog is shown.
+It is organized with a side-bar on the left that contains the various items that can be configured in Mastodon. 
+Parenthetically, you can see that you can configure the display style of the ]+\TrackScheme and BDV views, and the keymaps. 
+But we will see this later.
+In the sidebar select \texttt{Feature Color Modes}.
+The panel on the right now display the feature color mode configuration panel.
+
+Its top line has a drop-down list that contains all the color modes already defined. 
+Right now, there is only one, called \texttt{Number of links}.
+As the \texttt{\textit{built-in}} suffix indicates, it is a built-in color modes, and it cannot be edited. 
+To create a new one you must duplicate it and rename the new one.   
+Do so by clicking on the \texttt{Duplicate} button, then on \texttt{Rename}.
+Let's create a color mode that color spots and links based on the mean intensity inside the spots, that we would call \texttt{Mean intensity}.
+
+The rest of the configuration panel is made of two parts.
+The top part configures the vertex coloring, or how we color spots.
+The bottom part configures the edge coloring, or how we color links. 
+In Mastodon the data is organized in a mathematical graph, in which the vertices are the spots, and the edges are the links that connect spots from one frame to another, so you will sometimes find in Mastodon and in this manual the vocables vertex and edge to design a spot and a link respectively. 
+The vertex color mode specifies where do we take colors from. 
+You can choose between:
+\begin{myitemize}
+    \item \texttt{Vertex}, which means a spot will take its color from a feature value it owns.
+    \item \texttt{Incoming edge}, which means a spot will take its color from a feature value owned by the single incoming link that targets this spot. This is the link backward in time. If there are no such links or more than one, then the default color is used.
+    \item \texttt{Outgoing edge} is the same thing, but for the link forward in time. 
+    \item \texttt{Default} mode does not rely on feature values but simply uses the default color in the view.
+\end{myitemize}
+
+\noindent Depending on the mode you chose, the content of the drop-down list below, called \texttt{Vertex feature}, will change to reflect either the list of spot features or the link features.
+Select \texttt{Vertex} as a color mode and \texttt{Spot gaussian-filtered intensity} as feature.
+Two new drop-down list appear on the right of the feature list. 
+One contains the list of projections in the feature and the second one contains the list of channels in the dataset. 
+
+We need to explain a bit what are \textbf{feature projections}.
+We said above that a feature could be roughly anything numerical, and was not necessarily a scalar. 
+It could be a vector, a tensor, a complex number, \etc.
+However to be usable and useful in Mastodon, features are required to expose a sensible list of projections that compose them.
+Feature projections are scalar and real values that can decompose or project a feature on a real axis.
+How they are defined is up to the person that created the feature computer, but we can rely on the \textit{hope} that they choose wisely. 
+For instance, a feature that gives the velocity vector of a link will reasonably expose 3 projections, one for each of the X, Y and Z component of the vector. 
+Or maybe the polar angle, azimuthal angle and norm of this vector.
+Or maybe the 6 projections since they can be calculated on the fly. 
+A complex feature value will reasonably expose 2 projections, one for the real part, one of the imaginary part.
+\textit{Etc}.
+The \texttt{Spot gaussian-filtered intensity} feature has two projections, one for the mean value of the intensity within a spot and the standard deviation of this intensity.
+Since both can be computed on any of the channel present in the dataset, their number is multiplied by the number of channels. 
+The configuration panel changes according to the number of projections in a feature and its multiplicity. 
+For features that are made of one real value with no multiplicity, the projection list is superfluous and not shown.
+In our case, we simply want the mean of the only channel in the dataset.
+
+Coming back to the color mode configuration, next we need to pick a color-map.
+A color-map acts as the LUT for an image, and maps a color to a certain value. 
+Mastodon ships about 20 of them, many taken from the MatPlotLib project\footnote{\url{https://matplotlib.org/3.1.1/gallery/color/colormap_reference.html}}.
+Finally, you have to specify a min value and a max value that will act as the brightness and contrast values for an image.
+Values below the min you defined will all be displayed with the first color of the color-map and values larger than the max with last.
+The black square you see next to the graded representation of the color-map is the color used for data items for which the feature value is not present or undefined (division by zero, \etc).
+The \texttt{autoscale} button computes the min and max automatically from the feature currently selected with the values taken from the last feature computation.
+
+The edge coloring works exactly the same, except for the edge color mode.
+\begin{myitemize}
+    \item \texttt{Edge} means that a link will be colored by a feature value it owns.
+    \item \texttt{Source vertex} will take a feature value from the source spot of this link, that is, the first in time.
+    \item \texttt{Target vertex} does the same but for the last spot in time of this link. 
+    \item \texttt{Default} mode does not rely on feature values but simply uses the default color in the view.
+\end{myitemize}
+\noindent To build our example feature color mode, choose \texttt{Source vertex} as color mode, and use for instance the \texttt{viridis} color-map along with 0 and 1200 for min and max values.
+Do the same for the vertex color mode.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsubsection{Accelerating feature computation with the update mechanism.}
 
