@@ -51,7 +51,7 @@ We will base the demonstration in this chapter on the data we generated in the t
 
 On the main window (see Figure~\ref{fig:MastodonMainWindow} page~\pageref{fig:MastodonMainWindow}), there is a button \texttt{configure tags}. 
 Pressing it opens the tag-set dialog. 
-Right now, it appears as an empty table made of two columns. 
+Right now, it appears as an empty table made of two columns (Figure~\ref{fig:CreateTagSet}a). 
 This is where you enter tag-sets and tags.
 
 Press the \smallimg{add.png} button on the left column to create a new tag-set. 
@@ -67,42 +67,92 @@ Note that a tag is only made of a label (the text) and a color.
 The color will be used in Mastodon views.
 Create a second tag for the same tag-set called \texttt{Posterior}.
 Pick the color as you like. 
-Now try to create another tag-set called \texttt{Reviewed by} and create some tags in this tag-set. 
+Now try to create another tag-set called \texttt{Reviewed by} and create some tags in this tag-set (Figure~\ref{fig:CreateTagSet}b). 
 The tag-set dialog is normally fully navigable with the \keys{\tab}, \keys{\arrowkeyup} and \keys{\arrowkeydown} keys, so that you can enter tags quickly if you have a lot of them.
 You can create new tag-set or new tags with the \keys{\return} key, and delete them either with the \keys{\del} key or by pressing the \smallimg{delete.png} button.
 
 When you are finished, press the \menu{OK} button.
 
 
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat[]{\includegraphics[height=0.15\textheight]{figures/Mastodon_ConfigureTagSet_1.png}}
+    \hfill
+    \subfloat[]{\includegraphics[height=0.15\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_ConfigureTagSet_2.png}}
+    \hfill\null
+    
+    \caption{Creating tag-sets and tags. \textbf{a.}~The empty tag-set dialog. \textbf{b.}~After adding two tag-sets and six tags.  }
+    \label{fig:CreateTagSet}
+\end{figure}
+
 
 \subsubsection{Assigning tags to data items.}
 
 Tags are set via the selection tool, presented above (chapter~\ref{Selection_tool} page~\pageref{Selection_tool}).
 Once you have some spots and links in the selection, you can assign a tag to it via the \menu{Edit > Tags > The tag set name > The tag label} menu.
-The menu content will be updated with the tag-sets and tags you defined in the tag-set dialog, described above.
+The menu content will be updated with the tag-sets and tags you defined in the tag-set dialog, described above (Figure~\ref{fig:AssignTagSetMenu}).
 This will work in any Mastodon views, BDV or \TrackScheme.
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.2\textheight]{figures/Mastodon_ColorByTagSet_1.png}
+    
+    \caption{The menu item to assign tag-sets and tags to the current selection. }
+    \label{fig:AssignTagSetMenu}
+\end{figure}
+
 
 \TrackScheme ships a second way to set tags quickly from the keyboard.
 After selecting the spots and links of interest, press the \keys{Y} key.
-A floating menu should appear on the left part of the view panel. 
+A floating menu should appear on the left part of the view panel (Figure~\ref{fig:AssignTagSetShortcut}). 
+There is a bit of naming clash in the floating menu.
+Here, tag-sets are called \textit{tags} and tags are called \textit{labels}.
 Select the desired tag-set with the \keys{1}, \keys{2}, .. keys.
 The menu now shows the tags defined within this tag-set, that you can select the same way.
 Note that there is a way to remove all the tags over all the tag-sets on the selection by pressing \keys{\shift+\del} on the first menu, or just the tags of the selected tag-set by pressing \keys{0} on the second menu.
+
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \includegraphics[height=0.2\textheight]{figures/Mastodon_ColorByTagSet_2.png}
+    \hfill
+    \includegraphics[height=0.2\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_ColorByTagSet_3.png}
+    \hfill\null
+    
+    \caption{Assigning tags in \TrackScheme. After pressing the \menu{Y} key this floating menu is shown, that can be navigated with the digit keys.  }
+    \label{fig:AssignTagSetShortcut}
+\end{figure}
 
 
 
 \subsubsection{Coloring views by tag-sets.}
 
 The tags we just defined and assigned can be used in with the views, to highlight the items that are tagged. 
-In the \menu{View > Coloring} menu of any view in Mastodon, you will find a sub-menu updated with the tag-sets you created among other choices. 
+In the \menu{View > Coloring} menu of any view in Mastodon, you will find a sub-menu updated with the tag-sets you created among other choices (Figure~\ref{fig:ColorByTagSetMenu}). 
 By default, newly created views are colored with the \menu{None} coloring mode, which simply colors all the spots and links the same way, taking colors from render settings. 
-If you select a mode corresponding to a tag-set, tagged spots and links will appear painted with the color you chose for the tags of this tag-sets.
+If you select a mode corresponding to a tag-set, tagged spots and links will appear painted with the color you chose for the tags of this tag-sets (Figure~\ref{fig:ColorByTagSetTrackScheme}).
 This is very handy to mark some locations in the image or highlight interesting tracks in the data.
 Later we will see that tags can be used to retrieve specific items for further processing.
 Finally, in \TrackScheme there is an option to show a legend of the current coloring mode.
 You can toggle it on or off and set the location of this legend in the \menu{View > Colorbar} menu.
 
+\begin{figure}
+    \centering
+    \includegraphics[height=0.1\textheight]{figures/Mastodon_ColorByTagSet_4.png}
+    
+    \caption{The coloring menu, updated with the tag-sets. }
+    \label{fig:ColorByTagSetMenu}
+\end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[height=0.25\textheight]{figures/Mastodon_ColorByTagSet_5.png}
+    
+    \caption{Coloring with tag-sets in \TrackScheme. }
+    \label{fig:ColorByTagSetTrackScheme}
+\end{figure}
 
 
 \subsection{Numerical features.}
@@ -125,15 +175,21 @@ We explain you to write your own feature computer in the second part of this man
 
 Because feature computation can take very long on large images, you have to trigger it manually.
 On Mastodon main window, you can find a button \texttt{compute features} button.
-Pressing it will show the dialog below
-TODO
-Each feature computer is listed on the left panel.
-By clicking on the name the right panel shows some information about the feature they compute. 
-
+Pressing it will show the feature computation dialog (Figure~\ref{fig:FeatureComputationDialog}).
+The feature computers are listed on the left panel.
+Clicking on the computer name displays some information about the feature they compute in the right panel. 
 Note that they are named 'features' on this panel, but they are in reality the feature computers.
 For instance if you click on the \texttt{Spot gaussian-filtered intensity}, you will see in the information panel that this computer generates a feature for the mean intensity (weighted by a gaussian) and its standard deviation within a spot.
 Note also that they can have dependencies.
 For instance, the \texttt{Link velocity} feature computer depends on the \texttt{Link displacement} feature to be present at the time of computation.
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.3\textheight]{figures/Mastodon_FeatureComputation_1.png}
+    
+    \caption{The feature computation dialog. }
+    \label{fig:FeatureComputationDialog}
+\end{figure}
 
 The check-box on the left of each feature computer name triggers whether they will be part of the next feature computation.
 Press the \menu{\smallimg{bullet_green.png}Compute} button to trigger computation of features.
@@ -167,7 +223,7 @@ It is organized with a side-bar on the left that contains the various items that
 Parenthetically, you can see that you can configure the display style of the ]+\TrackScheme and BDV views, and the keymaps. 
 But we will see this later.
 In the sidebar select \texttt{Feature Color Modes}.
-The panel on the right now display the feature color mode configuration panel.
+The panel on the right now display the feature color mode configuration panel (Figure~\ref{fig:FeatureColorModeConfig1}).
 
 Its top line has a drop-down list that contains all the color modes already defined. 
 Right now, there is only one, called \texttt{Number of links}.
@@ -175,6 +231,14 @@ As the \texttt{\textit{built-in}} suffix indicates, it is a built-in color modes
 To create a new one you must duplicate it and rename the new one.   
 Do so by clicking on the \texttt{Duplicate} button, then on \texttt{Rename}.
 Let's create a color mode that color spots and links based on the mean intensity inside the spots, that we would call \texttt{Mean intensity}.
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.3\textheight]{figures/Mastodon_FeatureColorModeConfig_1.png}
+    
+    \caption{The feature color mode configuration preference dialog. }
+    \label{fig:FeatureColorModeConfig1}
+\end{figure}
 
 The rest of the configuration panel is made of two parts.
 The top part configures the vertex coloring, or how we color spots.
@@ -207,7 +271,7 @@ A complex feature value will reasonably expose 2 projections, one for the real p
 \textit{Etc}.
 The \texttt{Spot gaussian-filtered intensity} feature has two projections, one for the mean value of the intensity within a spot and the standard deviation of this intensity.
 Since both can be computed on any of the channel present in the dataset, their number is multiplied by the number of channels. 
-The configuration panel changes according to the number of projections in a feature and its multiplicity. 
+The configuration panel changes according to the number of projections in a feature and its multiplicity (Figure~\ref{fig:FeatureColorModeConfig2}). 
 For features that are made of one real value with no multiplicity, the projection list is superfluous and not shown.
 In our case, we simply want the mean of the only channel in the dataset.
 
@@ -226,8 +290,35 @@ The edge coloring works exactly the same, except for the edge color mode.
     \item \texttt{Target vertex} does the same but for the last spot in time of this link. 
     \item \texttt{Default} mode does not rely on feature values but simply uses the default color in the view.
 \end{myitemize}
-\noindent To build our example feature color mode, choose \texttt{Source vertex} as color mode, and use for instance the \texttt{viridis} color-map along with 0 and 1200 for min and max values.
-Do the same for the vertex color mode.
+\noindent To build our example feature color mode, choose \texttt{Source vertex} as color mode, and use for instance the \texttt{viridis} color-map along with 700 and 1100 for min and max values.
+Do the same for the vertex color mode (Figure~\ref{fig:FeatureColorModeConfig2}).
+
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.3\textheight]{figures/Mastodon_FeatureColorModeConfig_2.png}
+    
+    \caption{Our custom feature color mode, based on spot intensity. }
+    \label{fig:FeatureColorModeConfig2}
+\end{figure}
+
+Like for tag-sets, the \menu{View > Coloring} menu is now updated with items corresponding to the color modes we created.
+If they are grayed-out, it means that the feature values they depend on is not yet computed.
+This kind of view immediately reveals important aspect of the data, even at a very high level.
+For instance with our custom color mode, we can quickly find cells that are the brightest, and visually inspect how the intensity in cells change over time (Figure~\ref{fig:FeatureColorModeView}).
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \includegraphics[height=0.23\textheight]{figures/Mastodon_FeatureColorBDV.png}
+    \hfill
+    \includegraphics[height=0.23\textheight]{figures/Mastodon_FeatureColorTrackScheme.png}
+    \hfill\null
+    
+    \caption{Feature color mode in a BDV view and in a \TrackScheme view.  }
+    \label{fig:FeatureColorModeView}
+\end{figure}
+
 
 
 
