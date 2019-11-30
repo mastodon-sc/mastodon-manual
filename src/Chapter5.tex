@@ -322,24 +322,34 @@ For instance with our custom color mode, we can quickly find cells that are the 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \subsubsection{Accelerating feature computation with the update mechanism.}
+
+In this paragraph we explain one of the important aspect of feature computation in Mastodon, in the case of large data.
+It is not an interactive tutorial, but what it covers deserves explanation. 
+
+As we repeated several times in this manual, Mastodon is meant to harness large images and large data generated from it. 
+You probably noticed that the feature computers that deal with spot intensity (\texttt{Spot gaussian-filtered intensity}, \texttt{Spot median intensity}, \texttt{Spot sum intensity}) were taking a long time to compute. 
+They require synchronized access to pixel data, jumping from one spot to another, at a fixed resolution level.
+In situations where you have millions of spots, the computation of these features will take a very long time, possibly similar to the time it took to detect these spots. 
+So of course, you don't want to do it again and again each time one spot changes radius or position.
+You want to recompute feature values only for the spots that have been altered or created since the last computation. 
+Mastodon has a system that supports incremental updates. 
+This system tracks what data items have been modified or created for a given number of feature computation times. 
+It feature an \textit{update stack} that can provide to the feature computer that request it the list of data items that changed since the feature it provides have been last computed (Figure~\ref{fig:FeatureUpdateStack}). 
+
+\begin{figure}
+    \centering
+    \includegraphics[angle=90, height=0.8\textheight]{figures/Mastodon_FeatureUpdateStack.png}
+    \caption{An illustration of the feature update stack mechanism.  }
+    \label{fig:FeatureUpdateStack}
+\end{figure}
 
 
 \subsection{Tags, numerical features and saving the data to disk.}
+
+All tags and feature values are saved in the Mastodon file. 
+The feature update stack state is saved too, so you will retrieve everything back as it was when you saved.
+We did not have a choice, it was the only reasonable way to achieve a usable feature and tag framework in the case of very large data.
 
 \subsection{The data table views.}
 
