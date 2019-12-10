@@ -337,6 +337,12 @@ Mastodon has a system that supports incremental updates.
 This system tracks what data items have been modified or created for a given number of feature computation times. 
 It feature an \textit{update stack} that can provide to the feature computer that request it the list of data items that changed since the feature it provides have been last computed (Figure~\ref{fig:FeatureUpdateStack}). 
 
+You can it a try with a larger dataset than the one we have been using so far.
+Compute all the features, including the costly ones such as \texttt{Spot gaussian-filtered intensity}.
+The first time you compute this features, it should take a significant amount of time.
+Now move one spot from one position to another, and recompute all the features. 
+You should see that now the computation takes much less time.
+
 \begin{figure}
     \centering
     \includegraphics[angle=90, height=0.8\textheight]{figures/Mastodon_FeatureUpdateStack.png}
@@ -351,5 +357,146 @@ All tags and feature values are saved in the Mastodon file.
 The feature update stack state is saved too, so you will retrieve everything back as it was when you saved.
 We did not have a choice, it was the only reasonable way to achieve a usable feature and tag framework in the case of very large data.
 
+
 \subsection{The data table views.}
 
+\subsubsection{The main table view.}
+
+The BDV and \TrackScheme views are not suitable to display all the feature values we computed.
+The coloring we have been using with them is good only for visualization purpose. 
+There is a nice view to properly inspect and exploit feature values in subsequent steps in your analysis: the table view.
+In practice, the table view is simply a tabular representation of the data items in Mastodon, spots and links, in a list where a single row corresponds to a data item, and columns to feature values and tags. 
+You can display a new table view by using the menu \menu{Window > New data table}.
+If you did not compute features and did not define and tag-set, it should look like the table in Figure~\ref{fig:TableViewEmpty}.
+The view is made of two tables, one for spots (\texttt{Vertices} pane) and one for links (\texttt{Edges} pane).
+Right now it is pretty empty. 
+The spot and link tables only show the label and ID of the spots.
+Navigating in this table is done classically: the arrow keys \menu{\arrowkeyup} and \keys{\arrowkeydown} jump from one row to the next, and \keys{\arrowkeyleft} and \keys{\arrowkeyright} from one column to the next.
+\keys{Page\ \arrowkeyup} and \keys{Page\ \arrowkeydown} jump page per page.
+\keys{\ctrl + Page\ \arrowkeyup} and \keys{\ctrl + Page\ \arrowkeydown} alternate between the spot table and the link table.
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView1.png}
+    \hfill
+    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView2.png}
+    \hfill\null
+    
+    \caption{The table view, with no features computed and no tags defined. Left: the table for spots (\texttt{Vertices} pane). Right: the table for links (\texttt{Edges} pane).  }
+    \label{fig:TableViewEmpty}
+\end{figure}
+
+After computing some features and defining some tag-sets, the table show new columns (Fi\-gu\-re~\ref{fig:TableViewFeatureTags}). 
+Note that the column headers represent the feature with their projection and physical units on several rows.
+For instance, the \texttt{Spot gaussian-filtered intensity} feature name is displayed on the first row of the column header.
+The header is split in two columns on the second row, one for each projection included in the feature (mean and standard deviation of a single channel).
+And in the third and last row, the units of each projection is display in brackets (Counts in this case).
+The header of the tag-set columns are similar.
+The first row shows the name of the tag-set, and the second row shows each of the tag the set contains, with the tag chosen color as background.
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.27\textheight]{figures/Mastodon_TableView3.png}
+    
+    \caption{The table view, with features and tags.  }
+    \label{fig:TableViewFeatureTags}
+\end{figure}
+
+The table view can be used to edit in part the data  (Fi\-gu\-re~\ref{fig:TableViewEditing}). 
+For instance you can edit the spot label directly in the table. 
+Just navigate to the row of spot you want to change the name of and the \texttt{Label} column, then press \keys{F2}.
+The label field becomes editable.
+When you are done editing, press \keys{\return}.
+The tags are displayed as check-boxes in the table, that you can set directly by clicking on them.
+Or you can navigate the desired row and column and set them with the \keys{Space} key.
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.27\textheight]{figures/Mastodon_TableView4.png}
+    
+    \caption{After editing spot labels and tags.  }
+    \label{fig:TableViewEditing}
+\end{figure}
+
+The highlight and selection are also shared with table views. 
+When the table view is not active, selected items are shown with a gray background.
+The highlight spot or link is shown in the table with a thick black border (Figure~\ref{fig:TableViewHighlightSelection}).
+To add rows to the selection, the default key-bindings are again standard.
+Press \keys{\shift+Left-click} to add a range of rows to the selection from a rable view, or use \keys{\shift+\arrowkeyup} or \keys{\shift+\arrowkeydown} or \keys{\shift+Page\ \arrowkeyup} and \keys{\shift+Page\ \arrowkeydown}.
+By pressing \keys{\ctrl+Left-click} or \keys{\cmd+Left-click} you can toggle single rows in and out of the selection.
+Of course, all of the commands related to the selection we have seen before also apply to the table views (Table~\ref{tab:MastodonSelectionKeys} page~\pageref{tab:MastodonSelectionKeys}).
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView5.png}
+    \hfill
+    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView6.png}
+    \hfill\null
+    
+    \caption{Highlight and selection in the table view.  }
+    \label{fig:TableViewHighlightSelection}
+\end{figure}
+
+\subsubsection{Sorting rows.}
+
+The table can be sorted by clicking on the header of the column you want to use for sorting. 
+It works for labels, IDs, feature values and tags
+
+\subsubsection{The selection table.}
+
+There exists a variation of the table view, but that display only what is currently in the selection.
+To display such a table, go to \menu{Window > New selection table} in the menu.
+The selection table that appears only shows what is in the selection, and is constantly updated to reflect changes in the selection (Figure~\ref{fig:SelectionTable}).
+You cannot use it to edit the selection like in the main table.
+However the row you pick in this table will set the focus and highlight in other views.
+Everything else applies to the selection table.
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView7.png}
+    \hfill
+    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView8.png}
+    \hfill\null
+    
+    \caption{The selection table.  }
+    \label{fig:SelectionTable}
+\end{figure}
+
+\subsubsection{Feature-based coloring in table views.}
+
+Of course, feature based coloring works with the table views (Figure~\ref{fig:TableViewFeatureColoring}).
+And it can give a pleasant display when combined with sorting rows by a feature column.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.27\textheight]{figures/Mastodon_TableView9.png}
+    
+    \caption{Feature-based coloring in table views.  }
+    \label{fig:TableViewFeatureColoring}
+\end{figure}
+
+\subsubsection{Exporting table data.}
+
+The data currently displayed in a table view can be exported to CSV.
+When a table window is active, select the menu item \menu{File > Export to CSV}.
+You will have to specify a saving location and a name.
+But two CSV files will be produced: one for the spot table (appended with \texttt{-vertices.csv}) and one for the link table (appended with \texttt{-edges.csv})
+Only the data currently displayed in the view are saved, and ordered as in the view. 
+This means that if you call the \menu{File > Export to CSV} command from a selection table, only the current selection will be saved.
+
+
+\begin{table}[!htbp]
+    \centering
+    
+    \caption{Default navigation key-bindings for Mastodon-table views.}
+
+    \input{src/TableTableKeys.tex}
+
+    \label{tab:MastodonTableKeys}
+    \vspace{-10pt}
+
+\end{table}
