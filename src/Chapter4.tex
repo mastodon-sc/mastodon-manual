@@ -27,14 +27,24 @@ They let you store a position and orientation in space as bookmarks.
 You can later call them again and retrieve said position. 
 \begin{myitemize}
     \item First move to the position and orientation you want to store in a bookmark.
-    \item Then press \keys{\shift+B}. You should see a message prompting you to press another key.
+    \item Then press \keys{\shift+B}. You should see a message prompting you to press another key (Figure~\ref{fig:BDVSettingBookmark}).
     \item Pick one and press it. This key will be used as a tag for this bookmark.
     \item To later retrieve the position and orientation of this bookmark, press \keys{B} then the bookmark's key. The view should animate and restore the stored position and time-point.
     \item \keys{O} does the same things, but only restore the bookmark orientation, not its position.
 \end{myitemize}
 
-You can many bookmarks, all identified by the key you press after the bookmark command.
+You can have many bookmarks, all identified by the key you press after the bookmark command.
+Bookmarks are saved with the BDV settings file that also saves the channel color and display range.
+You can save such a file with the \menu{File > Save BDV Settings} or the \keys{F11} key.
+The settings file is loaded when a new BDV window is displayed.
 
+\begin{figure}
+    \centering
+    \includegraphics[height=0.27\textheight]{figures/Mastodon_SettingBookmark.png}
+    
+    \caption{Settings a bookmark in a BDV view.  }
+    \label{fig:BDVSettingBookmark}
+\end{figure}
 
 
 \subsection{Linking several views together.}
@@ -66,6 +76,7 @@ There is even some inertia again to emulate interacting with a tangible panel.
 
 
 \subsection{Spatial context in TrackScheme.}
+\label{sec:SpatialContext}
 
 There are situations where the density of cells displayed in \TrackScheme is so high that even at high zoom level this view is barely useful. 
 The hierarchical arrangement of tracks in \TrackScheme is handy to grasp how tracks behave over time.
@@ -76,7 +87,7 @@ In \TrackScheme views, the toolbar has a \menu{context} list box, from which you
 When \texttt{full graph} is selected, the full lineage data is shown in \TrackScheme. 
 This is the classic view.
 If you pick an item corresponding to an opened BDV view, then this \TrackScheme view will only display the lineages of the cells currently displayed in the target BDV view. 
-And the \TrackScheme view will be updated (and animated) as you pan, move in Z, zoom or unzoom the BDV view. 
+And the \TrackScheme view will be updated (and animated) as you pan, move in Z, zoom or unzoom the BDV view (Figure~\ref{fig:SpatialContext}). 
 
 Try it now with the data from the previous tutorial.
 Open a BDV view and a \TrackScheme view.
@@ -88,3 +99,17 @@ You will probably see that some lineages appear in gray, with dashed lines.
 They are called "ghost" lineages: 
 These are the lineages of cells that are not within the BDV view at the time-point currently displayed, but that will enter this view later or earlier in time. 
 The context feature is immensely useful when studying tissue development or coordinated cells movement. 
+
+
+\begin{figure}
+    \null\hfill
+    \includegraphics[width=0.32\textwidth]{figures/Mastodon_Context1.png}
+    \hfill
+    \includegraphics[width=0.38\textwidth]{figures/Mastodon_Context2.png}
+    \hfill
+    \includegraphics[width=0.25\textwidth]{figures/Mastodon_Context3.png}
+    \hfill\null
+    
+    \caption{Context in Mastodon. The context displayed in \TrackScheme (center) and the table (right, explained in the section~\ref{sec:DataTables} page~\pageref{sec:DataTables}) is determined by what is currently displayed in the BDV window (left). The content displayed in \TrackScheme and the table id updated live as the view in the BDV window is changed by the user. }
+    \label{fig:SpatialContext}
+\end{figure}

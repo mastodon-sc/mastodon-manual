@@ -359,6 +359,7 @@ We did not have a choice, it was the only reasonable way to achieve a usable fea
 
 
 \subsection{The data table views.}
+\label{sec:DataTables}
 
 \subsubsection{The main table view.}
 
@@ -426,6 +427,13 @@ To add rows to the selection, the default key-bindings are again standard.
 Press \keys{\shift+Left-click} to add a range of rows to the selection from a rable view, or use \keys{\shift+\arrowkeyup} or \keys{\shift+\arrowkeydown} or \keys{\shift+Page\ \arrowkeyup} and \keys{\shift+Page\ \arrowkeydown}.
 By pressing \keys{\ctrl+Left-click} or \keys{\cmd+Left-click} you can toggle single rows in and out of the selection.
 Of course, all of the commands related to the selection we have seen before also apply to the table views (Table~\ref{tab:MastodonSelectionKeys} page~\pageref{tab:MastodonSelectionKeys}).
+
+
+Another feature of data tables is that they can be made slave of a spatial context, like for \TrackScheme.
+When another BDV view is active, you can select its name in the drop-down list on the top-right part of the table. 
+Then the table only shows the data items that are currently displayed in the master BDV view.
+The notion of spatial context is explained above (section~\ref{sec:SpatialContext} page~\pageref{sec:SpatialContext}).
+See also the figure~\ref{fig:SpatialContext} page~\pageref{fig:SpatialContext}.
 
 \begin{figure}
     \centering
