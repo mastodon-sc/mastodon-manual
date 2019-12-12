@@ -20,7 +20,7 @@ Doing so, we will introduce the third kind of data view in Mastodon: the data ta
 As we said above, every-time you need to categorize certain data items, or need to visualize categories, you should rely on tags.
 Let's suppose that you are investigating the trajectories of cells in a developing embryo from an early stage to a stage where the embryo is polarized.
 Some cells will migrate to the anterior part, some others to the posterior part, \etc. 
-You might want to tag cell tracks with the \texttt{Anterior} or \texttt{Posterior} tag, to investigate where does these cell come from in the early embryo.
+You might want to tag cell tracks with the \texttt{Anterior} or \texttt{Posterior} tag, to investigate where do these cell come from in the early embryo.
 Or let's say that you are curating the results of the automated tracking on a large images. 
 The tracking results might have some inaccuracies, and you want to correct them for important tracks.
 Because there is a lot of tracks, you share the workload with some colleagues. 
@@ -49,7 +49,7 @@ We will base the demonstration in this chapter on the data we generated in the t
 
 \subsubsection{Creating tag-sets.}
 
-On the main window (see Figure~\ref{fig:MastodonMainWindow} page~\pageref{fig:MastodonMainWindow}), there is a button \texttt{configure tags}. 
+On the main window (see figure~\ref{fig:MastodonMainWindow} page~\pageref{fig:MastodonMainWindow}), there is a button \menu{configure tags}. 
 Pressing it opens the tag-set dialog. 
 Right now, it appears as an empty table made of two columns (Figure~\ref{fig:CreateTagSet}a). 
 This is where you enter tag-sets and tags.
@@ -132,7 +132,7 @@ Note that there is a way to remove all the tags over all the tag-sets on the sel
 The tags we just defined and assigned can be used in with the views, to highlight the items that are tagged. 
 In the \menu{View > Coloring} menu of any view in Mastodon, you will find a sub-menu updated with the tag-sets you created among other choices (Figure~\ref{fig:ColorByTagSetMenu}). 
 By default, newly created views are colored with the \menu{None} coloring mode, which simply colors all the spots and links the same way, taking colors from render settings. 
-If you select a mode corresponding to a tag-set, tagged spots and links will appear painted with the color you chose for the tags of this tag-sets (Figure~\ref{fig:ColorByTagSetTrackScheme}).
+If you select a mode corresponding to a tag-set, tagged spots and links will appear painted with the color you chose for the tags of this tag-set (Figure~\ref{fig:ColorByTagSetTrackScheme}).
 This is very handy to mark some locations in the image or highlight interesting tracks in the data.
 Later we will see that tags can be used to retrieve specific items for further processing.
 Finally, in \TrackScheme there is an option to show a legend of the current coloring mode.
@@ -159,7 +159,7 @@ You can toggle it on or off and set the location of this legend in the \menu{Vie
 
 Numerical features are values that are calculated from the data.
 For instance the mean intensity within a spot, or the displacement along a link.
-They are very generic: thr main restrictions is that there must be a data item (a spot or a link) per feature value. 
+They are very generic: the main restrictions is that there must be a data item (a spot or a link) per feature value. 
 But the feature itself can be scalar, non-scalar, real, integer, a string, a vector, 
 \etc.
 They are \textit{labile}. 
@@ -220,17 +220,17 @@ Feature color modes need to be created first, and this is done in a dedicated us
 Select the \menu{File > Preferences} menu item in the main window or any view.
 The preferences dialog is shown.
 It is organized with a side-bar on the left that contains the various items that can be configured in Mastodon. 
-Parenthetically, you can see that you can configure the display style of the ]+\TrackScheme and BDV views, and the keymaps. 
+Parenthetically, you can see that you can configure the display style of the \TrackScheme and BDV views, and the keymaps. 
 But we will see this later.
-In the sidebar select \texttt{Feature Color Modes}.
+In the sidebar select \menu{Feature Color Modes}.
 The panel on the right now display the feature color mode configuration panel (Figure~\ref{fig:FeatureColorModeConfig1}).
 
 Its top line has a drop-down list that contains all the color modes already defined. 
-Right now, there is only one, called \texttt{Number of links}.
-As the \texttt{\textit{built-in}} suffix indicates, it is a built-in color modes, and it cannot be edited. 
+Right now, there is only one, called \textbf{Number of links}.
+As the \textbf{\textit{built-in}} suffix indicates, it is a built-in color modes, and it cannot be edited. 
 To create a new one you must duplicate it and rename the new one.   
-Do so by clicking on the \texttt{Duplicate} button, then on \texttt{Rename}.
-Let's create a color mode that color spots and links based on the mean intensity inside the spots, that we would call \texttt{Mean intensity}.
+Do so by clicking on the \menu{Duplicate} button, then on \menu{Rename}.
+Let's create a color mode that color spots and links based on the mean intensity inside the spots, that we would call \textbf{Mean intensity}.
 
 \begin{figure}
     \centering
@@ -243,7 +243,7 @@ Let's create a color mode that color spots and links based on the mean intensity
 The rest of the configuration panel is made of two parts.
 The top part configures the vertex coloring, or how we color spots.
 The bottom part configures the edge coloring, or how we color links. 
-In Mastodon the data is organized in a mathematical graph, in which the vertices are the spots, and the edges are the links that connect spots from one frame to another, so you will sometimes find in Mastodon and in this manual the vocables vertex and edge to design a spot and a link respectively. 
+In Mastodon the data is organized in a mathematical graph\footnote{\href{https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)}{Mathematical graphs on Wikipedia \coloredlink{https://en.wikipedia.org/wiki/Graph\_(discrete\_mathematics)}}}, in which the vertices are the spots, and the edges are the links that connect spots from one frame to another, so you will sometimes find in Mastodon and in this manual the vocables vertex and edge to design a spot and a link respectively. 
 The vertex color mode specifies where do we take colors from. 
 You can choose between:
 \begin{myitemize}
@@ -254,7 +254,7 @@ You can choose between:
 \end{myitemize}
 
 \noindent Depending on the mode you chose, the content of the drop-down list below, called \texttt{Vertex feature}, will change to reflect either the list of spot features or the link features.
-Select \texttt{Vertex} as a color mode and \texttt{Spot gaussian-filtered intensity} as feature.
+Select \textbf{Vertex} as a color mode and \textbf{Spot gaussian-filtered intensity} as feature.
 Two new drop-down list appear on the right of the feature list. 
 One contains the list of projections in the feature and the second one contains the list of channels in the dataset. 
 
@@ -366,9 +366,10 @@ We did not have a choice, it was the only reasonable way to achieve a usable fea
 The BDV and \TrackScheme views are not suitable to display all the feature values we computed.
 The coloring we have been using with them is good only for visualization purpose. 
 There is a nice view to properly inspect and exploit feature values in subsequent steps in your analysis: the table view.
-In practice, the table view is simply a tabular representation of the data items in Mastodon, spots and links, in a list where a single row corresponds to a data item, and columns to feature values and tags. 
-You can display a new table view by using the menu \menu{Window > New data table}.
-If you did not compute features and did not define and tag-set, it should look like the table in Figure~\ref{fig:TableViewEmpty}.
+In practice, the table view is simply a tabular representation of the data items in Mastodon.
+Spots and links are displayed in a list where a single row corresponds to a data item, and columns to feature values and tags. 
+You can create a new table view by using the menu \menu{Window > New data table}.
+If you did not compute features and did not define and tag-set, it should look like the table in figure~\ref{fig:TableViewEmpty}.
 The view is made of two tables, one for spots (\texttt{Vertices} pane) and one for links (\texttt{Edges} pane).
 Right now it is pretty empty. 
 The spot and link tables only show the label and ID of the spots.

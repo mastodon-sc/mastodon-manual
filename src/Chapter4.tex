@@ -14,7 +14,7 @@ We took some inspiration from video-games, that are very good at communicating c
 The \bdv~\cite{bdv} is the image component of Mastodon and is meant to deal with very large images.
 It offers interactive and responsive user interaction, and to achieve this without any hardware acceleration, it resorts to only displaying a 2D slice through the data.
 This 2D slice can be arbitrarily positioned and oriented. 
-When it comes to annotating a 3D image, using a 2D slice through it is a good approach. 
+When it comes to annotating a 3D image, using a 2D slice is a good approach. 
 A full 3D view might actually hinders proper and efficient annotation of the data with a flat 2D screen and a mouse. 
 The 3D view leads to ambiguities about the depth positioning of your cursor, and the image data that stands between the camera eye and the plan of interest may hide it.
 Parenthetically, these issues with interacting with 3D data are best solved with virtual reality devices, but Mastodon is not a tool that exploit them.
@@ -52,7 +52,7 @@ The settings file is loaded when a new BDV window is displayed.
 You can generate as many views as you want in Mastodon, and you can link several of them via the lock system \smallimg{lock.png}.
 This is a good way to improve the perception of context, by linking several views that display for instance a close-up view of the data and another view displaying a bird-eye view of it.
 We already presented this feature in the Section~\ref{sec:LinkingViews} page~\pageref{sec:LinkingViews}. 
-The Figure~\ref{fig:ViewsInSync} page~\pageref{fig:ViewsInSync} shows an example of a view configuration with three views in sync, showing each a different level of desired information.
+The figure~\ref{fig:ViewsInSync} page~\pageref{fig:ViewsInSync} shows an example of a view configuration with three views in sync, showing each a different level of desired information.
 We direct you there for details on how to use the lock system.
 
 

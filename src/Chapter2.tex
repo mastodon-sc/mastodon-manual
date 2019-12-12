@@ -78,7 +78,8 @@ Mastodon was created specially because we needed to harness very big, multi-view
 This accumulation of inflated words is tied to the very large  - in objective disk space  occupation - images we deal with using modern microscopy tools. 
 Such datasets might not be optimal for a first contact with Mastodon.
 So just for this tutorial we will use a smaller dataset.
-It is a small region cut into a movie following the development of a drosophila, acquired in Pavel Tomancak lab (MPI-CBG).
+It is a small region cut into a movie following the development of a drosophila embryo, acquired by William Lemon in Patrick Keller lab (HHMI, Janelia Farm).
+This was created from the example dataset released with the TGMM software~\cite{TGMMpaper}.
 You can find it on Zenodo\footnote{\href{https://zenodo.org/record/3336346}{\coloredlink{https://zenodo.org/record/3336346}}} there: \href{https://doi.org/10.5281/zenodo.3336346}{\includegraphics[height=1.5\fontcharht\font`\B]{figures/zenodo3336346.png}}
 
 It is a zip file that contains 3 files:
@@ -141,9 +142,9 @@ After launching the command, this plain, sober window appears.
     \label{fig:MastodonMainWindow}
 \end{figure}
 
-Click on new \texttt{new project}, and browse to the \texttt{datasethdf5.xml} file of the XML/HDF5 file pair of the tutorial dataset.
-All the buttons that were grayed out should be enabled. 
-Click on the \texttt{bdv} button.
+Click on \menu{new project}, and browse to the \texttt{datasethdf5.xml} file of the XML/HDF5 file pair of the tutorial dataset.
+All the buttons that were grayed out should be now enabled. 
+Click on the \menu{bdv} button.
 A BDV window should appear and if it does everything is right.
 \begin{center}
          \includegraphics[width=0.4\textwidth]{figures/Mastodon_BDV.png}
@@ -155,7 +156,7 @@ Below we give the commands and key-bindings for navigation in a Mastodon-BDV win
 They are indeed close to what is found in the standard \Bdv but some changes. 
 \textbf{Please note:} You can reconfigure almost everything in Mastodon, as we will see later, including key-bindings.
 In this tutorial and the next ones, the key-bindings we present are for the \texttt{Default} configuration.
-In the table~\ref{tab:MastodonBDVNavigationKeys} you will find the key bindings to navigate through the image data.
+In the table~\ref{tab:MastodonBDVNavigationKeys} page~\pageref{tab:MastodonBDVNavigationKeys} you will find the key bindings to navigate through the image data.
 
 \begin{table}[!htbp]
     \centering
@@ -211,10 +212,10 @@ You can now choose to operate only on a rectangular ROI in the image.
 If you check the \textbf{Process only a ROI} button, new controls appear in the panel, and a ROI is drawn into an open BDV view (a new one is created if one is not opened).
 The ROI is painted as a wire-frame box, green for vertices that point towards the camera from the displayed slice, and purple for vertices that points away from the camera, below the displayed slice.
 The intersection of the ROI box with the displayed slice is painted with a purple semi-transparent overlay, with a white dotted line as borders.
-You can control the ROI bounds wither with the controls in the panel, or by directly dragging the ROI corners in the BDV view.
+You can control the ROI bounds with the controls in the panel, or by directly dragging the ROI corners in the BDV view.
 Time bounds can also be set this way. In our case we want to segment the full image over all time-points, so leave the \textbf{Process only a ROI} button unchecked.
 
-You cannot have non-rectangular ROI in Mastodon. Nonetheless they are super useful as is. 
+You cannot have non-rectangular ROIs in Mastodon. Nonetheless they are super useful as is. 
 You can for instance combine several detection steps using different parameters in different region of your image. Or different time interval.
 
 \begin{center}
@@ -247,16 +248,19 @@ So by properties of the LoG filter, this quality value is larger for :
     \item spots which diameter is close to the specified diameter.
 \end{myitemize}
 
-So the DoG detector requires only two parameters: the estimated diameter of the object we want to detect, and a threshold on the quality value, that will help separating spurious detections from real ones. 
+The DoG detector requires only two parameters: the estimated diameter of the object we want to detect, and a threshold on the quality value, that will help separating spurious detections from real ones. 
 The panel you are presented let you specify these parameters, and preview the resulting detection.
 Try with 10 pixels for \textbf{Estimated diameter} and 0 for the \textbf{Quality threshold}.
 The click on the \menu{\smallimg{led-icon-eye-green.png} Preview} button.
-A preview panel should open shortly, showing detection results on the current frame
+A preview panel should open shortly, showing detection results on the current frame (Figure~\ref{fig:PreviewDetection}).
 
-\begin{center}
+\begin{figure}
+    \label{fig:PreviewDetection}
+    \centering
          \includegraphics[height=0.25\textheight]{figures/Mastodon_DoGconfig1.png}
          \includegraphics[height=0.25\textheight]{figures/Mastodon_DoGconfig2.png}
-\end{center}
+    \caption{Previewing detection results.}
+\end{figure}
 
 These values are close but not quite.
 You can see that the diameter value is too small to properly grasps the elongated shape of the cells along Z (the BDV view on the left panel above is rotated to show a YZ plane). 
@@ -266,19 +270,21 @@ From the shape of the histogram, we can infer that a threshold value around 100 
 However we also need to change the diameter parameter, which will change the range of quality values.
 After trial and errors, values around 15 pixels for the diameter and 400 for the threshold seem to work.
 
-\begin{wrapfigure}{r}{0.4\textwidth}
-    \centering
-    \includegraphics[height=0.40\textwidth, trim=0.5cm 0.5cm .5cm .5cm, clip]{figures/Mastodon_DetectionResuts.png}
-\end{wrapfigure}
-
 Note that you can run the preview on any frame.
 You just have to move the time slider on the preview window.
 Once you are happy with the parameters, click on the \menu{\smallimg{arrow_right.png} Next} button.
 All the frames specified in the ROI (if any) will be processed. 
 In our case detection should conclude quickly and the following panel should appear:
 
-We now have more than 1000 cells detected and this concludes the detection step.
+We now have more than 1000 cells detected and this concludes the detection step (Figure~\ref{fig:DetectionResults}).
 Click on the \menu{\smallimg{accept-icon.png} Finish} button, and the wizard will disappear.
+
+\begin{figure}
+    \label{fig:DetectionResults}
+    \centering
+    \includegraphics[height=0.40\textwidth, trim=0.5cm 0.5cm .5cm .5cm, clip]{figures/Mastodon_DetectionResuts.png}
+    \caption{Detection results.}
+\end{figure}
 
 If you have complex images mixing several size of objects, or detection parameters that work for one part of the movie but not for another one, you could restart a new detection now, selecting for instance other parts of the movie with the ROI.
 You can do this and more, but for this kind of approach, the \textbf{Advanced DoG detector} offers more configuration capabilities, that will review later.
@@ -321,7 +327,10 @@ You can now choose between several linking algorithms.
 
 In Mastodon, they fall mainly in two categories.
 
-The first two LAP trackers are based on the \textbf{Linear Assignment Problem (LAP) framework}, first developed by Jaqaman \textit{et al.}~\cite{Jaqaman2008}, with important differences from the original paper described elsewhere~\cite{TrackMate}. We focused on this method for it gave us a lot of flexibility and it can be configured easily to handle many cases. You can tune it to allow splitting events, where a track splits in two, for instance following a cell that encounters mitosis. Merging events are handled too in the same way. More importantly are gap-closing events, where a spot disappear for one frame (because it moves out of focus, because detection failed, ...) but the track manages to recuperates and connect with reappearing spots later.
+The first two LAP trackers are based on the \textbf{Linear Assignment Problem (LAP) framework}, first developed by Jaqaman \textit{et al.}~\cite{Jaqaman2008}, with important differences from the original paper described elsewhere~\cite{TrackMate}. 
+We focused on this method for it gives us a lot of flexibility and it can be configured easily to handle many cases. 
+You can tune it to allow splitting events, where a track splits in two, for instance following a cell that encounters mitosis. 
+Merging events are handled too in the same way. More importantly are gap-closing events, where a spot disappear for one frame (because it moves out of focus, because detection failed, ...) but the track manages to recuperates and connect with reappearing spots later.
 
 In Mastodon the LAP algorithms exists in two flavors: a simple one and a not simple one. There are again the same, but the simple ones propose fewer configuration options and a thus more concise configuration panel. In short:
 \begin{myitemize}
@@ -404,4 +413,4 @@ We will see in a next section how to manually edit a spot, a link or a track eve
 But keep in mind that the tools we quickly surveyed can be used interactively too. 
 First the wizards let you go back to change a tracking parameter and check how the results are improved or not. 
 Second, because you can specify a region-of-interest (ROI) in the detection step, and select the spots you want to track in the linking step, several runs of these wizard can be combined on different parts of the same image, to accommodate \textit{e.g.} for changing image quality over time, or cell shape over time. 
-Mastodon aims at being the workbench for tracking that will get you to the results whatever the image.
+Mastodon aims at being the workbench for tracking that will get you to results, accommodating a wide range of use cases.
