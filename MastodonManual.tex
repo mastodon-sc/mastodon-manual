@@ -31,6 +31,9 @@
 \usepackage{secdot}
 \usepackage[super]{nth}
 
+% Epigraph
+\usepackage{epigraph}
+
 % I want a proper degree symbol in text.
 \usepackage{textcomp}       % additional symbols using companion encoding TS1
 \usepackage{gensymb}        % provides macro \degree which works in text and math
@@ -154,10 +157,10 @@
 
 \begin{document}
 
-\input{ src/TitlePage.tex }
+\input{src/TitlePage.tex}
 
 \newpage
-\input{ src/Preamble.tex }
+\input{src/Preamble.tex}
 
 \newpage
 \tableofcontents
@@ -170,28 +173,34 @@
 \part{Tutorials.}
 
 % Automated tracking.
-\newpage
-\input{ src/Chapter2.tex }
-
-% Manual tracking. TrackScheme.
-\newpage
-\input{ src/Chapter3.tex }
-
-% Orienting in Mastodon.
-\newpage
-\input{ src/Chapter4.tex }
-
-% Feature, tags and tables.
-\newpage
-\input{ src/Chapter5.tex }
-
 % \newpage
-% \input{ src/Chapter6.tex }
+% \input{ src/Chapter2.tex }
 
-
+% % Manual tracking. TrackScheme.
 % \newpage
-% \part{Technical information.}
+% \input{ src/Chapter3.tex }
 
+% % Orienting in Mastodon.
+% \newpage
+% \input{ src/Chapter4.tex }
+
+% % Feature, tags and tables.
+% \newpage
+% \input{ src/Chapter5.tex }
+
+\newpage
+\input{src/Chapter6.tex}
+
+
+\newpage
+\part{Technical information.}
+\vfill
+\epigraph{
+\textit{Frères humains qui après nous vivez \\ 
+N'ayez les cœurs contre nous endurcis, \\
+Car, se pitié de nous pauvres avez, \\ 
+Dieu en aura plus tost de vous merciz.}
+}{Francois Villon}
 
 \newpage
 \bibliographystyle{plainnat}
