@@ -5,14 +5,14 @@ The cells are difficult to track automatically, for instance because there are m
 Or because there are other cells of different sizes in the tissue we are studying. 
 Or because the image quality varies in time and space. 
 The data is such that that fully automated algorithms introduced in chapter~\ref{Getting_started} won't give us fully accurate results. 
-We can use the manual editing tools introduced in chapter~\ref{Manuel_Editing} and curate the results of automated tracking, removing spurious detections and links, and fixing incorrect ones. 
+We can use the manual editing tools introduced in chapter~\ref{Manuel_Editing} and curate the results of automated tracking, manually removing spurious detections and links, and fixing incorrect ones. 
 Another approach would be to start from a blank annotation and track manually only the cells we are interested in. 
 Both approaches might be long and tedious. 
 We introduce in this chapter tools for semi-automated tracking, that should alleviate the work of the second approach.
 
 Semi-automated tracking is simply a way of following a specific cell that you picked-up manually. 
 The tracker will follow the cell over time, and create spots and links for a certain amount of time-points.
-It searches for the best location candidate in the next time-point around the location of the spot.
+It searches for the best spot candidate in the next time-point around the location of the spot.
 It then creates a new spot there and links it to the previous one.
 This procedure is repeated this for a certain number of time-points you can set, creating or augmenting a track starting from the spot you selected.
 
@@ -23,6 +23,7 @@ You can make it connect to small tracks and resume tracking when it meets the tr
 You can force it to only create links on already existing spots. 
 These configuration options give rise to several use-cases we will also survey in this chapter.
 But the important message is that semi-automated tracking is a convenient means for dealing with difficult cases, when a fully automated approach fails, and when the data to track is large that doing it manually is inconvenient.
+Or when you only care for a subset of cells in a dense tissue.
 
 \subsection{Simple semi-automated tracking.}
 
@@ -30,6 +31,7 @@ We will introduce semi-automated tracking on a movie with empty annotation.
 Open the dataset we have been using so far, and clear all annotations (for instance select all \keys{\ctrl+A} then delete selection \keys{\shift+\backdel}).
 Then pick a cell in the top layer, and create a spot, centered on its brightest part, like for instance on Figure~\ref{fig:BeforeSemiAutoTracking}.
 Adjust its radius and select it.
+Open a \TrackScheme window to visualize the tracking progress.
 
 \begin{figure}
     \centering
@@ -50,6 +52,7 @@ Each spot is centered on the cell we started with, and it has the same radius th
 You can resume semi-automated tracking from the last spot created by just pressing \keys{\ctrl+T} again. 
 If you do it one more time you should reach the end of the movie, with a new track following a single cell over the full movie duration.
 To get it, you just had to press \keys{\ctrl+T} 3 times.
+If you have more than one cell in the selection, they will be tracked one after another.
 
 \begin{figure}
     \centering
@@ -63,8 +66,63 @@ To get it, you just had to press \keys{\ctrl+T} 3 times.
 \end{figure}
 
 
-
 \subsection{Configuring the semi-automated tracker.}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\textwidth]{figures/Mastodon_SemiAutoTracking_04.png}
+    \caption{The semi-automated tracking configuration panel.}
+    \label{fig:ConfigSemiAutoTracking}
+\end{figure}
+
+The tracking does not always succeed. 
+Depending on where you position the initial spot, it might fail, for instance stating in the log that if found a suitable spot, but outside the tolerance radius.
+(In this example movie, this happens often because the cells are very elongated along the Z direction, and the tracker tends to find candidates near the top, brightest part of the cell.) 
+The parameters that control for instance the tracker search radius can be set in the semi-automated tracking configuration dialog, in the \menu{Plugins > Tracking > Configure semi-automatic tracker}.
+The window show in Figure~\ref{fig:ConfigSemiAutoTracking} should appear.
+This dialog is very similar to the oen used to configure feature color modes, that we have seen in chapter~\ref{Configure_Color_Modes} page~\pageref{Configure_Color_Modes}.
+It also works the same way: the top elements are made to manage several tracking configuration, that will be stored on disk and retrieved in your next Mastodon session. 
+There are two default tracking configuration: the \textbf{Forward} one is the default that we just used. 
+The \textbf{Backtracking} configuration tracks backward in time. 
+The other parameters controls the tracker behavior for the configuration currently selected in the top drop-down list.
+To explain what they do we need first to explain how the semi-automated tracker works (Figure~\ref{fig:ExplainSemiAutoTracking}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/Mastodon_ExplainSemiAutoTracker_copie.pdf}
+    \caption{Illustration of the semi-automated tracking process.}
+    \label{fig:ExplainSemiAutoTracking}
+\end{figure}
+
+The semi-automated tracker works by processing only a small neighborhood around the initial spot.
+This neighborhood is centered on the spot center (in magenta in Figure~\ref{fig:ExplainSemiAutoTracking}), but taken in the next time-point (or previous one if you choose to go backward in time).
+It applies the DoG detector (described in chapter~\ref{Detecting_Cells} page~\pageref{Detection_Cells_DoG_Detector}) on this neighborhood, which yields several detections (green circles).
+The detections that are found outside of a search radius (white, dashed circle) are not considered.
+Detections inside the search radius but with a low quality are discarded as well.
+The tracker therefore select the detection with a sufficiently large quality inside the search radius. 
+If there is more than one suitable detection, it select to the one with the highest quality.
+A new spot is created at this location, with the same radius that of the initial spot. 
+If the initial spot is not a sphere but an ellipsoid, the smallest radius of the ellipsoid is taken. 
+The newly created spot is then linked to the initial spot. 
+This is then repeated for the next time-point (or previous one), using the new spot as initial spot in the same process.
+If no suitable detections are found within the search radius, the tracker stops, and the reason is printed in the tracker log window.
+
+The configuration panel control the parameters of this process.
+\begin{itemize}
+    
+    \item \texttt{Setup ID} specifies what channel (or setup in case you have a multi-view dataset) that will be used for the detection.
+    
+    \item \texttt{Quality factor} specifies the threshold on quality below which we reject detections. This threshold is expressed in fraction of the initial spot quality. For instance if the initial spot quality is 60 and the \texttt{Quality factor} is 0.5, detections with a quality lower than 30 will rejected. If the initial spot has no quality value (it was added manually), this parameter is ignored and all quality values are accepted.
+    
+    \item \texttt{Distance factor} specifies the search radius, in units of the initial spot radius. For instance, for a value of 2.5, only detections that are within 2.5 \texttimes\, the radius of the initial spot will be considered. Again, if the initial spot is not a sphere but an ellipsoid, the smallest radius of the ellipsoid is taken. 
+    
+    \item \texttt{N time-points} specifies the number of time-points after which to stop.
+    
+\end{itemize}
+
+\noindent If you see that the tracker often stops with a message stating that it could not find a suitable candidate within search radius, try to either decrease  the value of the \texttt{Quality factor} or increase the value of the \texttt{Distance factor}.
+
+
 
 \subsection{Main use-cases for semi-automated tracking.}
 
