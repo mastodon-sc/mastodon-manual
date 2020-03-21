@@ -80,12 +80,12 @@ Depending on where you position the initial spot, it might fail, for instance st
 (In this example movie, this happens often because the cells are very elongated along the Z direction, and the tracker tends to find candidates near the top, brightest part of the cell.) 
 The parameters that control for instance the tracker search radius can be set in the semi-automated tracking configuration dialog, in the \menu{Plugins > Tracking > Configure semi-automatic tracker}.
 The window show in Figure~\ref{fig:ConfigSemiAutoTracking} should appear.
-This dialog is very similar to the oen used to configure feature color modes, that we have seen in chapter~\ref{Configure_Color_Modes} page~\pageref{Configure_Color_Modes}.
+This dialog is very similar to the one used to configure feature color modes, that we have seen in chapter~\ref{Configure_Color_Modes} page~\pageref{Configure_Color_Modes}.
 It also works the same way: the top elements are made to manage several tracking configuration, that will be stored on disk and retrieved in your next Mastodon session. 
 There are two default tracking configuration: the \textbf{Forward} one is the default that we just used. 
 The \textbf{Backtracking} configuration tracks backward in time. 
 The other parameters controls the tracker behavior for the configuration currently selected in the top drop-down list.
-To explain what they do we need first to explain how the semi-automated tracker works (Figure~\ref{fig:ExplainSemiAutoTracking}).
+To explain what they do we need first to describe how the semi-automated tracker works (Figure~\ref{fig:ExplainSemiAutoTracking}).
 
 \begin{figure}
     \centering
@@ -94,39 +94,85 @@ To explain what they do we need first to explain how the semi-automated tracker 
     \label{fig:ExplainSemiAutoTracking}
 \end{figure}
 
-The semi-automated tracker works by processing only a small neighborhood around the initial spot.
+The semi-automated tracker works by processing only a small neighborhood around the initial spot, (called the \textit{source} spot later).
 This neighborhood is centered on the spot center (in magenta in Figure~\ref{fig:ExplainSemiAutoTracking}), but taken in the next time-point (or previous one if you choose to go backward in time).
 It applies the DoG detector (described in chapter~\ref{Detecting_Cells} page~\pageref{Detection_Cells_DoG_Detector}) on this neighborhood, which yields several detections (green circles).
 The detections that are found outside of a search radius (white, dashed circle) are not considered.
 Detections inside the search radius but with a low quality are discarded as well.
 The tracker therefore select the detection with a sufficiently large quality inside the search radius. 
-If there is more than one suitable detection, it select to the one with the highest quality.
-A new spot is created at this location, with the same radius that of the initial spot. 
-If the initial spot is not a sphere but an ellipsoid, the smallest radius of the ellipsoid is taken. 
-The newly created spot is then linked to the initial spot. 
+If there is more than one suitable detection, it selects the one with the highest quality.
+A new spot is created at this location, with the same radius that of the source spot. 
+If the source spot is not a sphere but an ellipsoid, the smallest radius of the ellipsoid is taken. 
+The newly created spot is then linked to the source spot. 
 This is then repeated for the next time-point (or previous one), using the new spot as initial spot in the same process.
 If no suitable detections are found within the search radius, the tracker stops, and the reason is printed in the tracker log window.
 
-The configuration panel control the parameters of this process.
+The configuration panel controls the parameters of this process.
 \begin{itemize}
     
     \item \texttt{Setup ID} specifies what channel (or setup in case you have a multi-view dataset) that will be used for the detection.
     
-    \item \texttt{Quality factor} specifies the threshold on quality below which we reject detections. This threshold is expressed in fraction of the initial spot quality. For instance if the initial spot quality is 60 and the \texttt{Quality factor} is 0.5, detections with a quality lower than 30 will rejected. If the initial spot has no quality value (it was added manually), this parameter is ignored and all quality values are accepted.
+    \item \texttt{Quality factor} specifies the threshold on quality below which we reject detections. This threshold is expressed in fraction of the source spot quality. For instance if the source spot quality is 60 and the \texttt{Quality factor} is 0.5, detections with a quality lower than 30 will rejected. If the source spot has no quality value (it was added manually), this parameter is ignored and all quality values are accepted.
     
-    \item \texttt{Distance factor} specifies the search radius, in units of the initial spot radius. For instance, for a value of 2.5, only detections that are within 2.5 \texttimes\, the radius of the initial spot will be considered. Again, if the initial spot is not a sphere but an ellipsoid, the smallest radius of the ellipsoid is taken. 
+    \item \texttt{Distance factor} specifies the search radius, in units of the source spot radius. For instance, for a value of 2.5, only detections that are within 2.5 \texttimes\, the radius of the source spot will be considered. Again, if the source spot is not a sphere but an ellipsoid, the smallest radius of the ellipsoid is taken. 
     
     \item \texttt{N time-points} specifies the number of time-points after which to stop.
+    
+    \item \texttt{Tracking direction} lets you specify whether you want tracking to happen forward or backward in time.
     
 \end{itemize}
 
 \noindent If you see that the tracker often stops with a message stating that it could not find a suitable candidate within search radius, try to either decrease  the value of the \texttt{Quality factor} or increase the value of the \texttt{Distance factor}.
 
+\subsection{Tracker behavior with existing annotations.}
 
+The next parameters below the \textbf{Existing spots} category configure how the tracker deals with existing annotations.
+They change the behavior described in the previous section.
+Indeed, before running the DoG detector on the neighborhood, the tracker first searches for an existing spot within the search radius. 
+If it finds one, it does not run the DoG detection, but links to the existing spot (called \textit{target} spot later) or not, depending on the following parameters.
+
+If the \texttt{Allow linking to an existing spot} checkbox is deselected, the tracker stops. 
+If it is selected, the tracker will link to the target spot, provided it has no links already. 
+However, the next 3 parameters allow to add exceptions: 
+
+\begin{itemize}
+    \item \texttt{Link even if target has incoming links}
+    \item \texttt{Link even if target has outgoing links}
+    \item \texttt{Continue tracking if source and target spots are already linked}
+\end{itemize}
+
+\noindent Their selection have important consequences when you are tracking along existing spots.
+They are best exemplified by several different use-cases.
 
 \subsection{Main use-cases for semi-automated tracking.}
 
-\subsubsection{Tracking from a blank annotation. }
+\subsubsection{Tracking a subset of cells. }
+
+This is what we have been doing in the first section of this chapter. 
+This does not require any special configuration and the default tracking configuration called \textbf{Forward} will do.
+Here is an example of when this use-case can be useful.
+
+Arianne Bercowski Rama and Laurel Ann Rohde (Segmentation Timing and Dynamics Laboratory, EPFL) are studying the somatogenesis dynamics in the zebrafish embryo.
+They acquire long-term time-lapse movies of the development of an embryo, with cellular resolution.
+For this project they wanted to follow a few cells of interest (a few dozens per movie) and investigate the expression of a gene reporter as the cells moved along the zebrafish embryo.
+The nuclei are all stained with a nuclear marker, so this fluorescence channel could be used for automated detection, but there are thousands of cells.
+Instead, they relied on semi-automated tracking, selecting a the cells of interest in the first frames of the movie, and tracking them to the end thanks to the semi-automated tracker (Figure~\ref{fig:ArianneUseCase}, left). 
+Once the tracking was done, they used feature analysis to extract fluorescence intensity over time for each cell in the gene reporter channel (Figure~\ref{fig:ArianneUseCase}, right).
+
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \includegraphics[width=0.4\textwidth]{figures/Mastodon_ArianneUseCase_01.png}
+    \hfill
+    \includegraphics[width=0.4\textwidth]{figures/Mastodon_ArianneUseCase_02.png}
+    \hfill\null
+    \caption{Semi-automated tracking of a subset of cells during somatogenesis in the zebrafish embryo. \textbf{Left}: Image data overlaid with the tracks of the cells of interest. \textbf{Right}: Gene reporter fluorescence intensity for 10 of these cells as a function of time.}
+    \label{fig:ArianneUseCase}
+\end{figure}
+
+
+
 
 \subsubsection{Patching small track segments.}
 
