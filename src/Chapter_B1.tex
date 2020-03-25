@@ -229,18 +229,18 @@ The fixed \texttt{AbstractEdge} part comprises element indices
 	\texttt{NEXT\_TARGET\_EDGE}, occupying 4 bytes each.
 The remaining 8 bytes are \texttt{Edge} attributes.
 
-\texttt{SOURCE} is the element index (in the vertex memory array) of the vertex from which this edge starts.
+\begin{itemize}
+    \item \texttt{SOURCE} is the element index (in the vertex memory array) of the vertex from which this edge starts.
 
-\texttt{TARGET} is the element index (in the vertex memory array) of the vertex to which this edge points.
+    \item \texttt{TARGET} is the element index (in the vertex memory array) of the vertex to which this edge points.
 
-\texttt{NEXT\_SOURCE\_EDGE} is the element index (in the edge memory array) of the next outgoing edge of the source vertex,
-	i.e., the next edge that has the same \texttt{SOURCE}.
-If there is no such edge then \texttt{NEXT\_SOURCE\_EDGE} is $-1$.
+    \item \texttt{NEXT\_SOURCE\_EDGE} is the element index (in the edge memory array) of the next outgoing edge of the source vertex, \ie, the next edge that has the same \texttt{SOURCE}. 
+    If there is no such edge then \texttt{NEXT\_SOURCE\_EDGE} is $-1$.
 
-\texttt{NEXT\_TARGET\_EDGE} is the element index (in the edge memory array) of the next incoming edge of the target vertex,
-	i.e., the next edge that has the same \texttt{TARGET}.
-If there is no such edge then \texttt{NEXT\_TARGET\_EDGE} is $-1$.
+    \item  \texttt{NEXT\_TARGET\_EDGE} is the element index (in the edge memory array) of the next incoming edge of the target vertex, \ie, the next edge that has the same \texttt{TARGET}.
+    If there is no such edge then \texttt{NEXT\_TARGET\_EDGE} is $-1$.
 
+\end{itemize}
 
 
 
