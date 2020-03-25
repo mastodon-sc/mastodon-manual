@@ -1,62 +1,50 @@
 \documentclass{scrartcl}
 
+% Tickz
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{matrix}
+
+% Fonts
 \usepackage{libertine} 
 \usepackage[libertine]{newtxmath}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{courier}
+\usepackage[scaled=.75]{beramono}
 
-\usepackage[export]{adjustbox}
-\usepackage{wrapfig}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{amsrefs}
-\usepackage{calc}
-\usepackage{funkey}
-\usepackage{notation}
-\usepackage{array}
+% Decorate key bindings and menu paths.
 \usepackage{menukeys}
-\input{tikzstyles}
-\usetikzlibrary{shapes.misc}
+
+% Several figures in a figure.
 \usepackage{subfig}
-\usepackage{longtable}
-\usepackage{multirow}
+
+% Tables.
 \usepackage{tabulary}
+\usepackage{booktabs}
+
+% Links.
 \usepackage{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \usepackage[htt]{hyphenat}
-\usepackage[scaled=.75]{beramono}
-% Put a dot after section number.
-\usepackage{secdot}
-\usepackage[super]{nth}
+
+% Colored links
+\newcommand\coloredlink[1]{\textcolor{blue!75!black}{\underline{\smash{#1}}}}
+\newcommand\wikilink[2]{\href{http://imagej.net/#1}{\coloredlink{#2}}}
 
 % Epigraph
 \usepackage{epigraph}
 
-% I want a proper degree symbol in text.
-\usepackage{textcomp}       % additional symbols using companion encoding TS1
-\usepackage{gensymb}        % provides macro \degree which works in text and math
-\DeclareUnicodeCharacter{00B0}{\degree}
-
-\newcommand\button[1]{\textit{#1}}
-\newcommand\key[1]{\texttt{#1}}
-\newcommand\screenshotA[1]{\centerline{\includegraphics[scale=0.5]{figures/#1}}}
-\newcommand\screenshotB[1]{\centerline{\includegraphics[width=.8\textwidth]{figures/#1}}}
-\newcommand\screenshotC[1]{\centerline{\includegraphics[width=.5\textwidth]{figures/#1}}}
-\newcommand\screenshotLeft[1]{\begin{wrapfigure}{r}{7.5cm}{\centerline{\includegraphics[width=7.3cm]{figures/#1}}}\end{wrapfigure}}
-\newcommand\screenshotLeftB[1]{\begin{wrapfigure}{r}{6cm}{\centerline{\includegraphics[width=5.8cm]{figures/#1}}}\end{wrapfigure}}
-\newcommand\screenshotLeftC[1]{\begin{wrapfigure}{r}{4cm}{\centerline{\includegraphics[width=3.8cm]{figures/#1}}}\end{wrapfigure}}
-\newcommand\screenshotTikz[1]{\centerline{\includetikz{figures/#1}}}
-\newcommand\coloredlink[1]{\textcolor{blue!75!black}{\underline{\smash{#1}}}}
-\newcommand\wikilink[2]{\href{http://imagej.net/#1}{\coloredlink{#2}}}
-\newcommand\otherlink[2]{\href{#1}{\coloredlink{#2}}}
-\newcommand\TODO[1]{\textcolor{red}{#1}}
-
-% Small font in verbatime environment.
-\makeatletter
-\def\verbatim{\small\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
-\makeatother
+% Test math symbols.
+\usepackage{textcomp}       
 
 % Small images in text (for e.g. small icon).
 \newcommand*{\smallimg}[1]{%
@@ -69,57 +57,19 @@
   }%
 }
 
-% Properly hyphen TrackMate & TrackScheme
-\newcommand\TrackScheme[0]{Track\-Scheme\xspace}
-\newcommand\TrackMate[0]{Track\-Mate\xspace}
-
-% Less space when we make bullet lists.
-\newenvironment{myitemize}
-{ \begin{itemize}
-    \setlength{\itemsep}{2pt}
-    \setlength{\parskip}{0pt}
-    \setlength{\parsep}{0pt}     }
-{ \end{itemize}                  } 
-
-
-% Syntax highlighting for code.
-\usepackage{color}
-\definecolor{sh_comment}{rgb}{0.12, 0.38, 0.18 }
-\definecolor{sh_keyword}{rgb}{0.37, 0.08, 0.25}  
-\definecolor{sh_string}{rgb}{0.06, 0.10, 0.98} 
-
-\usepackage{listings}
-\lstset{
-	rulesepcolor=\color{black},
-	showstringspaces=false,showtabs=false,tabsize=2,
-	basicstyle=\ttfamily\small,
-	stringstyle=\color{sh_string},
-	keywordstyle = \color{sh_keyword}\bfseries,
-	commentstyle=\color{sh_comment}\itshape,
-	% escapebegin={\lstsmallmath}, escapeend={\lstsmallmathend}
-	breaklines=true,
-	postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
-}
-
-% Tables in the Wiki and LaTeX
-\newcommand{\specialcell}[2][c]{%
-  \begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
-\newcommand\tablecell[2][&]{#2 #1}
-
-% Highlight a sentence or word of wisdom like for amsbox
-\newcommand\amsbox[1]{\begin{center}
-	\begin{tikzpicture}[baseline=(char.base)]
-		\node(char)[draw,
-			fill=lightgray!20,
-			shape=rectangle,
-			drop shadow,
-			rounded corners,
-			minimum width=6cm,
-			text width=13cm]
-			{#1};
-	\end{tikzpicture}
-\end{center}
-}
+% Properly hyphen TrackMate & TrackScheme & friends
+\newcommand\TrackScheme[0]{Track\-Scheme\ }
+\newcommand\TrackMate[0]{Track\-Mate\ }
+\newcommand{\bdv}{BigDataViewer\ }
+\newcommand{\Bdv}{BigDataViewer\ }
+\newcommand{\Ie}{\textit{I.e.{}}\ }
+\newcommand{\Eg}{\textit{E.g.{}}\ }
+\newcommand{\Cf}{\textit{Cf.{}}\ }
+\newcommand{\ie}{\textit{i.e.{}}\ }
+\newcommand{\eg}{\textit{e.g.{}}\ }
+\newcommand{\cf}{\textit{cf.{}}\ }
+\newcommand{\etc}{\textit{etc}\ }
+\newcommand{\etal}{\emph{et~al.}}
 
 % Making 1.5 spaced lines
 \usepackage{setspace}
@@ -127,7 +77,7 @@
 
 % Syntax highlighting
 \usepackage{minted}
-\setminted{fontsize=\small,baselinestretch=1}
+\setminted{fontsize=\small, baselinestretch=1}
 
 % More space between paragraphs and indent.
 \setlength{\parskip}{6pt}
@@ -136,19 +86,8 @@
 % Figure caption with special fonts.
 \usepackage[font=small,labelfont=bf,format=plain]{caption}
 
-% Smaller margins. Paper is expensive and we write in bug characters.
+% Smaller margins. Paper is expensive and we write in big characters.
 \usepackage[margin=1in]{geometry}
-
-% Tables.
-\usepackage{booktabs}
-\usepackage{graphicx}
-
-% Wrap figures around text.
-\usepackage{wrapfig}
-
-% Caption style for suib-figures.
-\captionsetup[subfigure]{position=top, labelfont=bf, textfont=normalfont, singlelinecheck=off, justification=raggedright, labelformat=simple, labelsep=period}
-
 
 
 %---------------------------------------------------------------------------------
@@ -166,30 +105,31 @@
 \tableofcontents
 
 % Introduction and generalities about Mastodon.
-% \newpage
-% \input{ src/Chapter1.tex }
+\newpage
+\input{src/Chapter_A1.tex}
 
 \newpage
 \part{Tutorials.}
 
 % Automated tracking.
 \newpage
-\input{src/Chapter2.tex}
+\input{src/Chapter_A2.tex}
 
-% % Manual tracking. TrackScheme.
+% Manual tracking. TrackScheme.
 \newpage
-\input{src/Chapter3.tex}
+\input{src/Chapter_A3.tex}
 
-% % Orienting in Mastodon.
-% \newpage
-% \input{src/Chapter4.tex}
-
-% % Feature, tags and tables.
+% Orienting in Mastodon.
 \newpage
-\input{src/Chapter5.tex}
+\input{src/Chapter_A4.tex}
 
+% Feature, tags and tables.
 \newpage
-\input{src/Chapter6.tex}
+\input{src/Chapter_A5.tex}
+
+% Semi automated-tracking.
+\newpage
+\input{src/Chapter_A6.tex}
 
 
 \newpage
@@ -202,8 +142,16 @@ Car, se pitié de nous pauvres avez, \\
 Dieu en aura plus tost de vous merciz.}
 }{Francois Villon}
 
+% The graph of Mastodon
 \newpage
-\bibliographystyle{plainnat}
+\input{src/Chapter_B1.tex}
+
+
+
+
+
+\newpage
+\bibliographystyle{ieeetr}
 \clearpage 
 \bibliography{References}
 

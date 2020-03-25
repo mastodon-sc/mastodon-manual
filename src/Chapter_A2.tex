@@ -185,10 +185,12 @@ The image data will be loaded along with the lineages.
 \subsection{Detecting cells.}
 \label{Detecting_Cells}
 
-\begin{wrapfigure}{r}{0.4\textwidth}
+\begin{figure}
     \centering
-         \includegraphics[width=0.4\textwidth]{figures/Mastodon_DetectionWizard_01.png}
-\end{wrapfigure}
+     \includegraphics[width=0.4\textwidth]{figures/Mastodon_DetectionWizard_01.png}
+     \caption{First panel of the detection wizard.}
+     \label{fig:DetectionWizardFirstPanel}
+\end{figure}
 
 We want to track automatically all the cells in this dataset, and the first step is therefore to detect them.
 Mastodon ships a wizard to perform cell detection. 
@@ -196,7 +198,7 @@ It is very much inspired by the \wikilink{TrackMate}{TrackMate} GUI, and if you 
 Also, the algorithms are very close to what was in TrackMate~\cite{TrackMate}, but they have been heavily optimized for Mastodon.
 
 The detection wizard can be launched from the \menu{Plugins > Tracking > Detection...} menu item. 
-You should have a window like this one appearing:
+You should have a window like the one depicted in Figure~\ref{fig:DetectionWizardFirstPanel}.
 
 Like for TrackMate, the automated tracking user interface uses \textit{wizards} to enter parameters, select algorithms, \textit{etc.}
 You can navigate back and forth with the \menu{\smallimg{arrow_right.png} Next} and  \menu{\smallimg{arrow_left.png} Previous} buttons. 
@@ -220,8 +222,8 @@ You cannot have non-rectangular ROIs in Mastodon. Nonetheless they are super use
 You can for instance combine several detection steps using different parameters in different region of your image. Or different time interval.
 
 \begin{center}
-         \includegraphics[height=0.25\textheight]{figures/Mastodon_ROIpanel.png}
-         \includegraphics[height=0.25\textheight]{figures/Mastodon_ROIBDV.png}
+     \includegraphics[height=0.25\textheight]{figures/Mastodon_ROIpanel.png}
+     \includegraphics[height=0.25\textheight]{figures/Mastodon_ROIBDV.png}
 \end{center}
 
 The next panel lets you choose the detector you want to use.
@@ -245,10 +247,10 @@ It is based on applying a Laplacian of Gaussian (LoG) filter on the image and lo
 Local maxima in the filtered image yields spot detections. 
 Each detected spot is assigned a \textbf{quality} value, that is obtained by taking the intensity value in the LoG filtered image at the location of the spot.
 So by properties of the LoG filter, this quality value is larger for :
-\begin{myitemize}
+\begin{itemize}
     \item bright spots;
     \item spots which diameter is close to the specified diameter.
-\end{myitemize}
+\end{itemize}
 
 The DoG detector requires only two parameters: the estimated diameter of the object we want to detect, and a threshold on the quality value, that will help separating spurious detections from real ones. 
 The panel you are presented let you specify these parameters, and preview the resulting detection.
@@ -257,11 +259,11 @@ The click on the \menu{\smallimg{led-icon-eye-green.png} Preview} button.
 A preview panel should open shortly, showing detection results on the current frame (Figure~\ref{fig:PreviewDetection}).
 
 \begin{figure}
-    \label{fig:PreviewDetection}
     \centering
          \includegraphics[height=0.25\textheight]{figures/Mastodon_DoGconfig1.png}
          \includegraphics[height=0.25\textheight]{figures/Mastodon_DoGconfig2.png}
     \caption{Previewing detection results.}
+    \label{fig:PreviewDetection}
 \end{figure}
 
 These values are close but not quite.
@@ -282,10 +284,10 @@ We now have more than 1000 cells detected and this concludes the detection step 
 Click on the \menu{\smallimg{accept-icon.png} Finish} button, and the wizard will disappear.
 
 \begin{figure}
-    \label{fig:DetectionResults}
     \centering
     \includegraphics[height=0.40\textwidth, trim=0.5cm 0.5cm .5cm .5cm, clip]{figures/Mastodon_DetectionResuts.png}
     \caption{Detection results.}
+    \label{fig:DetectionResults}
 \end{figure}
 
 If you have complex images mixing several size of objects, or detection parameters that work for one part of the movie but not for another one, you could restart a new detection now, selecting for instance other parts of the movie with the ROI.
@@ -305,23 +307,24 @@ But some algorithms can accommodate \textit{e.g.} dividing cells (2 outgoing lin
 
 \subsubsection{Selecting target spots for linking.}
 
-\begin{wrapfigure}{r}{0.3\textwidth}
+\begin{figure}
     \centering
     \includegraphics[height=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_LinkingWizard_01.png}
-\end{wrapfigure}
+    \caption{The first panel of the linking wizard.}
+    \label{fig:LinkingWizardFirstPanel}
+\end{figure}
 
 Like for the detection step, linking in Mastodon happens in a wizard.
 And also like for detection, the linking algorithms currently available in Mastodon are adapted from TrackMate. 
-
 Launch the wizard from the GUI, with the \menu{Plugins > Tracking > Linking...} menu item. 
-The first panel you are shown lets you select what spots to include in linking. 
+The first panel you are shown lets you select what spots to include in linking (Figure~\ref{fig:LinkingWizardFirstPanel}). 
 There are two modes:
-\begin{myitemize}
+\begin{itemize}
     \item Either you take all the spots between a start and and end frame. By default, all frames are selected.
     \item Either you specify you want to link only the spots that are in the selection. 
     This mode offers a lot of flexibility when facing complicated cases. 
     It is best use along with the selection creator, that we will introduce later in this manual.
-\end{myitemize}
+\end{itemize}
 For now, just leave the parameters as they are, which will include all spots in the linking process, and click next.
 You can now choose between several linking algorithms. 
 
@@ -335,11 +338,11 @@ You can tune it to allow splitting events, where a track splits in two, for inst
 Merging events are handled too in the same way. More importantly are gap-closing events, where a spot disappear for one frame (because it moves out of focus, because detection failed, ...) but the track manages to recuperates and connect with reappearing spots later.
 
 In Mastodon the LAP algorithms exists in two flavors: a simple one and a not simple one. There are again the same, but the simple ones propose fewer configuration options and a thus more concise configuration panel. In short:
-\begin{myitemize}
+\begin{itemize}
     \item The simple one only allows to deal with gap-closing events, and prevent splitting and merging events to be detected. Also, the costs to link two spots are computed solely based on their respective distance.
     
     \item The not simple one allows to detect any kind of event, so if you need to build tracks that are splitting or merging, you must go for this one. If you want to forbid the detection of gap-closing events, you want to use it as well. Also, you can alter the cost calculation to disfavor the linking of spots that have very different feature values.
-\end{myitemize}
+\end{itemize}
 
 The third tracker is called \textbf{Linear motion Kalman linker}.
 It can deal specifically with linear motion, or particles moving with a roughly constant velocity.
@@ -350,7 +353,7 @@ It relies on the Kalman filter\footnote{\href{https://en.wikipedia.org/wiki/Kalm
 
 The right choice of a particle linking algorithm is conditioned by the expected motion of the object you track.
 As a rule of thumb, you can make a decision following these simple rules:
-\begin{myitemize}
+\begin{itemize}
     
     \item If the objects you track are transported by an active process and have a motion for which the velocity vector changes slowly, then pick the  \textbf{Linear motion Kalman linker}.
     
@@ -358,7 +361,7 @@ As a rule of thumb, you can make a decision following these simple rules:
     
     \item If the objects divide or merge, or if you want to specify linking costs based on numerical features (like spot mean intensity), then pick the \textbf{LAP linker}.
     
-\end{myitemize}
+\end{itemize}
 In our case, we need the \textbf{Simple LAP linker}. Select it and click \menu{\smallimg{arrow_right.png} Next}.
 
 \subsubsection{Running the Simple LAP linker.}

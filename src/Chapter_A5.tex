@@ -247,12 +247,12 @@ The bottom part configures the edge coloring, or how we color links.
 In Mastodon the data is organized in a mathematical graph\footnote{\href{https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)}{Mathematical graphs on Wikipedia \coloredlink{https://en.wikipedia.org/wiki/Graph\_(discrete\_mathematics)}}}, in which the vertices are the spots, and the edges are the links that connect spots from one frame to another, so you will sometimes find in Mastodon and in this manual the vocables vertex and edge to design a spot and a link respectively. 
 The vertex color mode specifies where do we take colors from. 
 You can choose between:
-\begin{myitemize}
+\begin{itemize}
     \item \texttt{Vertex}, which means a spot will take its color from a feature value it owns.
     \item \texttt{Incoming edge}, which means a spot will take its color from a feature value owned by the single incoming link that targets this spot. This is the link backward in time. If there are no such links or more than one, then the default color is used.
     \item \texttt{Outgoing edge} is the same thing, but for the link forward in time. 
     \item \texttt{Default} mode does not rely on feature values but simply uses the default color in the view.
-\end{myitemize}
+\end{itemize}
 
 \noindent Depending on the mode you chose, the content of the drop-down list below, called \texttt{Vertex feature}, will change to reflect either the list of spot features or the link features.
 Select \textbf{Vertex} as a color mode and \textbf{Spot gaussian-filtered intensity} as feature.
@@ -285,12 +285,12 @@ The black square you see next to the graded representation of the color-map is t
 The \texttt{autoscale} button computes the min and max automatically from the feature currently selected with the values taken from the last feature computation.
 
 The edge coloring works exactly the same, except for the edge color mode.
-\begin{myitemize}
+\begin{itemize}
     \item \texttt{Edge} means that a link will be colored by a feature value it owns.
     \item \texttt{Source vertex} will take a feature value from the source spot of this link, that is, the first in time.
     \item \texttt{Target vertex} does the same but for the last spot in time of this link. 
     \item \texttt{Default} mode does not rely on feature values but simply uses the default color in the view.
-\end{myitemize}
+\end{itemize}
 \noindent To build our example feature color mode, choose \texttt{Source vertex} as color mode, and use for instance the \texttt{viridis} color-map along with 700 and 1100 for min and max values.
 Do the same for the vertex color mode (Figure~\ref{fig:FeatureColorModeConfig2}).
 
