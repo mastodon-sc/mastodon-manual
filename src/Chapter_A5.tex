@@ -193,7 +193,6 @@ For instance, the \texttt{Link velocity} feature computer depends on the \texttt
 
 The check-box on the left of each feature computer name triggers whether they will be part of the next feature computation.
 Press the \menu{\smallimg{bullet_green.png}Compute} button to trigger computation of features.
-You will probably notice, thanks to the progress bar, that the intensity-related features are the ones that take the most time to compute. 
 
 Once the computation of all the features is complete, all the small clock icons that were shown right to the feature computer names now turned to a green dot\smallimg{bullet_green.png}.
 This is how we keep track of the validity of the feature values.
@@ -206,7 +205,14 @@ While keeping the feature computation dialog open, move a spot in a BDV view.
 You should see that all the green dot icons now turn to the clock icon.
 Also, if you now deselect some feature computers before launching a new computation, the validity flag will not turn to the green dot icon for those feature computers.
 
-I guess that since we have feature values computed, you would like to inspect them and export them for further analysis.
+You probably have noticed, thanks to the progress bar, that the intensity-related features are the ones that take the most time to compute. 
+Indeed, they require loading all of the data blocks on which there are spots.
+This could  rapidly become cumbersome for large datasets, if you have to recompute all of the features every-time a spot is added or edited. 
+Fortunately we implemented an update mechanism for feature computation.
+After the first computation, which possible takes very long, only the spots that have been added or modified since the last computation are visited.
+The details of the update mechanism are explained in the technical part of this manual, chapter~\ref{FeatureComputationUpdateMechanism} page~\pageref{FeatureComputationUpdateMechanism}.
+
+Now that we have feature values computed, we would like to inspect them and export them for further analysis.
 This is the role of the table view, but before getting to it, we will make a little detour to showing how to use features to generate coloring, accelerating updates of computation and saving them to disk.
 
 
@@ -278,7 +284,7 @@ In our case, we simply want the mean of the only channel in the dataset.
 
 Coming back to the color mode configuration, next we need to pick a color-map.
 A color-map acts as the LUT for an image, and maps a color to a certain value. 
-Mastodon ships about 20 of them, many taken from the MatPlotLib project\footnote{\url{https://matplotlib.org/3.1.1/gallery/color/colormap_reference.html}}.
+Mastodon ships about 20 of them, many taken from the MatPlotLib project\footnote{\coloredlink{\url{https://matplotlib.org/3.1.1/gallery/color/colormap_reference.html}}}.
 Finally, you have to specify a min value and a max value that will act as the brightness and contrast values for an image.
 Values below the min you defined will all be displayed with the first color of the color-map and values larger than the max with last.
 The black square you see next to the graded representation of the color-map is the color used for data items for which the feature value is not present or undefined (division by zero, \etc).
@@ -318,37 +324,6 @@ For instance with our custom color mode, we can quickly find cells that are the 
     
     \caption{Feature color mode in a BDV view and in a \TrackScheme view.  }
     \label{fig:FeatureColorModeView}
-\end{figure}
-
-
-
-
-\subsubsection{Accelerating feature computation with the update mechanism.}
-
-In this paragraph we explain one of the important aspect of feature computation in Mastodon, in the case of large data.
-It is not an interactive tutorial, but what it covers deserves explanation. 
-
-As we repeated several times in this manual, Mastodon is meant to harness large images and large data generated from it. 
-You probably noticed that the feature computers that deal with spot intensity (\texttt{Spot gaussian-filtered intensity}, \texttt{Spot median intensity}, \texttt{Spot sum intensity}) were taking a long time to compute. 
-They require synchronized access to pixel data, jumping from one spot to another, at a fixed resolution level.
-In situations where you have millions of spots, the computation of these features will take a very long time, possibly similar to the time it took to detect these spots. 
-So of course, you don't want to do it again and again each time one spot changes radius or position.
-You want to recompute feature values only for the spots that have been altered or created since the last computation. 
-Mastodon has a system that supports incremental updates. 
-This system tracks what data items have been modified or created for a given number of feature computation times. 
-It feature an \textit{update stack} that can provide to the feature computer that request it the list of data items that changed since the feature it provides have been last computed (Figure~\ref{fig:FeatureUpdateStack}). 
-
-You can it a try with a larger dataset than the one we have been using so far.
-Compute all the features, including the costly ones such as \texttt{Spot gaussian-filtered intensity}.
-The first time you compute this features, it should take a significant amount of time.
-Now move one spot from one position to another, and recompute all the features. 
-You should see that now the computation takes much less time.
-
-\begin{figure}
-    \centering
-    \includegraphics[angle=90, height=0.8\textheight]{figures/Mastodon_FeatureUpdateStack.png}
-    \caption{An illustration of the feature update stack mechanism.  }
-    \label{fig:FeatureUpdateStack}
 \end{figure}
 
 
