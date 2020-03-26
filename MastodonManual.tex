@@ -78,13 +78,13 @@
 \usepackage{setspace}
 \onehalfspacing
 
-% Syntax highlighting
-\usepackage{minted}
-\setminted{fontsize=\small, baselinestretch=1}
-
 % More space between paragraphs and indent.
 \setlength{\parskip}{6pt}
 \setlength\parindent{24pt}
+
+% Syntax highlighting
+\usepackage{minted}
+\setminted{fontsize=\small, baselinestretch=1}
 
 % Figure caption with special fonts.
 \usepackage[font=small,labelfont=bf,format=plain]{caption}
@@ -101,39 +101,43 @@
 
 \input{src/TitlePage.tex}
 
+% Introduction and generalities about Mastodon.
 \newpage
 \input{src/Preamble.tex}
 
 \newpage
 \tableofcontents
 
-% Introduction and generalities about Mastodon.
 \newpage
-\input{src/Chapter_A1.tex}
-
-\newpage
-\part{Tutorials.}
+\part{Using Mastodon.}
 
 % % Automated tracking.
 % \newpage
-% \input{src/Chapter_A2.tex}
+% \input{src/Chapter_A1.tex}
 
 % % Manual tracking. TrackScheme.
 % \newpage
-% \input{src/Chapter_A3.tex}
+% \input{src/Chapter_A2.tex}
 
 % % Orienting in Mastodon.
 % \newpage
-% \input{src/Chapter_A4.tex}
+% \input{src/Chapter_A3.tex}
 
 % % Feature, tags and tables.
 \newpage
-\input{src/Chapter_A5.tex}
+\input{src/Chapter_A4.tex}
 
 % Semi automated-tracking.
 \newpage
-\input{src/Chapter_A6.tex}
+\input{src/Chapter_A5.tex}
 
+
+
+
+
+\newpage
+\part{Mastodon interoperability.}
+\vfill
 
 
 \newpage
@@ -153,18 +157,21 @@ Car, se pitié de nous pauvres avez, \\
 Dieu en aura plus tost de vous merciz.}
 }{Francois Villon}
 
+% Tecnical description of features.
+\newpage
+\input{src/Chapter_D1.tex}
 
 % The feature update mechanism.
 \newpage
-\input{src/Chapter_C1.tex}
+\input{src/Chapter_D2.tex}
 
 % The graph of Mastodon.
 \newpage
-\input{src/Chapter_C2.tex}
+\input{src/Chapter_D3.tex}
 
 % KD-tree searched on Convex polytopes.
 \newpage
-\input{src/Chapter_C3.tex}
+\input{src/Chapter_D4.tex}
 
 
 

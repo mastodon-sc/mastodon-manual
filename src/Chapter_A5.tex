@@ -1,487 +1,231 @@
-\section{Numerical features and tags. The table view.}
+\section{Semi-automated tracking.}
 
-Mastodon is a tracking and lineaging tool.
-Its output is a collection of tracks, and the analysis of these tracks to yield statistics on \eg velocity, displacement \etc is carried out in another software package such as MATLAB or Python.
-Nonetheless you will find in Mastodon tools to compute \textit{numerical features} on data item. 
-Numerical features are numbers that can be calculated on spots, links and tracks of the data. 
-For instance there are feature for the number of links that touch a spot, or the displacement of a link or the number of spots in a track.
-You can find them within Mastodon because it is convenient, but also because they are very useful for the interactive exploration of your data. 
-Coupled with feature-based coloring, the display and sorting of values in the table view and the selection creator tool, they can considerably accelerate and facilitate making sense of the data.
+Let us suppose we are dealing with a difficult image in which me must track only a subset of cells. 
+The cells are difficult to track automatically, for instance because there are many spurious structures labelled. 
+Or because there are other cells of different sizes in the tissue we are studying. 
+Or because the image quality varies in time and space. 
+The data is such that that fully automated algorithms introduced in chapter~\ref{Getting_started} won't give us fully accurate results. 
+We can use the manual editing tools introduced in chapter~\ref{Manuel_Editing} and curate the results of automated tracking, manually removing spurious detections and links, and fixing incorrect ones. 
+Another approach would be to start from a blank annotation and track manually only the cells we are interested in. 
+Both approaches might be long and tedious. 
+We introduce in this chapter tools for semi-automated tracking, that should alleviate the work of the second approach.
 
-Numerical features are numbers that classically relate to a physical quantity.
-When we need to \textit{categorize} items, we rely on \textit{tags}.
-We describe them just below. 
-This chapter will also show you how to compute numerical features and create a coloring view from the feature values and  tags.
-Doing so, we will introduce the third kind of data view in Mastodon: the data tables.
+Semi-automated tracking is simply a way of following a specific cell that you picked-up manually. 
+The tracker will follow the cell over time, and create spots and links for a certain amount of time-points.
+It searches for the best spot candidate in the next time-point around the location of the spot.
+It then creates a new spot there and links it to the previous one.
+This procedure is repeated this for a certain number of time-points you can set, creating or augmenting a track starting from the spot you selected.
 
+The semi-auto tracker can be configured to work backward in time (backtracking), to have a certain search radius, or a certain sensitivity to spot quality (as defined in chapter~\ref{Detecting_Cells}).
+The way it interacts with existing annotation can be configured too. 
+You can make it stops when it meets an existing spot, linking to it or not.
+You can make it connect to small tracks and resume tracking when it meets the track end.
+You can force it to only create links on already existing spots. 
+These configuration options give rise to several use-cases we will also survey in this chapter.
+But the important message is that semi-automated tracking is a convenient means for dealing with difficult cases, when a fully automated approach fails, and when the data to track is large that doing it manually is inconvenient.
+Or when you only care for a subset of cells in a dense tissue.
 
-\subsection{Tags and tag-sets.}
+\subsection{Simple semi-automated tracking.}
 
-As we said above, every-time you need to categorize certain data items, or need to visualize categories, you should rely on tags.
-Let's suppose that you are investigating the trajectories of cells in a developing embryo from an early stage to a stage where the embryo is polarized.
-Some cells will migrate to the anterior part, some others to the posterior part, \etc. 
-You might want to tag cell tracks with the \texttt{Anterior} or \texttt{Posterior} tag, to investigate where do these cell come from in the early embryo.
-Or let's say that you are curating the results of the automated tracking on a large images. 
-The tracking results might have some inaccuracies, and you want to correct them for important tracks.
-Because there is a lot of tracks, you share the workload with some colleagues. 
-You work asynchronously with them, editing the Mastodon file one after another. 
-Doing so, you can use tags in Mastodon to mark some tracks as reviewed by you.
-Your colleagues will use a tag for themselves, to ensure that no two scientists are reviewing the same track twice.
-All the cells that are not tagged in this categorisation are still waiting to be reviewed. 
-
-In Mastodon, a categorization corresponds to a \textbf{tag-set}.
-A tag-set defines a property that can have a reasonable number of discrete values, or \textbf{tags}.
-In the first of the two examples above, \texttt{Location} would be a tag-set to specify the location of cells.
-\texttt{Anterior} and \texttt{Posterior} would be two tags belonging to the \texttt{Location} tag-set.
-In the second example, \texttt{Reviewed by} would be a tag-set, and \texttt{Mette}, \texttt{Pavel}, \texttt{Tobias} and \texttt{Jean-Yves} would be 4 tags of this tag-set.
-
-You can assign tags to spots and links.
-To assign a tag to a whole track, you have to assign this tag to all the spots and links of this track.
-One data item (a spot or a ling) can have 1 or 0 tags per existing tag-set.
-But they can be categorized by as many tag-sets as there is.
-For instance, a spot can have the tag \texttt{Anterior} in the \texttt{Location} tag-set, and the tag \texttt{Pavel} in the \texttt{Reviewed by} tag-set. 
-Or it can be not tagged in the \texttt{Reviewed by} tag-set.
-But it cannot have both the tag \texttt{Mette} and the tag \texttt{Tobias} because they belong to the same tag-set.
-Each tag-set works independently, and clearing a tag-set does not affect the others even for one data item.
-Now that we set things straight, let's see how to create tag-sets.
-We will base the demonstration in this chapter on the data we generated in the tutorial chapter~\ref{Getting_started}.
-
-
-\subsubsection{Creating tag-sets.}
-
-On the main window (see figure~\ref{fig:MastodonMainWindow} page~\pageref{fig:MastodonMainWindow}), there is a button \menu{configure tags}. 
-Pressing it opens the tag-set dialog. 
-Right now, it appears as an empty table made of two columns (Figure~\ref{fig:CreateTagSet}a). 
-This is where you enter tag-sets and tags.
-
-Press the \smallimg{add.png} button on the left column to create a new tag-set. 
-A default name is shown for the tag-set, that you can edit.
-You can also directly press the  \keys{\return} key to immediately start editing the new tag-set.
-Let's say we want to create the location tag we talked about before.
-Type \texttt{Location} in the text field. 
-An empty line followed by a \smallimg{add.png} button should appear on the right column.
-This is where you will enter the tags of this tag-set.
-Click on this button, or press the \keys{\tab} key followed by the \keys{\return} key to create a new tag.
-For instance, the \texttt{Anterior} tag.
-Note that a tag is only made of a label (the text) and a color.
-The color will be used in Mastodon views.
-Create a second tag for the same tag-set called \texttt{Posterior}.
-Pick the color as you like. 
-Now try to create another tag-set called \texttt{Reviewed by} and create some tags in this tag-set (Figure~\ref{fig:CreateTagSet}b). 
-The tag-set dialog is normally fully navigable with the \keys{\tab}, \keys{\arrowkeyup} and \keys{\arrowkeydown} keys, so that you can enter tags quickly if you have a lot of them.
-You can create new tag-set or new tags with the \keys{\return} key, and delete them either with the \keys{\del} key or by pressing the \smallimg{delete.png} button.
-
-When you are finished, press the \menu{OK} button.
-
+We will introduce semi-automated tracking on a movie with empty annotation. 
+Open the dataset we have been using so far, and clear all annotations (for instance select all \keys{\ctrl+A} then delete selection \keys{\shift+\backdel}).
+Then pick a cell in the top layer, and create a spot, centered on its brightest part, like for instance on Figure~\ref{fig:BeforeSemiAutoTracking}.
+Adjust its radius and select it.
+Open a \TrackScheme window to visualize the tracking progress.
 
 \begin{figure}
     \centering
     \null\hfill
-    \subfloat[]{\includegraphics[height=0.15\textheight]{figures/Mastodon_ConfigureTagSet_1.png}}
+    \includegraphics[width=0.3\textwidth]{figures/Mastodon_SemiAutoTracking_01a.png}
     \hfill
-    \subfloat[]{\includegraphics[height=0.15\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_ConfigureTagSet_2.png}}
+    \includegraphics[width=0.3\textwidth]{figures/Mastodon_SemiAutoTracking_01b.png}
     \hfill\null
-    
-    \caption{Creating tag-sets and tags. \textbf{a.}~The empty tag-set dialog. \textbf{b.}~After adding two tag-sets and six tags.  }
-    \label{fig:CreateTagSet}
+    \caption{Manually picking a cell for semi-automated tracking.}
+    \label{fig:BeforeSemiAutoTracking}
 \end{figure}
 
-
-\subsubsection{Assigning tags to data items.}
-
-Tags are set via the selection tool, presented above (chapter~\ref{Selection_tool} page~\pageref{Selection_tool}).
-Once you have some spots and links in the selection, you can assign a tag to it via the \menu{Edit > Tags > The tag set name > The tag label} menu.
-The menu content will be updated with the tag-sets and tags you defined in the tag-set dialog, described above (Figure~\ref{fig:AssignTagSetMenu}).
-This will work in any Mastodon views, BDV or \TrackScheme.
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.2\textheight]{figures/Mastodon_ColorByTagSet_1.png}
-    
-    \caption{The menu item to assign tag-sets and tags to the current selection. }
-    \label{fig:AssignTagSetMenu}
-\end{figure}
-
-
-\TrackScheme ships a second way to set tags quickly from the keyboard.
-After selecting the spots and links of interest, press the \keys{Y} key.
-A floating menu should appear on the left part of the view panel (Figure~\ref{fig:AssignTagSetShortcut}). 
-There is a bit of naming clash in the floating menu.
-Here, tag-sets are called \textit{tags} and tags are called \textit{labels}.
-Select the desired tag-set with the \keys{1}, \keys{2}, .. keys.
-The menu now shows the tags defined within this tag-set, that you can select the same way.
-Note that there is a way to remove all the tags over all the tag-sets on the selection by pressing \keys{\shift+\del} on the first menu, or just the tags of the selected tag-set by pressing \keys{0} on the second menu.
-
+To start semi-automated tracking, press \keys{\ctrl+T}.
+A log window should open, and tracking should proceed. 
+If the log does not complain about candidates being too far, you should end up with something resembling Figure~\ref{fig:AfterSemiAutoTracking}.
+The tracking stopped after 10 frames, and the last spot added is now in the selection. 
+Each spot is centered on the cell we started with, and it has the same radius that of the first spot we created. 
+You can resume semi-automated tracking from the last spot created by just pressing \keys{\ctrl+T} again. 
+If you do it one more time you should reach the end of the movie, with a new track following a single cell over the full movie duration.
+To get it, you just had to press \keys{\ctrl+T} 3 times.
+If you have more than one cell in the selection, they will be tracked one after another.
 
 \begin{figure}
     \centering
     \null\hfill
-    \includegraphics[height=0.2\textheight]{figures/Mastodon_ColorByTagSet_2.png}
+    \includegraphics[width=0.2\textwidth]{figures/Mastodon_SemiAutoTracking_02.png}
     \hfill
-    \includegraphics[height=0.2\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_ColorByTagSet_3.png}
+    \includegraphics[width=0.4\textwidth]{figures/Mastodon_SemiAutoTracking_03.png}
     \hfill\null
-    
-    \caption{Assigning tags in \TrackScheme. After pressing the \menu{Y} key this floating menu is shown, that can be navigated with the digit keys.  }
-    \label{fig:AssignTagSetShortcut}
+    \caption{Results of semi-automated tracking.}
+    \label{fig:AfterSemiAutoTracking}
 \end{figure}
 
 
-
-\subsubsection{Coloring views by tag-sets.}
-
-The tags we just defined and assigned can be used in with the views, to highlight the items that are tagged. 
-In the \menu{View > Coloring} menu of any view in Mastodon, you will find a sub-menu updated with the tag-sets you created among other choices (Figure~\ref{fig:ColorByTagSetMenu}). 
-By default, newly created views are colored with the \menu{None} coloring mode, which simply colors all the spots and links the same way, taking colors from render settings. 
-If you select a mode corresponding to a tag-set, tagged spots and links will appear painted with the color you chose for the tags of this tag-set (Figure~\ref{fig:ColorByTagSetTrackScheme}).
-This is very handy to mark some locations in the image or highlight interesting tracks in the data.
-Later we will see that tags can be used to retrieve specific items for further processing.
-Finally, in \TrackScheme there is an option to show a legend of the current coloring mode.
-You can toggle it on or off and set the location of this legend in the \menu{View > Colorbar} menu.
+\subsection{Configuring the semi-automated tracker.}
 
 \begin{figure}
     \centering
-    \includegraphics[height=0.1\textheight]{figures/Mastodon_ColorByTagSet_4.png}
-    
-    \caption{The coloring menu, updated with the tag-sets. }
-    \label{fig:ColorByTagSetMenu}
+    \includegraphics[width=0.4\textwidth]{figures/Mastodon_SemiAutoTracking_04.png}
+    \caption{The semi-automated tracking configuration panel.}
+    \label{fig:ConfigSemiAutoTracking}
 \end{figure}
+
+The tracking does not always succeed. 
+Depending on where you position the initial spot, it might fail, for instance stating in the log that if found a suitable spot, but outside the tolerance radius.
+(In this example movie, this happens often because the cells are very elongated along the Z direction, and the tracker tends to find candidates near the top, brightest part of the cell.) 
+The parameters that control for instance the tracker search radius can be set in the semi-automated tracking configuration dialog, in the \menu{Plugins > Tracking > Configure semi-automatic tracker}.
+The window show in Figure~\ref{fig:ConfigSemiAutoTracking} should appear.
+This dialog is very similar to the one used to configure feature color modes, that we have seen in chapter~\ref{Configure_Color_Modes} page~\pageref{Configure_Color_Modes}.
+It also works the same way: the top elements are made to manage several tracking configuration, that will be stored on disk and retrieved in your next Mastodon session. 
+There are two default tracking configuration: the \textbf{Forward} one is the default that we just used. 
+The \textbf{Backtracking} configuration tracks backward in time. 
+The other parameters controls the tracker behavior for the configuration currently selected in the top drop-down list.
+To explain what they do we need first to describe how the semi-automated tracker works (Figure~\ref{fig:ExplainSemiAutoTracking}).
 
 \begin{figure}
     \centering
-    \includegraphics[height=0.25\textheight]{figures/Mastodon_ColorByTagSet_5.png}
-    
-    \caption{Coloring with tag-sets in \TrackScheme. }
-    \label{fig:ColorByTagSetTrackScheme}
+    \includegraphics[width=0.45\textwidth]{figures/Mastodon_ExplainSemiAutoTracker_copie.pdf}
+    \caption{Illustration of the semi-automated tracking process.}
+    \label{fig:ExplainSemiAutoTracking}
 \end{figure}
 
+The semi-automated tracker works by processing only a small neighborhood around the initial spot, (called the \textit{source} spot later).
+This neighborhood is centered on the spot center (in magenta in Figure~\ref{fig:ExplainSemiAutoTracking}), but taken in the next time-point (or previous one if you choose to go backward in time).
+It applies the DoG detector (described in chapter~\ref{Detecting_Cells} page~\pageref{Detection_Cells_DoG_Detector}) on this neighborhood, which yields several detections (green circles).
+The detections that are found outside of a search radius (white, dashed circle) are not considered.
+Detections inside the search radius but with a low quality are discarded as well.
+The tracker therefore select the detection with a sufficiently large quality inside the search radius. 
+If there is more than one suitable detection, it selects the one with the highest quality.
+A new spot is created at this location, with the same radius that of the source spot. 
+If the source spot is not a sphere but an ellipsoid, the smallest radius of the ellipsoid is taken. 
+The newly created spot is then linked to the source spot. 
+This is then repeated for the next time-point (or previous one), using the new spot as initial spot in the same process.
+If no suitable detections are found within the search radius, the tracker stops, and the reason is printed in the tracker log window.
 
-\subsection{Numerical features.}
-
-Numerical features are values that are calculated from the data.
-For instance the mean intensity within a spot, or the displacement along a link.
-They are very generic: the main restrictions is that there must be a data item (a spot or a link) per feature value. 
-But the feature itself can be scalar, non-scalar, real, integer, a string, a vector, 
-\etc.
-They are \textit{labile}. 
-Because they are defined for a data item, they will become invalid as soon as the data item changes.
-Think of what happens to the spot mean intensity if the spot is moved over the image for instance.
-Because we want to accommodate extensibility and large data, we have to use a special system that we describe below. 
-
-\subsubsection{Feature computation.}
-
-Numerical feature values are calculated by \textbf{feature computers}.
-Feature computers are actually specialized Mastodon plugins, made so that it is easy for a 3rd party (you) to implement their own features in Mastodon.
-We explain you to write your own feature computer in the second part of this manual, dedicated to technical information.
-
-Because feature computation can take very long on large images, you have to trigger it manually.
-On Mastodon main window, you can find a button \texttt{compute features} button.
-Pressing it will show the feature computation dialog (Figure~\ref{fig:FeatureComputationDialog}).
-The feature computers are listed on the left panel.
-Clicking on the computer name displays some information about the feature they compute in the right panel. 
-Note that they are named 'features' on this panel, but they are in reality the feature computers.
-For instance if you click on the \texttt{Spot gaussian-filtered intensity}, you will see in the information panel that this computer generates a feature for the mean intensity (weighted by a gaussian) and its standard deviation within a spot.
-Note also that they can have dependencies.
-For instance, the \texttt{Link velocity} feature computer depends on the \texttt{Link displacement} feature to be present at the time of computation.
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.3\textheight]{figures/Mastodon_FeatureComputation_1.png}
-    
-    \caption{The feature computation dialog. }
-    \label{fig:FeatureComputationDialog}
-\end{figure}
-
-The check-box on the left of each feature computer name triggers whether they will be part of the next feature computation.
-Press the \menu{\smallimg{bullet_green.png}Compute} button to trigger computation of features.
-
-Once the computation of all the features is complete, all the small clock icons that were shown right to the feature computer names now turned to a green dot\smallimg{bullet_green.png}.
-This is how we keep track of the validity of the feature values.
-Since the feature computation is triggered manually, and that a feature value might invalidated if the data changes (new spots added, removed, moved, changed the radius, added or removed some links), this icon serves as a signal for feature value de-synchronization.     
-If the icon is shows as a clock~\smallimg{time.png}, it means that the data changed since the last feature computation, and that the feature values are out of sync. 
-If is shows a green dot\smallimg{bullet_green.png}, then the data did not change since last computation, and the feature values are sure to be valid. 
-This is very important for proper interpretation of the data, and you will have to show the computation dialog often just to check the feature values validity. 
-By the way, you can check now how the validity flag works. 
-While keeping the feature computation dialog open, move a spot in a BDV view. 
-You should see that all the green dot icons now turn to the clock icon.
-Also, if you now deselect some feature computers before launching a new computation, the validity flag will not turn to the green dot icon for those feature computers.
-
-You probably have noticed, thanks to the progress bar, that the intensity-related features are the ones that take the most time to compute. 
-Indeed, they require loading all of the data blocks on which there are spots.
-This could  rapidly become cumbersome for large datasets, if you have to recompute all of the features every-time a spot is added or edited. 
-Fortunately we implemented an update mechanism for feature computation.
-After the first computation, which possible takes very long, only the spots that have been added or modified since the last computation are visited.
-The details of the update mechanism are explained in the technical part of this manual, chapter~\ref{FeatureComputationUpdateMechanism} page~\pageref{FeatureComputationUpdateMechanism}.
-
-Now that we have feature values computed, we would like to inspect them and export them for further analysis.
-This is the role of the table view, but before getting to it, we will make a little detour to showing how to use features to generate coloring, accelerating updates of computation and saving them to disk.
-
-
-\subsubsection{Coloring views by numerical features.}
-\label{Configure_Color_Modes}
-
-We have seen above that tag-sets could be used to generate coloring of the data items shown in a view. 
-Indeed, in the \menu{View > Coloring} menu of each view, that tag-sets are listed and when selected, are used to assign a color to each data item.
-We can do something similar with feature values, except that feature based coloring requires more input from us.
-
-Feature color modes need to be created first, and this is done in a dedicated user interface. 
-Select the \menu{File > Preferences} menu item in the main window or any view.
-The preferences dialog is shown.
-It is organized with a side-bar on the left that contains the various items that can be configured in Mastodon. 
-Parenthetically, you can see that you can configure the display style of the \TrackScheme and BDV views, and the keymaps. 
-But we will see this later.
-In the sidebar select \menu{Feature Color Modes}.
-The panel on the right now display the feature color mode configuration panel (Figure~\ref{fig:FeatureColorModeConfig1}).
-
-Its top line has a drop-down list that contains all the color modes already defined. 
-Right now, there is only one, called \textbf{Number of links}.
-As the \textbf{\textit{built-in}} suffix indicates, it is a built-in color modes, and it cannot be edited. 
-To create a new one you must duplicate it and rename the new one.   
-Do so by clicking on the \menu{Duplicate} button, then on \menu{Rename}.
-Let's create a color mode that color spots and links based on the mean intensity inside the spots, that we would call \textbf{Mean intensity}.
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.3\textheight]{figures/Mastodon_FeatureColorModeConfig_1.png}
-    
-    \caption{The feature color mode configuration preference dialog. }
-    \label{fig:FeatureColorModeConfig1}
-\end{figure}
-
-The rest of the configuration panel is made of two parts.
-The top part configures the vertex coloring, or how we color spots.
-The bottom part configures the edge coloring, or how we color links. 
-In Mastodon the data is organized in a mathematical graph\footnote{\href{https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)}{Mathematical graphs on Wikipedia \coloredlink{https://en.wikipedia.org/wiki/Graph\_(discrete\_mathematics)}}}, in which the vertices are the spots, and the edges are the links that connect spots from one frame to another, so you will sometimes find in Mastodon and in this manual the vocables vertex and edge to design a spot and a link respectively. 
-The vertex color mode specifies where do we take colors from. 
-You can choose between:
+The configuration panel controls the parameters of this process.
 \begin{itemize}
-    \item \texttt{Vertex}, which means a spot will take its color from a feature value it owns.
-    \item \texttt{Incoming edge}, which means a spot will take its color from a feature value owned by the single incoming link that targets this spot. This is the link backward in time. If there are no such links or more than one, then the default color is used.
-    \item \texttt{Outgoing edge} is the same thing, but for the link forward in time. 
-    \item \texttt{Default} mode does not rely on feature values but simply uses the default color in the view.
+    
+    \item \texttt{Setup ID} specifies what channel (or setup in case you have a multi-view dataset) that will be used for the detection.
+    
+    \item \texttt{Quality factor} specifies the threshold on quality below which we reject detections. This threshold is expressed in fraction of the source spot quality. For instance if the source spot quality is 60 and the \texttt{Quality factor} is 0.5, detections with a quality lower than 30 will rejected. If the source spot has no quality value (it was added manually), this parameter is ignored and all quality values are accepted.
+    
+    \item \texttt{Distance factor} specifies the search radius, in units of the source spot radius. For instance, for a value of 2.5, only detections that are within 2.5 \texttimes\, the radius of the source spot will be considered. Again, if the source spot is not a sphere but an ellipsoid, the smallest radius of the ellipsoid is taken. 
+    
+    \item \texttt{N time-points} specifies the number of time-points after which to stop.
+    
+    \item \texttt{Tracking direction} lets you specify whether you want tracking to happen forward or backward in time.
+    
 \end{itemize}
 
-\noindent Depending on the mode you chose, the content of the drop-down list below, called \texttt{Vertex feature}, will change to reflect either the list of spot features or the link features.
-Select \textbf{Vertex} as a color mode and \textbf{Spot gaussian-filtered intensity} as feature.
-Two new drop-down list appear on the right of the feature list. 
-One contains the list of projections in the feature and the second one contains the list of channels in the dataset. 
+\noindent If you see that the tracker often stops with a message stating that it could not find a suitable candidate within search radius, try to either decrease  the value of the \texttt{Quality factor} or increase the value of the \texttt{Distance factor}.
 
-We need to explain a bit what are \textbf{feature projections}.
-We said above that a feature could be roughly anything numerical, and was not necessarily a scalar. 
-It could be a vector, a tensor, a complex number, \etc.
-However to be usable and useful in Mastodon, features are required to expose a sensible list of projections that compose them.
-Feature projections are scalar and real values that can decompose or project a feature on a real axis.
-How they are defined is up to the person that created the feature computer, but we can rely on the \textit{hope} that they choose wisely. 
-For instance, a feature that gives the velocity vector of a link will reasonably expose 3 projections, one for each of the X, Y and Z component of the vector. 
-Or maybe the polar angle, azimuthal angle and norm of this vector.
-Or maybe the 6 projections since they can be calculated on the fly. 
-A complex feature value will reasonably expose 2 projections, one for the real part, one of the imaginary part.
-\textit{Etc}.
-The \texttt{Spot gaussian-filtered intensity} feature has two projections, one for the mean value of the intensity within a spot and the standard deviation of this intensity.
-Since both can be computed on any of the channel present in the dataset, their number is multiplied by the number of channels. 
-The configuration panel changes according to the number of projections in a feature and its multiplicity (Figure~\ref{fig:FeatureColorModeConfig2}). 
-For features that are made of one real value with no multiplicity, the projection list is superfluous and not shown.
-In our case, we simply want the mean of the only channel in the dataset.
+\subsection{Tracker behavior with existing annotations.}
 
-Coming back to the color mode configuration, next we need to pick a color-map.
-A color-map acts as the LUT for an image, and maps a color to a certain value. 
-Mastodon ships about 20 of them, many taken from the MatPlotLib project\footnote{\coloredlink{\url{https://matplotlib.org/3.1.1/gallery/color/colormap_reference.html}}}.
-Finally, you have to specify a min value and a max value that will act as the brightness and contrast values for an image.
-Values below the min you defined will all be displayed with the first color of the color-map and values larger than the max with last.
-The black square you see next to the graded representation of the color-map is the color used for data items for which the feature value is not present or undefined (division by zero, \etc).
-The \texttt{autoscale} button computes the min and max automatically from the feature currently selected with the values taken from the last feature computation.
+The next parameters below the \textbf{Existing spots} category configure how the tracker deals with existing annotations.
+They change the behavior described in the previous section.
+Indeed, before running the DoG detector on the neighborhood, the tracker first searches for an existing spot within the search radius. 
+If it finds one, it does not run the DoG detection, but links to the existing spot (called \textit{target} spot later) or not, depending on the following parameters.
 
-The edge coloring works exactly the same, except for the edge color mode.
+If the \texttt{Allow linking to an existing spot} checkbox is deselected, the tracker stops. 
+If it is selected, the tracker will link to the target spot, provided it has no links already. 
+However, the next 3 parameters allow to add exceptions: 
+
 \begin{itemize}
-    \item \texttt{Edge} means that a link will be colored by a feature value it owns.
-    \item \texttt{Source vertex} will take a feature value from the source spot of this link, that is, the first in time.
-    \item \texttt{Target vertex} does the same but for the last spot in time of this link. 
-    \item \texttt{Default} mode does not rely on feature values but simply uses the default color in the view.
+    \item \texttt{Link even if target has incoming links}
+    \item \texttt{Link even if target has outgoing links}
+    \item \texttt{Continue tracking if source and target spots are already linked}
 \end{itemize}
-\noindent To build our example feature color mode, choose \texttt{Source vertex} as color mode, and use for instance the \texttt{viridis} color-map along with 700 and 1100 for min and max values.
-Do the same for the vertex color mode (Figure~\ref{fig:FeatureColorModeConfig2}).
 
+\noindent Their selection have important consequences when you are tracking along existing spots.
+They are best exemplified by several different use-cases.
 
-\begin{figure}
-    \centering
-    \includegraphics[height=0.3\textheight]{figures/Mastodon_FeatureColorModeConfig_2.png}
-    
-    \caption{Our custom feature color mode, based on spot intensity. }
-    \label{fig:FeatureColorModeConfig2}
-\end{figure}
+\subsection{Main use-cases for semi-automated tracking.}
 
-Like for tag-sets, the \menu{View > Coloring} menu is now updated with items corresponding to the color modes we created.
-If they are grayed-out, it means that the feature values they depend on is not yet computed.
-This kind of view immediately reveals important aspect of the data, even at a very high level.
-For instance with our custom color mode, we can quickly find cells that are the brightest, and visually inspect how the intensity in cells change over time (Figure~\ref{fig:FeatureColorModeView}).
+\subsubsection{Tracking a subset of cells. }
+
+This is what we have been doing in the first section of this chapter. 
+This does not require any special configuration and the default tracking configuration called \textbf{Forward} will do.
+Here is an example of when this use-case can be useful.
+
+Arianne Bercowski Rama and Laurel Ann Rohde (Segmentation Timing and Dynamics Laboratory, EPFL) are studying the somatogenesis dynamics in the zebrafish embryo.
+They acquire long-term time-lapse movies of the development of an embryo, with cellular resolution.
+For this project they wanted to follow a few cells of interest (a few dozens per movie) and investigate the expression of a gene reporter as the cells moved along the zebrafish embryo.
+The nuclei are all stained with a nuclear marker, so this fluorescence channel could be used for automated detection, but there are thousands of cells.
+Instead, they relied on semi-automated tracking, selecting a the cells of interest in the first frames of the movie, and tracking them to the end thanks to the semi-automated tracker (Figure~\ref{fig:ArianneUseCase}, left). 
+Once the tracking was done, they used feature analysis to extract fluorescence intensity over time for each cell in the gene reporter channel (Figure~\ref{fig:ArianneUseCase}, right).
+
 
 \begin{figure}
     \centering
     \null\hfill
-    \includegraphics[height=0.23\textheight]{figures/Mastodon_FeatureColorBDV.png}
+    \includegraphics[width=0.4\textwidth]{figures/Mastodon_ArianneUseCase_01.png}
     \hfill
-    \includegraphics[height=0.23\textheight]{figures/Mastodon_FeatureColorTrackScheme.png}
+    \includegraphics[width=0.4\textwidth]{figures/Mastodon_ArianneUseCase_02.png}
     \hfill\null
-    
-    \caption{Feature color mode in a BDV view and in a \TrackScheme view.  }
-    \label{fig:FeatureColorModeView}
+    \caption{Semi-automated tracking of a subset of cells during somatogenesis in the zebrafish embryo. \textbf{Left}: Image data overlaid with the tracks of the cells of interest. \textbf{Right}: Gene reporter fluorescence intensity for 10 of these cells as a function of time.}
+    \label{fig:ArianneUseCase}
 \end{figure}
 
 
-\subsection{Tags, numerical features and saving the data to disk.}
+\subsubsection{Stitching small track segments.}
 
-All tags and feature values are saved in the Mastodon file. 
-The feature update stack state is saved too, so you will retrieve everything back as it was when you saved.
-We did not have a choice, it was the only reasonable way to achieve a usable feature and tag framework in the case of very large data.
+The semi-automated tracker can be used with the same configuration to stitch small track segments, which follow the same cell but are separated and spread in time. 
+This might be caused linking with missing detections, and the situation could resemble what is pictured in Figure~\ref{fig:Tracklets}.
 
-
-\subsection{The data table views.}
-\label{sec:DataTables}
-
-\subsubsection{The main table view.}
-
-The BDV and \TrackScheme views are not suitable to display all the feature values we computed.
-The coloring we have been using with them is good only for visualization purpose. 
-There is a nice view to properly inspect and exploit feature values in subsequent steps in your analysis: the table view.
-In practice, the table view is simply a tabular representation of the data items in Mastodon.
-Spots and links are displayed in a list where a single row corresponds to a data item, and columns to feature values and tags. 
-You can create a new table view by using the menu \menu{Window > New data table}.
-If you did not compute features and did not define and tag-set, it should look like the table in figure~\ref{fig:TableViewEmpty}.
-The view is made of two tables, one for spots (\texttt{Vertices} pane) and one for links (\texttt{Edges} pane).
-Right now it is pretty empty. 
-The spot and link tables only show the label and ID of the spots.
-Navigating in this table is done classically: the arrow keys \menu{\arrowkeyup} and \keys{\arrowkeydown} jump from one row to the next, and \keys{\arrowkeyleft} and \keys{\arrowkeyright} from one column to the next.
-\keys{Page\ \arrowkeyup} and \keys{Page\ \arrowkeydown} jump page per page.
-\keys{\ctrl + Page\ \arrowkeyup} and \keys{\ctrl + Page\ \arrowkeydown} alternate between the spot table and the link table.
+We can use the semi-automated tracker to connect them, and add the missing detections.
+We want the tracker to create spots for the cell in time-points when they are missing, and to connect to existing ones it will find by following the cell.
+To allow this, we must enable first the '\texttt{Link even if target has outgoing links}' setting, so that the tracker does not stop when it meets a spot that is at the beginning of a track segment.
+Second, we must enable the '\texttt{Continue tracking if source and target spots are already linked}' setting.
+If we do not, the tracker will stop after connecting the first track segment it meets. 
+Finally, we have to increase the value of the '\texttt{N time-points}' parameter, so that the tracker iterate through the full movie. 
+After doing this and tracking for the first cell, we get a single track (Figure~\ref{fig:StitchedTracklets}).
 
 \begin{figure}
     \centering
     \null\hfill
-    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView1.png}
+    \includegraphics[height=0.2\textheight]{figures/Mastodon_Tracklets_01.png}
     \hfill
-    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView2.png}
+    \includegraphics[height=0.2\textheight]{figures/Mastodon_Tracklets_02.png}
     \hfill\null
-    
-    \caption{The table view, with no features computed and no tags defined. Left: the table for spots (\texttt{Vertices} pane). Right: the table for links (\texttt{Edges} pane).  }
-    \label{fig:TableViewEmpty}
+    \caption{Small discontinuous track segments following a single cell.}
+    \label{fig:StitchedTracklets}
 \end{figure}
-
-After computing some features and defining some tag-sets, the table show new columns (Fi\-gu\-re~\ref{fig:TableViewFeatureTags}). 
-Note that the column headers represent the feature with their projection and physical units on several rows.
-For instance, the \texttt{Spot gaussian-filtered intensity} feature name is displayed on the first row of the column header.
-The header is split in two columns on the second row, one for each projection included in the feature (mean and standard deviation of a single channel).
-And in the third and last row, the units of each projection is display in brackets (Counts in this case).
-The header of the tag-set columns are similar.
-The first row shows the name of the tag-set, and the second row shows each of the tag the set contains, with the tag chosen color as background.
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.27\textheight]{figures/Mastodon_TableView3.png}
-    
-    \caption{The table view, with features and tags.  }
-    \label{fig:TableViewFeatureTags}
-\end{figure}
-
-The table view can be used to edit in part the data  (Fi\-gu\-re~\ref{fig:TableViewEditing}). 
-For instance you can edit the spot label directly in the table. 
-Just navigate to the row of spot you want to change the name of and the \texttt{Label} column, then press \keys{F2}.
-The label field becomes editable.
-When you are done editing, press \keys{\return}.
-The tags are displayed as check-boxes in the table, that you can set directly by clicking on them.
-Or you can navigate the desired row and column and set them with the \keys{Space} key.
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.27\textheight]{figures/Mastodon_TableView4.png}
-    
-    \caption{After editing spot labels and tags.  }
-    \label{fig:TableViewEditing}
-\end{figure}
-
-The highlight and selection are also shared with table views. 
-When the table view is not active, selected items are shown with a gray background.
-The highlight spot or link is shown in the table with a thick black border (Figure~\ref{fig:TableViewHighlightSelection}).
-To add rows to the selection, the default key-bindings are again standard.
-Press \keys{\shift+Left-click} to add a range of rows to the selection from a rable view, or use \keys{\shift+\arrowkeyup} or \keys{\shift+\arrowkeydown} or \keys{\shift+Page\ \arrowkeyup} and \keys{\shift+Page\ \arrowkeydown}.
-By pressing \keys{\ctrl+Left-click} or \keys{\cmd+Left-click} you can toggle single rows in and out of the selection.
-Of course, all of the commands related to the selection we have seen before also apply to the table views (Table~\ref{tab:MastodonSelectionKeys} page~\pageref{tab:MastodonSelectionKeys}).
-
-
-Another feature of data tables is that they can be made slave of a spatial context, like for \TrackScheme.
-When another BDV view is active, you can select its name in the drop-down list on the top-right part of the table. 
-Then the table only shows the data items that are currently displayed in the master BDV view.
-The notion of spatial context is explained above (section~\ref{sec:SpatialContext} page~\pageref{sec:SpatialContext}).
-See also the figure~\ref{fig:SpatialContext} page~\pageref{fig:SpatialContext}.
 
 \begin{figure}
     \centering
     \null\hfill
-    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView5.png}
+    \includegraphics[height=0.2\textheight]{figures/Mastodon_Tracklets_03.png}
     \hfill
-    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView6.png}
-    \hfill\null
-    
-    \caption{Highlight and selection in the table view.  }
-    \label{fig:TableViewHighlightSelection}
-\end{figure}
-
-\subsubsection{Sorting rows.}
-
-The table can be sorted by clicking on the header of the column you want to use for sorting. 
-It works for labels, IDs, feature values and tags
-
-\subsubsection{The selection table.}
-
-There exists a variation of the table view, but that display only what is currently in the selection.
-To display such a table, go to \menu{Window > New selection table} in the menu.
-The selection table that appears only shows what is in the selection, and is constantly updated to reflect changes in the selection (Figure~\ref{fig:SelectionTable}).
-You cannot use it to edit the selection like in the main table.
-However the row you pick in this table will set the focus and highlight in other views.
-Everything else applies to the selection table.
-
-\begin{figure}
-    \centering
-    \null\hfill
-    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView7.png}
+    \includegraphics[height=0.2\textheight]{figures/Mastodon_Tracklets_04.png}
     \hfill
-    \includegraphics[height=0.23\textheight]{figures/Mastodon_TableView8.png}
+    \includegraphics[height=0.2\textheight]{figures/Mastodon_Tracklets_05.png}
     \hfill\null
-    
-    \caption{The selection table.  }
-    \label{fig:SelectionTable}
+    \caption{Results of stitching the track segments with the semi-automated tracker. Notice the messages on the log window that state what the tracker did when it meets existing spots.}
+    \label{fig:Tracklets}
 \end{figure}
 
-\subsubsection{Feature-based coloring in table views.}
+\subsubsection{Backtracking, branching on cell divisions. }
 
-Of course, feature based coloring works with the table views (Figure~\ref{fig:TableViewFeatureColoring}).
-And it can give a pleasant display when combined with sorting rows by a feature column.
+Backtracking is particularly useful when creating lineages of cells that divide often in the movie.
+Another application is in mapping differentiated cells at a late time-point, to the position of their progenitors at the beginning of the movie. 
+For this we typically starts from an empty annotation, select a cell of interest in a late time-point, and backtrack it to its position in the beginning of the movie.
+The built-in configuration called \textbf{Backtracking} is made for this.
+If the cell we backtrack divided several times during the movie, might be creating tracks for sibling cells.
+We want these tracks to branch properly in case we meet the mother cell when it divides.
 
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.27\textheight]{figures/Mastodon_TableView9.png}
-    
-    \caption{Feature-based coloring in table views.  }
-    \label{fig:TableViewFeatureColoring}
-\end{figure}
-
-\subsubsection{Exporting table data.}
-
-The data currently displayed in a table view can be exported to CSV.
-When a table window is active, select the menu item \menu{File > Export to CSV}.
-You will have to specify a saving location and a name.
-But two CSV files will be produced: one for the spot table (appended with \texttt{-vertices.csv}) and one for the link table (appended with \texttt{-edges.csv})
-Only the data currently displayed in the view are saved, and ordered as in the view. 
-This means that if you call the \menu{File > Export to CSV} command from a selection table, only the current selection will be saved.
+This is why we need to enable the '\texttt{Link even if target has outgoing links}' setting, but no other.
+Suppose we already have one track for a cell that divides, following the mother cell then one of the daughter cells. 
+When we will backtrack from the other daughter cell, late in the movie, we will meet the division point of the mother cell. 
+There is an existing spot there, just before the cell divides. 
+It has already an outgoing link (to the first daughter we already tracked), and we want to connect to it. 
+Hence we enable the '\texttt{Link even if target has outgoing links}' setting.
+Because we want to stop tracking there (the rest of the track is good already), we do not enable any of the two other settings.
 
 
-\begin{table}[!htbp]
-    \centering
-    
-    \caption{Default navigation key-bindings for Mastodon-table views.}
 
-    \input{src/TableTableKeys.tex}
-
-    \label{tab:MastodonTableKeys}
-    \vspace{-10pt}
-
-\end{table}
+\subsubsection{Sparse linking over dense spots.}

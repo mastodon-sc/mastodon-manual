@@ -1,421 +1,494 @@
-\section{Getting started with Mastodon. Automated tracking.}
-\label{Getting_started}
+\section{Manually editing tracks in Mastodon. TrackScheme.}
+\label{Manuel_Editing}
 
-This tutorial is the starting point for new Mastodon users. 
-It will walk you through basic operations in Mastodon, opening a dataset and creating a Mastodon project, automatically detect cells and link them, and show you how to use the main views of Mastodon.
-We don't go into details, and will revisit the features we survey here later.
+One of the key feature of Mastodon, the implementation of which made our lives extremely hard and rich, is the ability to edit manually at any time any spot or link within an annotation that can contains billions of them, while retaining a good and pleasant response time from the software.
+I am not even speaking of the undo/redo mechanism, which getting right was also very interesting. 
 
-\subsection{The image data.}
+In this tutorial, we will show how to do just that, from existing tracking data, the one we generated in the previous section. 
+We will use it as an opportunity to present \TrackScheme, the track visualizer of Mastodon, as well as introduce several useful editing features such as the undo/redo mechanism mentioned above.
+We will also introduce the various visual hints that help the user knowing what spot or link is currently edited or inspected, such as the \textbf{focus}, the \textbf{highlight} and the \textbf{selection}.
 
-\subsubsection{Exporting your image to \Bdv file format.}
+Manual editing is often \textbf{not desirable}, first because it is not objective which might be detrimental in situations where the performance of an algorithm is evaluated, or when an unknown motion characteristics is investigated. 
+Second, because it does not look like a realistic solution when \textit{e.g.} thousands of cells are to be followed over thousands of time-points.
+Regarding the latter however, several courageous individuals sacrificed their time, energy and sometimes sanity in doing so, for the sake of finally getting a scientific answer when there was no other working solutions. 
+See for instance~\cite{MaMuT} and~\cite{McDole2018}.
+If you are going this way, Mastodon aims at providing tools to do so, in the hopefully fastest and least painful way possible. 
+Also, you can combine the fully automated approach of the previous chapter with manual editing to correct hopefully a few numbers of mistakes.
+Finally, there is also a semi-automated tracking tool, that we will introduce later.
 
-Mastodon uses \wikilink{BigDataViewer}{\Bdv} (BDV) files as input images.
-You need to prepare your images so that they can be opened in the \bdv.
-
-BDV files are used more and more by several software projects in the Fiji ecosystem and beyond. 
-This tutorial focuses on Mastodon not on BDV, however we will take a very small detour to explain what makes it fit and how to turn your images into this format. 
-If you know already, you can skip this part, because we simply recapitulate what is being explained in the original \Bdv publication~\cite{bdv}.
-
-For this tutorial we will use a ready-made dataset, in the adequate format, but it is a good idea to know how to export or create an image in such a format.
-We lazily rely on the excellent \bdv documentation and point directly to the \bdv instructions to prepare your images, \eg depending on whether
-\begin{itemize}
-	\item they are \wikilink{BigDataViewer\#Exporting_from_ImageJ_Stacks}{opened as an ImageJ stack}, or
-	\item they come from a \wikilink{BigDataViewer\#Integration_with_Fiji.27s_SPIMage_Processing_Tools}{SPIM processing pipeline}, or
-	\item they come from the \wikilink{BigStitcher}{BigStitcher} plugin~\cite{BigStitcher}, \etc.
-\end{itemize}
-
-Once you have prepared your images for opening in the \bdv, you should have a \texttt{.xml} file and a possibly very large \texttt{.h5} file on your computer. The \texttt{.xml} file must be the output of the \bdv data preparation. It should start with the following lines:
-\begin{minted}{xml}
-<?xml version="1.0" encoding="UTF-8"?>
-<SpimData version="0.2">
-  <BasePath type="relative">.</BasePath>
-  <SequenceDescription>
-    <ImageLoader format="bdv.hdf5">
-      <hdf5 type="relative">datasethdf5.h5</hdf5>
-...
-\end{minted}
+This tutorial will start by presenting you the manual editing tools of Mastodon, as well as \TrackScheme and the focus, highlight and selection tools.
+Because this catalogue of actions can be a bit dry and long to swallow, we will in the last paragraph use it to remove and rebuild some tracks from the results of the last tutorial.
 
 
-\subsubsection{Key advantages of the \Bdv file format.}
-\label{BDV_advantages}
 
-The BDV file format solves mainly two challenges in image visualization and analysis, that arise with modern microscopy, namely:
-\begin{itemize}
-    
-    \item Modern microscopes can generate images that are very large in size. Much larger that what can be fitted in RAM, even with the increase in computer power. It is now common to find single movies acquired on SPIM microscopes that are several TBs in size. Computers with several TBs of RAM are not so common.
-    
-    \item Multiple views of the same sample can be acquired, and they need to be visualized in the same viewer. The first use case is also the multi-view images generated by SPIM microscopes, but we can also think of correlative light-electron microscopy.
-    
-\end{itemize}
+\subsection{TrackScheme, the lineage view and editor.}
 
-If we focus on the first challenge, you see that we need to stream the image data directly from the disk, instead of fully loading it into RAM. 
-But at the same time, we need a tool that allows for interactive browsing of the data. 
-The view must be responsive to the user input, and not block when it has to load the data from the file. 
-The BDV file format offers a clever file format design that does this, coupled to a specialized viewer.
-The image data are stored in small chunks corresponding to a neighborhood. As the viewer shows a slice through the image, the required chunks are loaded on demand and cached.
-All the chunks are organized in a HDF5 file, which is like a file-system in a file\footnote{\href{https://en.wikipedia.org/wiki/Hierarchical_Data_Format}{\coloredlink{Hierarchical Data Format} on Wikipedia.}}, and accessing single chunks is fast with current computer hardware.
-On top of this, the image is also stored as a multi-scale pyramid\footnote{\href{https://en.wikipedia.org/wiki/Pyramid_(image_processing)}{\coloredlink{Multi-scale pyramid} on Wikipedia.}}, to speed-up zooming and unzooming (Figure~\ref{fig:BDVchunks}).
-The BDV display component exploits this file format in a clever way, and ensures that the view still answers to user interactions (mouse pan, zoom, clicks \etc) even if the chunks are not full loaded.
+First, load or retrieve the tracking data of the previous chapter. 
+You should have a few hundreds of tracks. 
+To open a TrackScheme view window, press the \menu{trackscheme} button on the main window (Figure~\ref{fig:MastodonMainWindow} page~\pageref{fig:MastodonMainWindow}).
+A window as shown in figure~\ref{fig:TrackScheme} should open.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.6\textwidth]{figures/BdvTikz-pyramidblocks.png}
-    \caption{Illustration of the BDV file format storage strategy. The image is stored over several resolution levels (multi-scale pyramid) and in chunks.}
-    \label{fig:BDVchunks}
-\end{figure}
-
-There are several implementations of this strategy, for instance in Imaris\footnote{\href{http://open.bitplane.com/Default.aspx?tabid=268}{\coloredlink{IMARIS 5.5 File Format Description (IMS).}}} and with the new file format N5\footnote{\href{https://github.com/saalfeldlab/n5}{\coloredlink{N5 API on GitHub.}}} proposed by the Saalfeld lab.
-Some of them are inter-compatible.
-We will pick the BDV file format all along this document. 
-The \Bdv has proved its value and impact on our field.
-For instance our previous work on cell lineaging in large images, \wikilink{MaMuT}{MaMuT}, is based on BDV~\cite{MaMuT}.
-
-
-
-\subsubsection{The tutorial dataset.}
-
-Mastodon was created specially because we needed to harness very big, multi-view images. We wanted to generate  comprehensive lineages and follow a large number of cells over a very long time.
-This accumulation of inflated words is tied to the very large  - in objective disk space  occupation - images we deal with using modern microscopy tools. 
-Such datasets might not be optimal for a first contact with Mastodon.
-So just for this tutorial we will use a smaller dataset.
-It is a small region cut into a movie following the development of a drosophila embryo, acquired by William Lemon in Patrick Keller lab (HHMI, Janelia Farm).
-This was created from the example dataset released with the TGMM software~\cite{TGMMpaper}.
-You can find it on Zenodo\footnote{\href{https://zenodo.org/record/3336346}{\coloredlink{https://zenodo.org/record/3336346}}} there: \href{https://doi.org/10.5281/zenodo.3336346}{\includegraphics[height=1.5\fontcharht\font`\B]{figures/zenodo3336346.png}}
-
-It is a zip file that contains 3 files:
-\begin{minted}{text}
-    14M  datasethdf5.h5
-   2.7K  datasethdf5.settings.xml
-   8.7K  datasethdf5.xml
-\end{minted}
-
-The \texttt{.h5} file is the HDF5 file mentioned above, that contains the image data itself.
-The \texttt{data\-sethdf5.xml} is a text file following the XML convention, specific to the BDV file format, that contains information about the the image data and metadata. 
-When we want to open a BDV file, we point the reader to this file.
-The \texttt{datasethdf5.settings.xml} is an optional file that stores user display parameters, such as channel colors, min and max display value, as well as bookmarks in the data. 
-We refer you to the \wikilink{BigDataViewer\#Loading_and_Saving_Settings}{BDV documentation} about this file.
-Mastodon uses this settings file to store that same information.
-
-If you open this data in the \Bdv (in Fiji in the \menu{Plugins > BigDataViewer > Open XML/HDF5} menu), you should see something like in figure~\ref{fig:OpeningImage}. 
-There is about 70 cells in each of the 30 time-points, arranged in a layer at the top of the sample. 
-The deeper part of the sample (low Z coordinates) has some hazy, diffuse signal from which we cannot individualize cells.
-As time progresses, the cells move towards the middle part and bottom (high Y coordinates) part of the image, and some of them move deeper in Z, initiating gastrulation.
-
-The goal of this short tutorial is to track all these cells in Mastodon.
-
-\begin{figure}
-     \centering
-         \includegraphics[width=0.3\textwidth]{figures/BDV-imageXY.png}
-         \includegraphics[width=0.3\textwidth]{figures/BDV-imageXZ.png}
-         \caption{The tutorial dataset opened in \Bdv, seen along XY (left) and XZ (right)}
-     \label{fig:OpeningImage}
+    \includegraphics[width=0.8\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme.png}
+     \caption{The TrackScheme window.}
+     \label{fig:TrackScheme}
 \end{figure}  
 
+The TrackScheme view offers a special way of displaying tracks. 
+If you are familiar with TrackMate, you will see that we brought the same kind of features here, but scaled to large data.
+You can think of TrackScheme as a workbench for tracks, where you will edit, cut, stitch and rename them.
+It displays a kind of "track map", where a track is laid on a panel, arranged vertically over time, as a Parisian subway train map. 
+Tracks are displayed hierarchically, discarding the spatial location of each spot. 
+Each track is laid out going through time from top to bottom.
+One horizontal line corresponds to a single time-point in the movie.
+One vertical column corresponds to a single track, that is all the spots that are connected by links over time, including divisions and merges.
+It is a great tool particularly to study and edit cell lineages.
 
-
-
-\subsection{Getting Mastodon.}
-
-As of today, Mastodon is available as a preview. We are still working on adding and validating features.
-Nonetheless the preview has everything we need to track these cells.
-Also, Mastodon is independent of ImageJ or Fiji, it can operate as a standalone software. 
-However we currently distribute it via Fiji, because the updater and the dependency management are so convenient. 
-So the first thing to do is to grab Fiji\footnote{\href{http://fiji.sc/}{\coloredlink{http://fiji.sc/}}}, if you do not have it already.
-
-Then launch the \wikilink{Updater}{Fiji updater} and once your Fiji is up to date, click on the \texttt{Manage update site} button.
-We will add the \wikilink{Following_an_update_site}{add the Mastodon update site}.
-You should find the Mastodon preview site in the list. 
-Select it, update Fiji and restart it. 
-After restarting, you should find the command \menu{Plugins > Mastodon (preview)} at the bottom of the menu.
-
-\begin{center}
-    \includegraphics[width=0.7\textwidth]{figures/Mastodon_UpdateSite.png}
-\end{center}
-
-\subsection{Creating a new Mastodon project.}
-
-After launching the command, this plain, sober window appears.
-\begin{figure}[!htbp]
-    \centering
-    \includegraphics[width=0.3\textwidth]{figures/Mastodon_MainWindow.png}
-    \caption{The main window of Mastodon.}
-    \label{fig:MastodonMainWindow}
-\end{figure}
-
-Click on \menu{new project}, and browse to the \texttt{datasethdf5.xml} file of the XML/HDF5 file pair of the tutorial dataset.
-All the buttons that were grayed out should be now enabled. 
-Click on the \menu{bdv} button.
-A BDV window should appear and if it does everything is right.
-\begin{center}
-         \includegraphics[width=0.4\textwidth]{figures/Mastodon_BDV.png}
-\end{center}
-
-It is almost a regular BDV window and if you already know who to use it and the key bindings you should find your marks quickly.
-The BDV view displays a \textit{slice} of the image through arbitrary orientation. 
-Below we give the commands and key-bindings for navigation in a Mastodon-BDV window. 
-They are indeed close to what is found in the standard \Bdv but some changes. 
-\textbf{Please note:} You can reconfigure almost everything in Mastodon, as we will see later, including key-bindings.
-In this tutorial and the next ones, the key-bindings we present are for the \texttt{Default} configuration.
-In the table~\ref{tab:MastodonBDVNavigationKeys} page~\pageref{tab:MastodonBDVNavigationKeys} you will find the key bindings to navigate through the image data.
+When opened, the view in TrackScheme is scaled so that the full data is shown, all tracks over all time-points. 
+Even on our small dataset, most of the tracks and spots appear as single lines or dense boxes.
+To see the details of each track, you need to zoom in and navigate around the data.
+The navigation actions their mappings are listed in the table~\ref{tab:MastodonTrackSchemeNavigationKeys} below.
 
 \begin{table}[!htbp]
     \centering
-    
-    \caption{Default navigation key-bindings for Mastodon-BDV views.}
-
-    \input{src/TableBDVNavigationKeys.tex}
-
-    \label{tab:MastodonBDVNavigationKeys}
-    \vspace{-10pt}
-
+    \caption{Default navigation key-bindings for Mastodon-TrackScheme views.}
+    \input{src/TableTrackSchemeNavigationKeys.tex}
+    \label{tab:MastodonTrackSchemeNavigationKeys}
 \end{table}
 
-Now you want to save the project. 
-Go back to the main window, and click on the \menu{save project} button.
-This will create a single file, called for instance \texttt{drosophila\_crop.mastodon} file. 
-This file is actually a zip file that contains the tracks and \textit{links} to the image data.
-The image data is kept separate from the Mastodon file, which allows for using it with another software, independently. 
-So if you want to transfer or move a full Mastodon project, you need to take the \texttt{.mastodon} file and all the \texttt{.xml} and \texttt{.h5} files from the \Bdv dataset.
-
-Next time you want to open this project, just click on the \menu{load project} button and point the file browser to the \texttt{.mastodon} file.
-The image data will be loaded along with the lineages.
-
-
-
-\subsection{Detecting cells.}
-\label{Detecting_Cells}
+Try to zoom in until you can see the label of a few spots.
+TrackScheme implements adaptive level of details depending on the zoom level, so that we can accommodate plotting a large amount of data without compromising the responsiveness of Mastodon too much (Figure~\ref{fig:TrackSchemeZoomLevel}).
+On the finer level of details, spots are plotted as circles, with the spot label shown.
+As you zoom out, they becomes just empty circles, then points, then they disappear to only show the track as a line.
+When the zoom level is so low that several tracks coalesce, they are drawn as a gray box. 
 
 \begin{figure}
     \centering
-     \includegraphics[width=0.4\textwidth]{figures/Mastodon_DetectionWizard_01.png}
-     \caption{First panel of the detection wizard.}
-     \label{fig:DetectionWizardFirstPanel}
-\end{figure}
-
-We want to track automatically all the cells in this dataset, and the first step is therefore to detect them.
-Mastodon ships a wizard to perform cell detection. 
-It is very much inspired by the \wikilink{TrackMate}{TrackMate} GUI, and if you know this software you will find your marks here.
-Also, the algorithms are very close to what was in TrackMate~\cite{TrackMate}, but they have been heavily optimized for Mastodon.
-
-The detection wizard can be launched from the \menu{Plugins > Tracking > Detection...} menu item. 
-You should have a window like the one depicted in Figure~\ref{fig:DetectionWizardFirstPanel}.
-
-Like for TrackMate, the automated tracking user interface uses \textit{wizards} to enter parameters, select algorithms, \textit{etc.}
-You can navigate back and forth with the \menu{\smallimg{arrow_right.png} Next} and  \menu{\smallimg{arrow_left.png} Previous} buttons. 
-The \menu{\smallimg{book.png} Log} button will bring an independent panel where all the activity in the wizard are logged as text. 
-
-This first panel allows for selecting the target \textit{source} on which the detection will be run. 
-Since we use the \bdv for images, a channel or a view is stored and displayed as a source. 
-A source can have multiple resolutions stored, as explain in paragraph~\ref{BDV_advantages}, but for the data used in this tutorial this is not the case. The sources are nicknamed 'setups' in this panel.
-They are numbered from 0 and can be selected from the drop-down list. 
-Below the list we try to display the metadata we could retrieve from the \bdv file.
-Just pick the first and only channel, and click \menu{\smallimg{arrow_right.png} Next}.
-
-You can now choose to operate only on a rectangular ROI in the image. 
-If you check the \textbf{Process only a ROI} button, new controls appear in the panel, and a ROI is drawn into an open BDV view (a new one is created if one is not opened).
-The ROI is painted as a wire-frame box, green for vertices that point towards the camera from the displayed slice, and purple for vertices that points away from the camera, below the displayed slice.
-The intersection of the ROI box with the displayed slice is painted with a purple semi-transparent overlay, with a white dotted line as borders.
-You can control the ROI bounds with the controls in the panel, or by directly dragging the ROI corners in the BDV view.
-Time bounds can also be set this way. In our case we want to segment the full image over all time-points, so leave the \textbf{Process only a ROI} button unchecked.
-
-You cannot have non-rectangular ROIs in Mastodon. Nonetheless they are super useful as is. 
-You can for instance combine several detection steps using different parameters in different region of your image. Or different time interval.
-
-\begin{center}
-     \includegraphics[height=0.25\textheight]{figures/Mastodon_ROIpanel.png}
-     \includegraphics[height=0.25\textheight]{figures/Mastodon_ROIBDV.png}
-\end{center}
-
-The next panel lets you choose the detector you want to use.
-In vanilla Mastodon, three detectors are available.
-Right now, we will use the default one, the \textbf{DoG detector}, which should be good enough for most cases.
-DoG means 'difference-of-Gaussians'.
-It is an efficient approximation of the LoG ('Laplacian of Gaussian') filter, and there is also a detector in Mastodon based on the latter.
-
-These detectors excel at finding roundish structures in the image that are bright over a dark background.
-The structures must have a shape somewhat close to a sphere, but they can accommodate a lot of variability.
-As a rule of thumb, if you can define rough estimate of the radius of these structures, they are eligible to be picked up by our detectors. 
-This also implies that in Mastodon, we cannot segment complex shapes, or object labeled by their contour (\textit{e.g.} cell membranes), or even exploit these shapes to have an accurate measurements of the volume. 
-This is an important limitation of Mastodon.
-
-For now, select the \textbf{DoG detector} and click \menu{\smallimg{arrow_right.png} Next}.
-\label{Detection_Cells_DoG_Detector}
-
-Here is briefly  how it works.
-The LoG detector, and its approximation the DoG detector, is the best detector for blob-like particles in the presence of noise~\cite{Sage2005}. 
-It is based on applying a Laplacian of Gaussian (LoG) filter on the image and looking for local maxima. The result is obtained by summing the second order spatial derivatives of the gaussian- filtered image, and normalizing for scale.
-Local maxima in the filtered image yields spot detections. 
-Each detected spot is assigned a \textbf{quality} value, that is obtained by taking the intensity value in the LoG filtered image at the location of the spot.
-So by properties of the LoG filter, this quality value is larger for :
-\begin{itemize}
-    \item bright spots;
-    \item spots which diameter is close to the specified diameter.
-\end{itemize}
-
-The DoG detector requires only two parameters: the estimated diameter of the object we want to detect, and a threshold on the quality value, that will help separating spurious detections from real ones. 
-The panel you are presented let you specify these parameters, and preview the resulting detection.
-Try with 10 pixels for \textbf{Estimated diameter} and 0 for the \textbf{Quality threshold}.
-The click on the \menu{\smallimg{led-icon-eye-green.png} Preview} button.
-A preview panel should open shortly, showing detection results on the current frame (Figure~\ref{fig:PreviewDetection}).
-
-\begin{figure}
-    \centering
-         \includegraphics[height=0.25\textheight]{figures/Mastodon_DoGconfig1.png}
-         \includegraphics[height=0.25\textheight]{figures/Mastodon_DoGconfig2.png}
-    \caption{Previewing detection results.}
-    \label{fig:PreviewDetection}
-\end{figure}
-
-These values are close but not quite.
-You can see that the diameter value is too small to properly grasps the elongated shape of the cells along Z (the BDV view on the left panel above is rotated to show a YZ plane). 
-Also the threshold value is too low, and some spurious detections are found below the epithelium.
-These spots have a low quality, that manifests as a peak at low value in the quality histogram displayed on the configuration panel.
-From the shape of the histogram, we can infer that a threshold value around 100 should work.
-However we also need to change the diameter parameter, which will change the range of quality values.
-After trial and errors, values around 15 pixels for the diameter and 400 for the threshold seem to work.
-
-Note that you can run the preview on any frame.
-You just have to move the time slider on the preview window.
-Once you are happy with the parameters, click on the \menu{\smallimg{arrow_right.png} Next} button.
-All the frames specified in the ROI (if any) will be processed. 
-In our case detection should conclude quickly and the following panel should appear:
-
-We now have more than 1000 cells detected and this concludes the detection step (Figure~\ref{fig:DetectionResults}).
-Click on the \menu{\smallimg{accept-icon.png} Finish} button, and the wizard will disappear.
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.40\textwidth, trim=0.5cm 0.5cm .5cm .5cm, clip]{figures/Mastodon_DetectionResuts.png}
-    \caption{Detection results.}
-    \label{fig:DetectionResults}
-\end{figure}
-
-If you have complex images mixing several size of objects, or detection parameters that work for one part of the movie but not for another one, you could restart a new detection now, selecting for instance other parts of the movie with the ROI.
-You can do this and more, but for this kind of approach, the \textbf{Advanced DoG detector} offers more configuration capabilities, that will review later.
-
-
-
-\subsection{Linking cells.}
-
-What we just did is the detection step. 
-It yields one Mastodon spot per cell, but the notion of cell identity propagated over time is missing yet.
-The particle linking step just does that.
-A particle linking or tracking algorithm accepts a collection of spots, ordered by frames (time-points), and tries to link each spot to the next spot(s) in the next frame or so. 
-All the spots you can reach by starting from one spot and navigating across links build a \textit{track}, and in our case it represents one cell (or any other object) followed over time. 
-In most cases there is one spot per frame for a track, meaning that that a spot has at most one incoming link (spot from previous frame) and one outgoing kink (spot in next frame). 
-But some algorithms can accommodate \textit{e.g.} dividing cells (2 outgoing links for the mother cell going to the two daughter cells) and merging events. There is a vast literature behind tracking algorithms, and it is an active domain of Research. A relatively recent paper compare implementation and list some pros and pitfalls of many of them~\cite{Chenouard2014}.
-
-\subsubsection{Selecting target spots for linking.}
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_LinkingWizard_01.png}
-    \caption{The first panel of the linking wizard.}
-    \label{fig:LinkingWizardFirstPanel}
-\end{figure}
-
-Like for the detection step, linking in Mastodon happens in a wizard.
-And also like for detection, the linking algorithms currently available in Mastodon are adapted from TrackMate. 
-Launch the wizard from the GUI, with the \menu{Plugins > Tracking > Linking...} menu item. 
-The first panel you are shown lets you select what spots to include in linking (Figure~\ref{fig:LinkingWizardFirstPanel}). 
-There are two modes:
-\begin{itemize}
-    \item Either you take all the spots between a start and and end frame. By default, all frames are selected.
-    \item Either you specify you want to link only the spots that are in the selection. 
-    This mode offers a lot of flexibility when facing complicated cases. 
-    It is best use along with the selection creator, that we will introduce later in this manual.
-\end{itemize}
-For now, just leave the parameters as they are, which will include all spots in the linking process, and click next.
-You can now choose between several linking algorithms. 
-
-\subsubsection{Available linking algorithms in Mastodon.}
-
-In Mastodon, they fall mainly in two categories.
-
-The first two LAP trackers are based on the \textbf{Linear Assignment Problem (LAP) framework}, first developed by Jaqaman \textit{et al.}~\cite{Jaqaman2008}, with important differences from the original paper described elsewhere~\cite{TrackMate}. 
-We focused on this method for it gives us a lot of flexibility and it can be configured easily to handle many cases. 
-You can tune it to allow splitting events, where a track splits in two, for instance following a cell that encounters mitosis. 
-Merging events are handled too in the same way. More importantly are gap-closing events, where a spot disappear for one frame (because it moves out of focus, because detection failed, ...) but the track manages to recuperates and connect with reappearing spots later.
-
-In Mastodon the LAP algorithms exists in two flavors: a simple one and a not simple one. There are again the same, but the simple ones propose fewer configuration options and a thus more concise configuration panel. In short:
-\begin{itemize}
-    \item The simple one only allows to deal with gap-closing events, and prevent splitting and merging events to be detected. Also, the costs to link two spots are computed solely based on their respective distance.
+    \subfloat[]{\includegraphics[width=0.25\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_0.png}}
+    \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_1.png}}
+    \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_2.png}}
+    \\
+    \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_3.png}}
+    \subfloat[]{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackScheme_Zoom_4.png}}
     
-    \item The not simple one allows to detect any kind of event, so if you need to build tracks that are splitting or merging, you must go for this one. If you want to forbid the detection of gap-closing events, you want to use it as well. Also, you can alter the cost calculation to disfavor the linking of spots that have very different feature values.
-\end{itemize}
-
-The third tracker is called \textbf{Linear motion Kalman linker}.
-It can deal specifically with linear motion, or particles moving with a roughly constant velocity.
-This velocity does not need to be the same for all particles. 
-It relies on the Kalman filter\footnote{\href{https://en.wikipedia.org/wiki/Kalman_filter}{\coloredlink{Kalman filter on Wikipedia.}}} to predict the most probable position of a particle undergoing (quasi) constant velocity movement.
-
-\subsubsection{How to pick the right linking algorithm?}
-
-The right choice of a particle linking algorithm is conditioned by the expected motion of the object you track.
-As a rule of thumb, you can make a decision following these simple rules:
-\begin{itemize}
-    
-    \item If the objects you track are transported by an active process and have a motion for which the velocity vector changes slowly, then pick the  \textbf{Linear motion Kalman linker}.
-    
-    \item If the object motion is random (like in Brownian motion) or unknown, pick on the LAP linker. If the objects you track do not divide, nor merge, pick the \textbf{Simple LAP linker}.
-    
-    \item If the objects divide or merge, or if you want to specify linking costs based on numerical features (like spot mean intensity), then pick the \textbf{LAP linker}.
-    
-\end{itemize}
-In our case, we need the \textbf{Simple LAP linker}. Select it and click \menu{\smallimg{arrow_right.png} Next}.
-
-\subsubsection{Running the Simple LAP linker.}
-
-This linker only requires the specification of three parameters.
-
-The first one is the \textbf{Max linking distance} during frame-to-frame linking. 
-It is the distance beyond which linking a spot to another one in the next frame will be forbidden. 
-For instance, if you know that your objects move by at most 5~{\textmu}m from one frame to the next, pick a value slightly larger, for instance 6~{\textmu}m.
-Distances are expressed in whatever physical units the BDV dataset specified.
-In our case it is pixels. 
-
-\begin{center}
-    \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_LinkingWizard_03.png}
-\end{center}
-
-In practical cases, it can happen that the detection step might miss an object in some frames, then detect again later.
-These gaps will result in generating several small tracks for a single objects, which is one of the main course of spurious results when analyzing tracks. 
-The simple LAP linker can bridge over missed detections.
-It does so by inspecting small tracks that results from frame-to-frame linking, and tries to connect the end of one with the beginning of another one.
-The last two parameters of the linker specifies how they are bridged. 
-The \textbf{Max gap-closing distance} specifies how far can we look for candidates when we try to bridge the end of a track with the beginning of another one.
-The \textbf{Max frame gap} specifies how far they can be in time. 
-For instance a Max-frame-gap of 2 means that we can bridge the end of a track at frame $t$ with the beginning of a track at frame $t+2$.
-Which results of bridging over detections missed by no more than 1 frame.
-
-In our case, the default parameters turn to work fine. 
-Click \menu{\smallimg{arrow_right.png} Next} and the linking will proceed. 
-Click on the \menu{\smallimg{accept-icon.png} Finish} button to end the tracking process.
-If you have a BDV window opened, it should be updated with the tracking results, like in figure~\ref{fig:Tracking results}.
-By default the tracks are represented by colored lines, extending backward in time.
-Points in tracks that are close to the current time-point are green and fade to ref for points that are far back in time.
-When you change the Z focus, the spots are painted as circle of radius corresponding the the intersection of the sphere with the current Z-plane. 
-When the spot sphere does not interest with current Z-plane, it is painted as a small dots.
-The points of the track away in time that are not close to the current Z-slice are faded away.
-We will see later how to customize the display of tracks. 
- 
- 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.6\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_LinkingResults.png}
-     \caption{How tracking results are displayed in BDV views.}
-     \label{fig:Tracking results}
+    \caption{TrackScheme displays spots and links differently depending on the zoom level. \textbf{a.}~At low zoom level tracks that coalesce are shown as gray boxes. \textbf{b.}~Zooming in, the individual tracks appear first as black lines. \textbf{c.}~When they are separated enough, spots appear as black dots. \textbf{d.}~With an even higher zoom level they are shown as empty circles. \textbf{e.}~Until they grow big enough so that the spot labels can be painted. Notice the size of the sliders at the bottom and at the right of the view.}
+    \label{fig:TrackSchemeZoomLevel}
 \end{figure}  
- 
-\subsection{Wrapping up.} 
 
-This concludes our first tutorial on automated tracking with Mastodon.
-To continue with the next chapter, save the project with the tracks you just generated.
+\subsection{The focus and the spot labels.}
 
-As you can see, after creating a project from a BDV file, the process consists mainly in running in succession the two wizards, one for detection, one for particle linking. 
-Even if they provide fully automated tracking, Mastodon is made for interacting with the data as you generate it. 
-We will see in a next section how to manually edit a spot, a link or a track even at the finest granularity.
-But keep in mind that the tools we quickly surveyed can be used interactively too. 
-First the wizards let you go back to change a tracking parameter and check how the results are improved or not. 
-Second, because you can specify a region-of-interest (ROI) in the detection step, and select the spots you want to track in the linking step, several runs of these wizard can be combined on different parts of the same image, to accommodate \textit{e.g.} for changing image quality over time, or cell shape over time. 
-Mastodon aims at being the workbench for tracking that will get you to results, accommodating a wide range of use cases.
+You probably noticed that some spots are painted differently from their neighbors. 
+Mastodon manages three special collections of spots and links to facilitate making sense of the data across views:
+\begin{itemize}
+    \item the \textbf{selection}, painted in green, that manages a classical selection of spots and links;
+    \item the \textbf{highlight}, used to highlight the spot or link currently under the mouse;
+    \item the \textbf{focus}, particularly used in TrackScheme, to indicate what spot is currently focused on by the keyboard interaction.
+\end{itemize}
+
+\noindent We will first present the focus (see Table~\ref{tab:MastodonTrackSchemeFocusKeys}). 
+
+\begin{table}[htbp]
+    \centering
+    \caption{Default key-bindings for the focus in TrackScheme and BDV views.}
+    \input{src/TableFocusKeys.tex}
+    \label{tab:MastodonTrackSchemeFocusKeys}
+\end{table}
+
+
+\subsubsection{Moving the focus.}
+
+The spot that has the focus is painted with a dashed contour (Figure~\ref{fig:FocusedSpots}, left). 
+Only one spot can have the focus and it is set by mouse or keyboard interaction.
+Click on one spot in TrackScheme when fully zoomed, and move across track and time with the arrow cursor keys \keys{\arrowkeyleft} \keys{\arrowkeyright} \keys{\arrowkeyup} and \keys{\arrowkeydown}.
+If the focus reaches the border of the window, the view will be moved to follow it.
+You can think of the focus as the caret in a text editor. 
+It is meant to facilitate keyboard interaction.
+
+You can also jumps across branches.
+A branch in a track is a linear section of the track between divisions, fusions or the track end or start.
+\keys{\Alt+\arrowkeyup} and \keys{\Alt+\arrowkeydown} will move the focus to the branch start and end.
+In the case where you could navigate to several branches, for instance you are currently at a cell division and you can go the end of either daughter cells branches, you can navigate to one or the other with \keys{\Alt+\arrowkeydown} or \keys{\ctrl+\Alt+\arrowkeydown}.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_FocusInTrackScheme.png}
+    \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_FocusInBDV.png}
+    \caption{Focused spots are painted in TrackScheme (left) and in BDV (right) views as ellipses with a dashed-contour.}
+     \label{fig:FocusedSpots}
+\end{figure}  
+
+\subsubsection{Editing the spot labels.}
+
+By the way, the focus is used to rename individual spots.
+Zoom in so that we can see the label of the spots and move the focus to a spot. 
+Press \keys{\return}.
+A small editing box appears inside the spot and lets you change its label (Figure~\ref{fig:EditSpotLabel}).
+
+By default the spot label display the spot ID. 
+If you edit the label then it shows the new label you entered.
+Editing the label of a spot does not affect its ID or any other properties. 
+The spot label is just a convenient text field that you can use to annotate cells and search them later.
+Only the spots have a label. 
+The links don't.
+
+\begin{figure}
+    \begin{minipage}{.35\textwidth}
+        \centering
+        \includegraphics[height=0.22\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_EditSpotLabel.png}
+        \caption{Editing a spot label in \TrackScheme.}
+        \label{fig:EditSpotLabel}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{.55\textwidth}
+        \centering
+        \includegraphics[height=0.25\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeTrackOrder.png}
+        \caption{The left to right order of tracks in TrackScheme. Track names are set by the label of their first spot in time, regardless of the time-point this spot is in. Tracks are then laid out by alphanumerical order of the track label.}
+        \label{fig:TrackOrder}
+    \end{minipage}
+\end{figure}  
+
+
+\subsubsection{The order of tracks in TrackScheme.}
+
+The spot labels also control how the tracks are ordered in TrackScheme.
+We said before that in TrackScheme all the spatial information is discarded. 
+However the tracks are laid out in a deterministic order.
+This order is set by the label of of a track. 
+
+There is no special structure to follow individual tracks in Mastodon. 
+For this, we simply use the first spot of a track. 
+So when we speak of the label of a track, we simply means the label of the first spot (in time) in the track. 
+The tracks are arranged from left to right following the alphanumerical order of the track labels.
+So you can change the tracks arrangement by editing theirs first spot's label.
+For instance a track named \texttt{A} will be laid out to the left of a track named \texttt{B}, and a track named \texttt{D9} will be put to the left of a track named \texttt{D10} (Figure~\ref{fig:TrackOrder}).
+
+If you change the track labels now, the tracks will not move immediately in TrackScheme.
+For the new arrangement to happen, you need to either open another TrackScheme window, or to edit the data, which we will see soon.
+
+
+\subsubsection{The focus in BDV views.}
+
+The focus also works in the BDV views.
+In these views, the spot that has the focus is also painted with a thick dashed circle (Figure~\ref{fig:FocusedSpots}, right).
+Parenthetically, notice that the focus is shared across all opened views. 
+If you have a TrackScheme view and a BDV view opened, and that they both contain a display of the same spot, setting the focus in one view will update this very spot display in the other views.
+
+When you are in a BDV view and have set the focus, you can also navigate with the arrow keys.
+After clicking inside a cell, you can navigate in time and follow a cell lineage through the movie with \keys{\arrowkeyup} and \keys{\arrowkeydown}.
+If you reach the border of the view or if the cell moves in Z, the view will be translated to keep the cell in focus.
+However, you cannot edit the spot labels in a BDV view nor jump from one track to another with \keys{\arrowkeyleft} \keys{\arrowkeyright}.
+Navigating across branch with \keys{\Alt+\arrowkeyup} and \keys{\Alt+\arrowkeydown} \etc also works.
+
+
+\subsection{Synchronizing several views together.}
+\label{sec:LinkingViews}
+
+You probably noticed that both BDV and \TrackScheme views have a toolbar on the of the view itself.
+This toolbar can be hidden and shown by a press of the \keys{T} key.
+In both view types, the toolbar contains 3 gray locks \smallimg{lock_open_grey.png}, that are used to link several views together for navigation.
+For instance, if you click on the lock 1 \smallimg{lock.png} on a BDV view and the same lock on a \TrackScheme view, they will be synchronized.
+If you move with the focus in the \TrackScheme view, the BDV view will be translated to show the focused spot.
+If you \keys{Double-click} on a spot in any view, all views in sync will translate to show the spot.
+This is very handy to navigate around in TrackScheme, for instance following a cell over time while the BDV view displays where it is in the sample. 
+You can even combine several BDV views in sync at different magnification to have both an overview of the cell position in the sample and a close view of the cell itself (Figure~\ref{fig:ViewsInSync}).
+
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_Sync1.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_Sync2.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_Sync3.png}}
+    
+    \caption{Three views of the same dataset in sync. Notice that the lock number 1 is activated on the three views (in yellow). The second view is zoomed in a XY plane. The third view is dezoomed and align with XZ.}
+    \label{fig:ViewsInSync}
+\end{figure}  
+
+
+\subsection{The highlight.}
+
+The highlight is the second visual hint we will introduce. 
+You probably already noticed it and used it: the display of spots and links that are just below the mouse cursor changes.
+Highlighted spots and links are painted with a thick continuous line (Figure~\ref{fig:Highlight}). 
+To highlight a spot or link you just have to lay the mouse over it.
+As for the focus, the highlight is common to all views, and if you highlight a spot or a link in a view, its display is changed in all the views that show it.
+
+
+\subsection{Deleting individual spots and links.}
+
+The highlight is especially important for track editing. 
+The commands that delete a single object are actually applied to the highlighted spot or link.
+For instance, to delete a spot or a link in \TrackScheme, simply move the mouse cursor over it so that it is highlighted and press \keys{D}.
+You should see the tracks being rearranged following the deletion. 
+In a BDV view, the highlight and deletion mechanism is the same. 
+
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[height=0.14\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_HighlightSpotBDV.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.14\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_HighlightLinkBDV.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.14\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_HighlightSpot.png}}
+    \hfill
+    \subfloat{\includegraphics[height=0.14\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_HighlightLink.png}}
+    
+    \caption{The highlight in Mastodon. The highlighted spot or link will appear painted with a thicker line, both in the BDV and TrackScheme views.}
+    \label{fig:Highlight}
+\end{figure}  
+
+
+
+
+
+\subsection{Linking spots together.}
+
+Creating links between existing spots happens in a similar way, except that you have to point to a source spot and another target spot for a single link.
+In \TrackScheme, move inside a spot until it is highlighted (no mouse-click).
+You must be at a zoom level large enough so that a spot is at least painted as a dot or a circle (Figure~\ref{fig:TrackSchemeZoomLevel}c, d, e). 
+Then press and hold the \keys{L} key.
+Without releasing the \keys{L} key, move the mouse out of the spot.
+You should see a red line representing the link to create (Figure~\ref{fig:TrackSchemeManualLink}).
+Move the mouse to the desired target spot, until it becomes highlighted.
+The red line should snap to it and become thicker.
+If you now release the \keys{L} key now, a new link between the source and target spot is created and in TrackScheme it should cause a rearrangement of the tracks.
+Notice that you cannot add a link between spots in the same frame.
+Also notice that you can toggle links this way.
+If you draw a link between two spots that are already connected, their link will be removed.
+
+In BDV views, it is again very similar (Figure~\ref{fig:BDVManualLink}).
+Move the mouse over a spot until it is highlighted then press and hold the \keys{L} key.
+The view will automatically move to the next frame. 
+The link to create will be painted as a white line, and the ghost shape of the source spot is painted as a dashed white ellipse. 
+Move the mouse to the target spot in this frame until it is highlighted, then release the \keys{L} key.
+The link is created.
+If you press \keys{\shift+L} in a spot, the BDV view will move to the \textbf{previous} frame, and create a backward link.
+
+You cannot move in Z while creating a link this way. 
+You must orient the BDV view so that the source and target spot are roughly in the same displayed slice. 
+However you can move in time. 
+While still holding the \keys{L} key, press the \keys{N} or \keys{[} and \keys{M} or \keys{]} key to navigate backward and forward in time.
+This way you can create links between spots separated by more than one time-point.
+
+
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking1.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking2.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_TrackSchemeManualLinking3.png}}
+    \hfill\null
+    
+    \caption{Manually creating links in TrackScheme. Press and hold \keys{L} while hovering the mouse over a spot. Then drag the link in red to the target spot. A new link will be created between the two spots when you release \keys{L}. Doing this between two spots that are already connected removes the link between them.}
+    \label{fig:TrackSchemeManualLink}
+\end{figure}  
+
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking1.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking2.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.3\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_BDVManualLinking3.png}}
+    \hfill\null
+    
+    \caption{Manually creating links in BDV views. Press and hold \keys{L} while hovering the mouse over a spot. 
+    The viewer moves to the next frame and paints the source spot as a dashed, white outline, and the link to create as a white line.
+    Then drag the white link to the target spot. 
+    A new link will be created between the two spots when you release \keys{L}. 
+    As for \TrackScheme, doing this between two spots that are already connected removes the link between them.}
+    \label{fig:BDVManualLink}
+\end{figure}  
+
+
+
+\subsection{The selection.}
+\label{Selection_tool}
+
+The selection is the third visual cue of Mastodon and probably the most important one. 
+It behaves and has the role of a classical selection tool you would find in another software that manages a collection of data items. 
+It is meant to select a subset of spots and links and apply operations to this subset.
+Contrary to the focus and the highlight, any number of spots and links can be put in the selection. 
+
+The selection in \TrackScheme is built in a classical way. 
+Click and drag from an empty part of the view.
+A red box appears to let you select an area of the view.
+Release it when it contains the part of the tracks you want to select, and selected items should now be painted in green (Figure~\ref{fig:SelectionBox}).
+All spots and tracks in the selection box are put in the selection, even if the zoom level is too small for them to be painted.
+\keys{\ctrl+A} selects the whole data. 
+There are variants to select only all the spots (\keys{\ctrl+\Alt+A}) or only all the links (\keys{\ctrl+\shift+A}).
+
+\keys{\shift+click} on a spot or a link to toggle it in the selection.
+To clear the selection, click on an empty part of the \TrackScheme view.
+In \TrackScheme you can also add spots - but not links - to the selection using the focus.
+For instance, if you combine navigating with the focus while holding the \keys{\shift} key, spots that you navigate to will be added to the selection. 
+\keys{\shift+\Alt+\arrowkeydown} will add all the spots from the focused spot to the end of the branch it belongs to.
+Finally there are commands to add a full track from the currently focused spot. 
+\keys{\shift+Space} will select the whole track of the focused spot.
+\keys{\shift+Page\ \arrowkeydown} selects all the spots and links in the track that are forward in time relative to the focused spot, and \keys{\shift+Page\ \arrowkeyup} does the converse backward in time.
+
+The selection is shown in BDV views as red or magenta spots and links by default.
+In BDV views you can only edit the selection via \keys{\shift+click}.
+The interaction with the focus also work as described above.
+These default key-bindings are recapitulated in the table~\ref{tab:MastodonSelectionKeys}.
+
+\begin{table}[!htbp]
+    \centering
+    \caption{Default selection key-bindings for Mastodon views.}
+    \input{src/TableSelectionKeys.tex}
+    \label{tab:MastodonSelectionKeys}
+\end{table}
+
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_SelectionBox1.png}}
+    \hfill
+    \subfloat{\includegraphics[width=0.35\textwidth,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_SelectionBox2.png}}
+    \hfill\null
+    
+    \caption{The selection box in \TrackScheme.}
+    \label{fig:SelectionBox}
+\end{figure}  
+
+
+
+\subsection{Editing spots and links with the selection.}
+
+The selection actions are all applied in bulk. 
+You can delete all the spots and the links currently in the selection with \keys{\shift+\backdel}.
+If your selection includes spots that are not linked, pressing \keys{\shift+K} will link them sequentially. 
+If the selection contains more than one spot per frame, only one of them, picked randomly, will be linked. 
+
+
+
+\subsection{Manually adding spots and linking them.}
+
+Adding new spots requires specifying where to add them.
+Since \TrackScheme does not include spatial information you cannot use it to add spots.
+You can only add spots in the BDV views. 
+
+To add a new spot, simply hover the mouse in a BDV view where you want the spot to be created, and press \keys{A}.
+A new spot will appear, with a radius given by the last radius value you used.
+You can respectively decrease or increase the radius of a spot by pressing \keys{Q} and \keys{E}.
+Modifiers affect the amount of radius changes.
+\keys{\shift+Q} and \keys{\shift+E} change the radius by a larger amount and \keys{\ctrl+Q} and \keys{\ctrl+E} by a finer amount.
+
+Spots created this way are not linked. 
+It might not be the quicker way to follow manually a cell over several frames. 
+To do so, you can use a little trick. 
+When you want to add a spot, and link it to an existing one, arrange the BDV view so that this source spot is visible in the displayed time-point.
+Then place the mouse cursor \textit{inside} the source spot, and press and hold \keys{A}.
+Like for creating links, the BDV moves to the next time-point, paint the source spot and link with white, dashed lines, and let you position the new target spot.
+While you keep \keys{A} pressed, you can move the target spot around.
+When it is in the desired position, release \keys{A}.
+The new spot is created and linked to the source spot.
+This way, you can quickly follow a cell or an object and manually creates a track for it by just positioning the mouse with a few presses of \keys{A}.
+
+\subsection{Moving spots around.}
+
+To move an existing spot we use a similar interaction with the spots.
+In a BDV view, place the mouse cursor inside the spot you want to move, then press and hold \keys{Space}.
+While you hold \keys{Space} pressed the spot will move where you move the mouse. 
+Release the \keys{Space} key at the desired location.
+
+
+\subsection{The undo/redo mechanism.}
+
+One of the most useful actions is undoubtedly undo and redo. 
+To undo just press \keys{\ctrl+Z} and to redo use \keys{\ctrl+\shift+Z}. 
+There is no limit to the number of undos you can do. 
+And everything can be undone in Mastodon, even tag definitions.
+In our humble opinion, this is one of the core reasons for Mastodon, a tracking and lineaging software that aims at combining automated and manual approaches, to exist.
+
+
+\subsection{Putting things in practice.}
+
+
+\begin{figure}
+    \centering
+    \null\hfill
+    \subfloat[]{\includegraphics[height=0.18\textheight]{figures/Mastodon_ManualTracking_01.png}}
+    \hfill
+    \subfloat[]{\includegraphics[height=0.18\textheight,trim=0.5cm .5cm .5cm .5cm,clip]{figures/Mastodon_ManualTracking_02.png}}
+    \hfill
+    \subfloat[]{\includegraphics[height=0.18\textheight]{figures/Mastodon_ManualTracking_03.png}}
+    \hfill\null
+    
+    \caption{Manual tracking in Mastodon. \textbf{a.}~After selecting the spots we added to each time-point. \textbf{b.}~After linking them with \keys{shift+K}. \textbf{c.}~Backtracking a cell with \keys{shift+A}.  }
+    \label{fig:ManualTracking}
+\end{figure}  
+
+
+
+Make sure you have one BDV view and one \TrackScheme view open, and that both are linked using the same lock \smallimg{lock.png}.
+In \TrackScheme, select one of the spot or link that belongs to one of the long tracks; the ones that extend from the first time-point to the last.
+Press \keys{\shift+Space}.
+You selected the whole track to which the spot or link you selected belong to.
+Press \keys{\shift+\backdel}.
+The track has been removed.
+
+Let's remove a couple of other tracks another way.
+Click and drag in \TrackScheme to draw a selection box around some long tracks.
+Then press \keys{\shift+\backdel}.
+Our model should now lack several good tracks we will try to put back manually.
+For clarity, also remove all the tracks on the right part of the \TrackScheme view, that do not start at the first time-point.
+
+In the BDV view, go to the first time-point, and look for a cell whose spot has been removed.
+Pan the view (right-click and drag), adjust the zoom (\keys{\ctrl+\shift+Mousewheel}) and the Z position (\keys{Mousewheel} with or without \keys{\shift}) so that the cell is well in view.
+Then put the mouse cursor over it and press \keys{A}.
+A spot has been added on the cell.
+The fine adjustment of the spot position in 3D can be made easier with a second BDV view.
+Open another BDV view, zoom and rotate it so that it is aligned with the XZ plane by pressing \keys{\shift+Y}.
+Add it to the lock group by toggling the right lock \smallimg{lock.png} in the toolbar.
+Go back to the first BDV view, and align it with the XY plane by pressing \keys{\shift+Z}.
+You must now find the spot we just added. 
+If you cannot find it in any of the two BDV view, look for it in \TrackScheme.
+It will be in the rightmost column at the first line, since we added the spot to the first time-point.
+Double-clicking on it in \TrackScheme will center the two BDV views on it.
+Now that the two BDV views are centered on the spot, you can adjust its XY and Z positions over the cell using the two views.
+In any of the two BDV views, put the mouse cursor, then press and hold \keys{Space}.
+Move the spot the desired location and release \keys{Space}.
+The spot might not have the right diameter to encompass the cell.
+Change its radius by pressing \keys{\shift+Q} and \keys{\shift+E} (without \keys{\shift} for finer adjustments) until you are happy with it.
+
+You must now do it for the same cell in the subsequent time-points.
+Press \keys{M} in a BDV view to move to the next time-point.
+Again, put the mouse cursor roughly at the center of the cell and press \keys{A}.
+Adjust its position with \keys{Space} and move to the next time-point.
+
+We have to repeat this for all the time-points of the movie (Figure~\ref{fig:ManualTracking}a).
+This might be tedious but does not have to be too long. 
+When I need to do this I adopt a posture similar to what I have when I play PC video-games: the right hand on the mouse, the left hand over the left side of the keyboard, over the \keys{A}, \keys{D}, \keys{Q}, and \keys{E}.
+The \keys{\shift} key can be accessed with the little finger, the \keys{Space} key with the thumb.
+The \keys{N} and \keys{M} keys to navigate over time are accessible with the left thumb also.
+
+We created a bunch of spots, but they are not linked. 
+Move to the \TrackScheme view. 
+You will find the spots you last created there always at rightmost part of the view.
+Since they are not linked, they should appear each in their separate column, in a stairway manner. 
+Select them all by dragging a selection box around them and press \keys{\shift+K}.
+They should now link together into a new track (Figure~\ref{fig:ManualTracking}b).
+With one of the spot of this newly created track selected, press \keys{\Alt+\arrowkeyup} to jump to the first spot in the track.
+Then press \keys{\return} to edit its name into something like \texttt{My first track}.
+
+We can create a track directly.
+Let's do this by backtracking a cell from the last time-point to the first.
+In a BDV view, move to the last time-point, and place the mouse cursor over an annotated cell. 
+Create a spot over it by pressing \keys{A} and center and resize it until satisfaction.
+Now keep the mouse cursor inside this spot, and press \keys{\shift+A} and hold the \keys{A} key.
+The BDV view moves to the previous time-point and creates a new spot there, already linked to the other one.
+By repeating this you can create a track that will backtrack the cell until it appears in the movie (Figure~\ref{fig:ManualTracking}c).
+
+We have now restored two of the tracks we removed at the beginning of this paragraph.
+Hopefully now you feel enough at ease to do these manipulations quickly, efficiently and without too much hassle.
+But one of the concluding beauty of this chapter is that you can restore the data as we had it at the beginning by roughly 100 presses of the \keys{\ctrl+Z} keys.
