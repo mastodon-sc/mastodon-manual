@@ -1,19 +1,31 @@
+\begin{titlepage}
+
+\begin{tikzpicture}[overlay,remember picture]
+\draw [line width=1.0pt,rounded corners=10pt,]
+    ($ (current page.north west) + (2cm, -2cm) $)
+    rectangle
+    ($ (current page.south east) + (-2cm, 2cm) $);       
+\end{tikzpicture}
+
+\begin{center}
+        
+    \vfill
+    
+	{\fontsize{60}{70}\selectfont \textbf{Mastodon}}
+	{\fontsize{40}{50}\selectfont \textbf{documentation}} \\ 
+	\protect{\includegraphics[width=12cm]{figures/Mastodon-logo_jy-01.png}}
+    
+    \LARGE{Tobias Pietzsch \& Jean-Yves Tinevez} \\
+    \LARGE{\today}
+    
+    \vfill
+    \includegraphics[width=4cm]{figures/Pasteur-logo-medium.png}
+    \hfill
+    \includegraphics[width=4cm]{figures/MPICBG_logo_bw.png}%
 
 
-\title{
-	{\fontsize{60}{70}\selectfont Mastodon}
-	{\fontsize{40}{50}\selectfont documentation} \\ 
-	\protect{\includegraphics[width=10cm]{figures/Mastodon-logo_jy-01.png}}
-}
 
-\author{Tobias Pietzsch \& Jean-Yves Tinevez}
+\end{center}
+% \thispagestyle{empty}
 
-\titlehead{%
-  \makebox[0pt][l]{\smash{%
-    \parbox[t][\dimexpr\textheight-\ht\strutbox\relax][b]{\textwidth}{%
-      \includegraphics[width=4cm]{figures/Pasteur-logo-medium.png}
-      \hfill
-      \includegraphics[width=4cm]{figures/MPICBG_logo_bw.png}%
-  }}}}
-\maketitle
-\thispagestyle{empty}
+\end{titlepage}
