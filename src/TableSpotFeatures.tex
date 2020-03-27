@@ -1,0 +1,42 @@
+{
+\footnotesize
+
+\begin{tabular}{p{0.17\textwidth}|p{0.17\textwidth}|p{0.57\textwidth}}
+
+    \toprule
+    \textbf{Feature name} &
+    \textbf{Projections} &
+    \textbf{Description}             
+    \\ \midrule
+    
+    \multicolumn{2}{l|}{Spot frame} & 
+    The spot frame.
+    \\ \midrule
+
+    \multicolumn{2}{l|}{Spot N links} & 
+    The total number of links, incoming and outgoing, of the spot.
+    \\ \midrule
+    
+    Spot position &
+    X, Y, Z &
+    The spot center position, in physical units.
+    \\ \midrule
+    
+    \multicolumn{2}{l|}{Spot radius} & 
+    The spot radius in physical units. 
+    
+    For spots that are ellipsoids, returns a radius using the geometric mean of the spot ellipsoid radiuses. This approximation is such that the sphere with the reported radius and the spot ellipsoid have the same volume.
+    \\ \midrule
+    
+    Spot sum intensity & 
+    One value per channel &
+    The total spot intensity for all the pixels inside the spot ellipsoid.
+    \\ \midrule
+    
+    \multicolumn{2}{l|}{Spot track ID} &
+    The ID of the track the spot belongs to.
+    Track IDs are positive integer numbers starting from 0.
+    \\ \midrule
+
+\end{tabular}
+}
