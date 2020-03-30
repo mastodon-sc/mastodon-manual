@@ -25,7 +25,8 @@ We lazily rely on the excellent \bdv documentation and point directly to the \bd
 \end{itemize}
 
 Once you have prepared your images for opening in the \bdv, you should have a \texttt{.xml} file and a possibly very large \texttt{.h5} file on your computer. The \texttt{.xml} file must be the output of the \bdv data preparation. It should start with the following lines:
-\begin{minted}{xml}
+
+\begin{lstlisting}[language=XML]
 <?xml version="1.0" encoding="UTF-8"?>
 <SpimData version="0.2">
   <BasePath type="relative">.</BasePath>
@@ -33,7 +34,7 @@ Once you have prepared your images for opening in the \bdv, you should have a \t
     <ImageLoader format="bdv.hdf5">
       <hdf5 type="relative">datasethdf5.h5</hdf5>
 ...
-\end{minted}
+\end{lstlisting}
 
 
 \subsubsection{Key advantages of the \Bdv file format.}
@@ -83,11 +84,11 @@ This was created from the example dataset released with the TGMM software~\cite{
 You can find it on Zenodo\footnote{\href{https://zenodo.org/record/3336346}{\coloredlink{https://zenodo.org/record/3336346}}} there: \href{https://doi.org/10.5281/zenodo.3336346}{\includegraphics[height=1.5\fontcharht\font`\B]{figures/zenodo3336346.png}}
 
 It is a zip file that contains 3 files:
-\begin{minted}{text}
+\begin{lstlisting}[language=sh]
     14M  datasethdf5.h5
    2.7K  datasethdf5.settings.xml
    8.7K  datasethdf5.xml
-\end{minted}
+\end{lstlisting}
 
 The \texttt{.h5} file is the HDF5 file mentioned above, that contains the image data itself.
 The \texttt{data\-sethdf5.xml} is a text file following the XML convention, specific to the BDV file format, that contains information about the the image data and metadata. 
