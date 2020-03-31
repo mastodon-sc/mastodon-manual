@@ -1,17 +1,41 @@
 \section{Mastodon numerical features.}
 \label{FeaturesExplanation}
 
-We describe here how the feature values currently available in Mastodon are calculated. 
+This chapter describes how the feature values currently available in Mastodon are calculated. 
+We also gives information about their dimension, units, \etc.
 
 \subsection{Feature dimensions.}
 
+In Mastodon, feature values are expressed when possible in physical units. 
+Each feature projection as a \textit{dimension} (in the physics meaning) from which we compute the \textit{units} of the values.
+For instance, if a feature value as the dimension \texttt{LENGTH} and the spatial units is µm, then the values of this feature will be in~µm.
+Mastodon only has physical units for space. 
+For time, the frame interval is always equal to the dummy \texttt{1~frame}.
+This is why you will find all units involving time expressed in \texttt{frame}s.
+Each feature projection has a dimension, and the features report what are the dimension of their projections in the feature computation dialog (Figure~\ref{fig:FindFeatureDimension}).
+Here is the table of all the feature dimensions currently supported in Mastodon, and example of the derived units when the spatial units are~µm.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\textwidth]{figures/Mastodon_FindFeatureDimension.png}
+    \caption{The feature dimensions are listed in the feature computation dialog, in the description panel that appears on the right when you click on a feature name.}
+    \label{fig:FindFeatureDimension}
+\end{figure}
+
+\begin{table}
+    \centering
+    \footnotesize
+    \input{src/TableFeatureDimensions}
+    \caption{Feature dimensions in Mastodon.}
+    \label{tab:FeatureDimensions}
+\end{table}
 
 \subsection{Spot features.}
 
 \subsubsection{Spot gaussian-filtered intensity.}
 
 This feature has two projections per channel, \textbf{Mean} and \textbf{Std}.
-The values are floating point numbers, with the dimension \textbf{Intensity}.
+The values are floating point numbers, with the dimension \texttt{Intensity}.
 
 The \textbf{Mean} projections give the average intensity at the center of the spot.
 The average is calculated by taking the mean intensity inside the spot, weighted by a gaussian centered on the spot.

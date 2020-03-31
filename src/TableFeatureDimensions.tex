@@ -1,0 +1,94 @@
+\begin{tabular}{ l | l | p{0.125\textwidth} | p{0.50\textwidth} }
+
+    \toprule
+    \textbf{Dimension} &
+    \textbf{Name} &
+    \textbf{Example units (when spatial units are µm)} &
+    \textbf{Description}
+    
+    \\ \midrule
+    
+    \texttt{NONE} &
+    None &
+    ø &
+    Used for dimensionless quantities, such as frame position, number of things, \etc 
+    \\ \midrule
+    
+    \texttt{LENGTH} & 
+    Length &
+    µm &
+    For quantities about the length of objects. 
+    For instance radius or distance between objects.
+    \\ \midrule
+    
+    \texttt{POSITION} & 
+    Position &
+    µm &
+    Dimension for feature that report a position.
+    Different from \texttt{LENGTH} so that for objects with small lengths at large positions, quantities are plotted separately.
+    \\ \midrule
+    
+    \texttt{TIME} &
+    Time &
+    frame &
+    For quantities that report a delay, a duration or the timing of an event.
+    Because Mastodon does not deal with physical units for time, quantities formed with the time dimension always use the \texttt{frame} unit.
+    \\ \midrule
+    
+    \texttt{VELOCITY} & 
+    Velocity & 
+    µm / frame &
+    For quantities that report a speed or a velocity.
+    \\ \midrule
+    
+    \texttt{RATE} &
+    Rate &
+    / frame &
+    For quantities that report a change per units of time.
+    \\ \midrule
+    
+    \texttt{ANGLE} &
+    Angle &
+    Radians &
+    Measures of angles. 
+    In Mastodon, all angles are in \textbf{radians}.
+    \\ \midrule
+    
+    \texttt{STRING} &
+    NA &
+    ø &
+    For non-numeric features.
+    \\ \midrule
+    
+    \texttt{INTENSITY} &
+    Intensity &
+    Counts &
+    For quantities based on pixel values.
+    For instance the mean intensity within a spot.
+    \\ \midrule
+    
+    \texttt{INTENSITY\_SQUARED} &
+    Intensity² &
+    Counts² &
+    For quantities based on pixel intensity squared.
+    For instance the variance of the mean within a spot.
+    \\ \midrule
+    
+    \texttt{QUALITY} &
+    Quality &
+    ø &
+    This dimension is used by spot detectors.
+    There is a special feature called \textbf{Detection quality}, that stores for each spot they detect automatically a measure of quality or confidence in their detection.
+    See section~\ref{Detection_Cells_DoG_Detector}.
+    \\ \midrule
+    
+    \texttt{COST} &
+    Cost &
+    ø &
+    This dimension is used by spot linking algorithms.
+    There is a special feature called \textbf{Link cost} used in the estimation phase.
+    It stores for each link the cost that the linker computes for it in the estimation phase.
+    These costs are then used in the association phase to retrieve the best set of links.
+    \\ \bottomrule
+
+\end{tabular}
