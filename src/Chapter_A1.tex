@@ -1,5 +1,5 @@
 \section{Getting started with Mastodon. Automated tracking.}
-\label{Getting_started}
+\label{sec:GettingStarted}
 
 This tutorial is the starting point for new Mastodon users. 
 It will walk you through basic operations in Mastodon, opening a dataset and creating a Mastodon project, automatically detect cells and link them, and show you how to use the main views of Mastodon.
@@ -38,7 +38,7 @@ Once you have prepared your images for opening in the \bdv, you should have a \t
 
 
 \subsubsection{Key advantages of the \Bdv file format.}
-\label{BDV_advantages}
+\label{sec:BDVAdvantages}
 
 The BDV file format solves mainly two challenges in image visualization and analysis, that arise with modern microscopy, namely:
 \begin{itemize}
@@ -184,7 +184,7 @@ The image data will be loaded along with the lineages.
 
 
 \subsection{Detecting cells.}
-\label{Detecting_Cells}
+\label{sec:DetectingCells}
 
 \begin{figure}
     \centering
@@ -207,7 +207,7 @@ The \menu{\smallimg{book.png} Log} button will bring an independent panel where 
 
 This first panel allows for selecting the target \textit{source} on which the detection will be run. 
 Since we use the \bdv for images, a channel or a view is stored and displayed as a source. 
-A source can have multiple resolutions stored, as explain in paragraph~\ref{BDV_advantages}, but for the data used in this tutorial this is not the case. The sources are nicknamed 'setups' in this panel.
+A source can have multiple resolutions stored, as explain in paragraph~\ref{sec:BDVAdvantages}, but for the data used in this tutorial this is not the case. The sources are nicknamed 'setups' in this panel.
 They are numbered from 0 and can be selected from the drop-down list. 
 Below the list we try to display the metadata we could retrieve from the \bdv file.
 Just pick the first and only channel, and click \menu{\smallimg{arrow_right.png} Next}.
@@ -240,7 +240,7 @@ This also implies that in Mastodon, we cannot segment complex shapes, or object 
 This is an important limitation of Mastodon.
 
 For now, select the \textbf{DoG detector} and click \menu{\smallimg{arrow_right.png} Next}.
-\label{Detection_Cells_DoG_Detector}
+\label{sec:DetectionCellsDoGDetector}
 
 Here is briefly  how it works.
 The LoG detector, and its approximation the DoG detector, is the best detector for blob-like particles in the presence of noise~\cite{Sage2005}. 

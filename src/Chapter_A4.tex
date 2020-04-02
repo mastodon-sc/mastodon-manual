@@ -44,7 +44,7 @@ Or it can be not tagged in the \texttt{Reviewed by} tag-set.
 But it cannot have both the tag \texttt{Mette} and the tag \texttt{Tobias} because they belong to the same tag-set.
 Each tag-set works independently, and clearing a tag-set does not affect the others even for one data item.
 Now that we set things straight, let's see how to create tag-sets.
-We will base the demonstration in this chapter on the data we generated in the tutorial chapter~\ref{Getting_started}.
+We will base the demonstration in this chapter on the data we generated in the tutorial chapter~\ref{sec:GettingStarted}.
 
 
 \subsubsection{Creating tag-sets.}
@@ -89,7 +89,7 @@ When you are finished, press the \menu{OK} button.
 
 \subsubsection{Assigning tags to data items.}
 
-Tags are set via the selection tool, presented above (chapter~\ref{Selection_tool} page~\pageref{Selection_tool}).
+Tags are set via the selection tool, presented above (chapter~\ref{sec:SelectionTool} page~\pageref{sec:SelectionTool}).
 Once you have some spots and links in the selection, you can assign a tag to it via the \menu{Edit > Tags > The tag set name > The tag label} menu.
 The menu content will be updated with the tag-sets and tags you defined in the tag-set dialog, described above (Figure~\ref{fig:AssignTagSetMenu}).
 This will work in any Mastodon views, BDV or \TrackScheme.
@@ -210,14 +210,14 @@ Indeed, they require loading all of the data blocks on which there are spots.
 This could  rapidly become cumbersome for large datasets, if you have to recompute all of the features every-time a spot is added or edited. 
 Fortunately we implemented an update mechanism for feature computation.
 After the first computation, which possible takes very long, only the spots that have been added or modified since the last computation are visited.
-The details of the update mechanism are explained in the technical part of this manual, chapter~\ref{FeatureComputationUpdateMechanism} page~\pageref{FeatureComputationUpdateMechanism}.
+The details of the update mechanism are explained in the technical part of this manual, chapter~\ref{sec:FeatureComputationUpdateMechanism} page~\pageref{sec:FeatureComputationUpdateMechanism}.
 
 Now that we have feature values computed, we would like to inspect them and export them for further analysis.
 This is the role of the table view, but before getting to it, we will make a little detour to showing how to use features to generate coloring, accelerating updates of computation and saving them to disk.
 
 
 \subsubsection{Coloring views by numerical features.}
-\label{Configure_Color_Modes}
+\label{sec:ConfigureColorModes}
 
 We have seen above that tag-sets could be used to generate coloring of the data items shown in a view. 
 Indeed, in the \menu{View > Coloring} menu of each view, that tag-sets are listed and when selected, are used to assign a color to each data item.

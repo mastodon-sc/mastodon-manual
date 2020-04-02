@@ -4,8 +4,8 @@ Let us suppose we are dealing with a difficult image in which me must track only
 The cells are difficult to track automatically, for instance because there are many spurious structures labelled. 
 Or because there are other cells of different sizes in the tissue we are studying. 
 Or because the image quality varies in time and space. 
-The data is such that that fully automated algorithms introduced in chapter~\ref{Getting_started} won't give us fully accurate results. 
-We can use the manual editing tools introduced in chapter~\ref{Manuel_Editing} and curate the results of automated tracking, manually removing spurious detections and links, and fixing incorrect ones. 
+The data is such that that fully automated algorithms introduced in chapter~\ref{sec:GettingStarted} won't give us fully accurate results. 
+We can use the manual editing tools introduced in chapter~\ref{sec:ManuelEditing} and curate the results of automated tracking, manually removing spurious detections and links, and fixing incorrect ones. 
 Another approach would be to start from a blank annotation and track manually only the cells we are interested in. 
 Both approaches might be long and tedious. 
 We introduce in this chapter tools for semi-automated tracking, that should alleviate the work of the second approach.
@@ -16,7 +16,7 @@ It searches for the best spot candidate in the next time-point around the locati
 It then creates a new spot there and links it to the previous one.
 This procedure is repeated this for a certain number of time-points you can set, creating or augmenting a track starting from the spot you selected.
 
-The semi-auto tracker can be configured to work backward in time (backtracking), to have a certain search radius, or a certain sensitivity to spot quality (as defined in chapter~\ref{Detecting_Cells}).
+The semi-auto tracker can be configured to work backward in time (backtracking), to have a certain search radius, or a certain sensitivity to spot quality (as defined in chapter~\ref{sec:DetectingCells}).
 The way it interacts with existing annotation can be configured too. 
 You can make it stops when it meets an existing spot, linking to it or not.
 You can make it connect to small tracks and resume tracking when it meets the track end.
@@ -80,7 +80,7 @@ Depending on where you position the initial spot, it might fail, for instance st
 (In this example movie, this happens often because the cells are very elongated along the Z direction, and the tracker tends to find candidates near the top, brightest part of the cell.) 
 The parameters that control for instance the tracker search radius can be set in the semi-automated tracking configuration dialog, in the \menu{Plugins > Tracking > Configure semi-automatic tracker}.
 The window show in Figure~\ref{fig:ConfigSemiAutoTracking} should appear.
-This dialog is very similar to the one used to configure feature color modes, that we have seen in chapter~\ref{Configure_Color_Modes} page~\pageref{Configure_Color_Modes}.
+This dialog is very similar to the one used to configure feature color modes, that we have seen in chapter~\ref{sec:ConfigureColorModes} page~\pageref{sec:ConfigureColorModes}.
 It also works the same way: the top elements are made to manage several tracking configuration, that will be stored on disk and retrieved in your next Mastodon session. 
 There are two default tracking configuration: the \textbf{Forward} one is the default that we just used. 
 The \textbf{Backtracking} configuration tracks backward in time. 
@@ -96,7 +96,7 @@ To explain what they do we need first to describe how the semi-automated tracker
 
 The semi-automated tracker works by processing only a small neighborhood around the initial spot, (called the \textit{source} spot later).
 This neighborhood is centered on the spot center (in magenta in Figure~\ref{fig:ExplainSemiAutoTracking}), but taken in the next time-point (or previous one if you choose to go backward in time).
-It applies the DoG detector (described in chapter~\ref{Detecting_Cells} page~\pageref{Detection_Cells_DoG_Detector}) on this neighborhood, which yields several detections (green circles).
+It applies the DoG detector (described in chapter~\ref{sec:DetectingCells} page~\pageref{sec:DetectingCells}) on this neighborhood, which yields several detections (green circles).
 The detections that are found outside of a search radius (white, dashed circle) are not considered.
 Detections inside the search radius but with a low quality are discarded as well.
 The tracker therefore select the detection with a sufficiently large quality inside the search radius. 
