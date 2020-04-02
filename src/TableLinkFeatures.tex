@@ -1,0 +1,31 @@
+{
+\footnotesize
+
+\begin{tabular}{p{0.17\textwidth}|p{0.17\textwidth}|p{0.57\textwidth}}
+
+    \toprule
+    \textbf{Feature name} &
+    \textbf{Projections} &
+    \textbf{Description}             
+    \\ \midrule
+    
+    Link target IDs & 
+    Source spot id
+    
+    Target spot id &
+    Stores the IDs of the two spots the link connects to. 
+    In Mastodon, the links are oriented: the source and target are not equivalent. 
+    By convention in Mastodon, the source spot is always the first in time, and the target the last in time.
+    \\ \midrule
+
+    \multicolumn{2}{l|}{Link displacement} & 
+    The distance between the source and target spots of the links, in physical units.
+    \\ \midrule
+    
+    \multicolumn{2}{l|}{Link velocity} & 
+    The velocity at the time of the link.
+    It is calculated as the link displacement divided by the frame interval between the source and target spots (in \texttt{frame} units).
+    \\ \bottomrule
+
+\end{tabular}
+}

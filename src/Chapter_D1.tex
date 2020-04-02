@@ -15,7 +15,7 @@ This is why you will find all units involving time expressed in \texttt{frame}s.
 Each feature projection has a dimension, and the features report what are the dimension of their projections in the feature computation dialog (Figure~\ref{fig:FindFeatureDimension}).
 The Table~\ref{tab:FeatureDimensions} lists all the feature dimensions currently supported in Mastodon, and give examples of the derived units when the spatial units are~µm.
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \includegraphics[width=0.4\textwidth]{figures/Mastodon_FindFeatureDimension.png}
     \caption{The feature dimensions are listed in the feature computation dialog, in the description panel that appears on the right when you click on a feature name.}
@@ -71,4 +71,17 @@ The Figure~\ref{fig:SpotMedianBox} illustrates what this box looks like for seve
 
 \subsection{Link features.}
 
+\input{src/TableLinkFeatures}
+
 \subsection{Track features.}
+
+'Track' is the vocable we use in Mastodon for the weakly connected components of the graph.
+A track is made of all the links and spots that can be reached by jumping across links in any direction.
+In a lineage, a track corresponds to a single cell and all its daughters, grand-daughters, \etc.
+Track feature are value that are defined for a whole track. 
+An example would be the number of spots in a track.
+In Mastodon, there is no special place to store track feature values.
+Track feature values are stored in the spots of the tracks, and listed in spot features.
+By convention, their name starts with \textbf{Track} and spot features starts with \textbf{Spot}.
+
+\input{src/TableTrackFeatures}
