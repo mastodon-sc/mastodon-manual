@@ -297,6 +297,7 @@ You can do this and more, but for this kind of approach, the \textbf{Advanced Do
 
 
 \subsection{Linking cells.}
+\label{sec:LinkingCells}
 
 What we just did is the detection step. 
 It yields one Mastodon spot per cell, but the notion of cell identity propagated over time is missing yet.
@@ -307,6 +308,7 @@ In most cases there is one spot per frame for a track, meaning that that a spot 
 But some algorithms can accommodate \textit{e.g.} dividing cells (2 outgoing links for the mother cell going to the two daughter cells) and merging events. There is a vast literature behind tracking algorithms, and it is an active domain of Research. A relatively recent paper compare implementation and list some pros and pitfalls of many of them~\cite{Chenouard2014}.
 
 \subsubsection{Selecting target spots for linking.}
+\label{sec:SelectingInputForLinking}
 
 \begin{figure}
     \centering
