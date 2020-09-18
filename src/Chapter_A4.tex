@@ -210,8 +210,7 @@ You probably have noticed, thanks to the progress bar, that the intensity-relate
 Indeed, they require loading all of the data blocks on which there are spots.
 This could  rapidly become cumbersome for large datasets, if you have to recompute all of the features every-time a spot is added or edited. 
 Fortunately we implemented an update mechanism for feature computation.
-After the first computation, which possible takes very long, only the spots that have been added or modified since the last computation are visited.
-The details of the update mechanism are explained in the technical part of this manual, chapter~\ref{sec:FeatureComputationUpdateMechanism} page~\pageref{sec:FeatureComputationUpdateMechanism}.
+After the first computation, which possible takes very long, only the spots that have been added or modified since the last computation are considered for computation.
 
 Now that we have feature values computed, we would like to inspect them and export them for further analysis.
 This is the role of the table view, but before getting to it, we will make a little detour to showing how to use features to generate coloring, accelerating updates of computation and saving them to disk.
@@ -326,14 +325,6 @@ For instance with our custom color mode, we can quickly find cells that are the 
     \caption{Feature color mode in a BDV view and in a \TrackScheme view.  }
     \label{fig:FeatureColorModeView}
 \end{figure}
-
-
-\subsection{Tags, numerical features and saving the data to disk.}
-
-All tags and feature values are saved in the Mastodon file. 
-The feature update stack state is saved too, so you will retrieve everything back as it was when you saved.
-We did not have a choice, it was the only reasonable way to achieve a usable feature and tag framework in the case of very large data.
-
 
 \subsection{The data table views.}
 \label{sec:DataTables}
