@@ -4,7 +4,11 @@ services: docker
 
 branches:
   only:
-  - master
+    - master
+  
+branches:
+  except:
+    - master-pdf
 
 cache:
   directories:
