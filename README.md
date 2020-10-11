@@ -10,6 +10,6 @@ It focusus on the automatic and interactive tracking of cells or organelles in m
 This repo contains the LaTeX source for its manual. 
 It is automatically build using a Github action and you can get the latest pdf by cick on the orange badge above. 
 
-![Mastodon logo](doc/Mastodon-logo-512x512.png)
+![Mastodon logo](https://github.com/mastodon-sc/mastodon/blob/master/doc/Mastodon-logo-512x512.png)
 
 Tobias Pietzsch & Jean-Yves Tinevez.
